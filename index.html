@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>People Above All</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1714;
+    --warm: #C8A97E;
+    --rust: #8B4513;
+    --muted: #6B6560;
+    --border: rgba(26,23,20,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--cream) 60%, transparent);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .nav-cta:hover { color: var(--warm); border-color: var(--warm); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+  }
+
+  .hero-left {
+    padding: 140px 64px 80px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    animation: fadeUp 1.2s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 32px;
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--warm);
+  }
+
+  .hero-subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 420px;
+    margin-bottom: 56px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.3s, color 0.3s;
+  }
+
+  .btn-ghost:hover { border-color: var(--ink); }
+
+  .hero-right {
+    padding: 140px 80px 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: fadeUp 1.2s 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .manifesto-block {
+    position: relative;
+  }
+
+  .manifesto-block::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: -16px;
+    font-size: 120px;
+    color: var(--warm);
+    opacity: 0.2;
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1;
+  }
+
+  .manifesto-text {
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--ink);
+    margin-bottom: 40px;
+  }
+
+  .manifesto-attribution {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 80px;
+  }
+
+  /* BELIEFS */
+  .beliefs {
+    padding: 120px 80px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .beliefs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .belief-card {
+    background: var(--cream);
+    padding: 48px;
+    transition: background 0.4s;
+  }
+
+  .belief-card:hover { background: #EDE8DF; }
+
+  .belief-icon {
+    font-size: 28px;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .belief-title {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .belief-body {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* FOR WHOM */
+  .for-whom {
+    padding: 120px 80px;
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .for-whom .section-label {
+    color: var(--warm);
+  }
+
+  .for-whom .section-label::after {
+    background: rgba(245,240,232,0.15);
+  }
+
+  .audience-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .audience-item {
+    border-top: 1px solid rgba(245,240,232,0.2);
+    padding-top: 32px;
+  }
+
+  .audience-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--warm);
+    margin-bottom: 20px;
+  }
+
+  .audience-title {
+    font-size: 26px;
+    font-weight: 300;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .audience-body {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.55);
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    padding: 120px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .how-intro h2 {
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .how-intro h2 em { font-style: italic; color: var(--warm); }
+
+  .how-intro p {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .step:first-child { border-top: 1px solid var(--border); }
+
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--warm);
+    padding-top: 6px;
+  }
+
+  .step-title {
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .step-body {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* FOUNDER SECTION */
+  .founder {
+    padding: 120px 80px;
+    background: var(--ink);
+    color: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .founder-left { position: relative; }
+
+  .founder-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2A2420 0%, #3A3028 100%);
+    border: 1px solid rgba(200,169,126,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .founder-avatar-initials {
+    font-size: 52px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--warm);
+    letter-spacing: -0.03em;
+  }
+
+  /* neural ring around avatar */
+  .founder-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(200,169,126,0.2);
+  }
+
+  .founder-name {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    color: var(--cream);
+  }
+
+  .founder-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 28px;
+  }
+
+  .founder-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .founder-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(245,240,232,0.2);
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .founder-link:hover { color: var(--warm); border-color: var(--warm); }
+
+  .founder-right {}
+
+  .founder-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .founder-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(245,240,232,0.12);
+  }
+
+  .founder-story {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.85);
+    margin-bottom: 28px;
+  }
+
+  .founder-story em {
+    font-style: italic;
+    color: var(--warm);
+  }
+
+  .founder-quote {
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.45);
+    border-left: 1px solid rgba(200,169,126,0.3);
+    padding-left: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .founder {
+      grid-template-columns: 1fr;
+      padding: 80px 32px;
+      gap: 48px;
+    }
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 140px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: 'PAA';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 320px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink);
+    opacity: 0.03;
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .cta-section h2 em { font-style: italic; color: var(--warm); }
+
+  .cta-section p {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 56px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  /* FORM MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,23,20,0.7);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--cream);
+    padding: 64px;
+    max-width: 560px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.4s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-close {
+    position: absolute;
+    top: 24px; right: 24px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--ink); }
+
+  .modal h3 {
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .modal h3 em { font-style: italic; color: var(--warm); }
+
+  .modal-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--warm);
+  }
+
+  .form-group textarea {
+    resize: none;
+    height: 80px;
+  }
+
+  .form-group select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6560'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+  }
+
+  .form-group select option { background: var(--cream); }
+
+  .form-submit {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .form-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+
+  .form-success {
+    text-align: center;
+    padding: 40px 0;
+    display: none;
+  }
+
+  .form-success-icon { font-size: 48px; margin-bottom: 24px; }
+
+  .form-success h4 {
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 12px;
+  }
+
+  .form-success p {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 80px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 120px 32px 48px; border-right: none; border-bottom: 1px solid var(--border); }
+    .hero-right { padding: 48px 32px 80px; }
+    .divider { margin: 0 32px; }
+    .beliefs { padding: 80px 32px; }
+    .beliefs-grid { grid-template-columns: 1fr; }
+    .for-whom { padding: 80px 32px; }
+    .audience-list { grid-template-columns: 1fr; gap: 32px; }
+    .how { padding: 80px 32px; grid-template-columns: 1fr; gap: 48px; }
+    .cta-section { padding: 100px 32px; }
+    footer { padding: 40px 32px; }
+    .modal { padding: 40px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">People Above All</a>
+  <a href="#" class="nav-cta" onclick="openModal('join'); return false;">Присоединиться</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Движение · Платформа · Сообщество</p>
+    <h1 class="hero-title">Люди<br>превыше<br><em>всего.</em></h1>
+    <p class="hero-subtitle">Мы строим пространство, где идеи рождаются в сотрудничестве, приватность — норма, а связи основаны на ценностях, а не на алгоритмах.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary" onclick="openModal('idea'); return false;">У меня есть идея</a>
+      <a href="#" class="btn-ghost" onclick="openModal('join'); return false;">Ищу проект</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="manifesto-block">
+      <p class="manifesto-text">Мы окружены «социальными» сетями, которые делают нас одинокими. Технологиями, которые следят за нами вместо того, чтобы нас освобождать. Системами, которые ставят прибыль выше людей.<br><br>Это заканчивается сейчас.</p>
+      <p class="manifesto-attribution">— Манифест People Above All</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BELIEFS -->
+<section class="beliefs">
+  <div class="section-label">Наши убеждения</div>
+  <div class="beliefs-grid">
+    <div class="belief-card reveal">
+      <span class="belief-icon">🌱</span>
+      <h3 class="belief-title">Идеи созданы, чтобы делиться ими</h3>
+      <p class="belief-body">Твоя идея — это семя. Посади его открыто, полей сотрудничеством — и оно вырастет во что-то, что никто не мог бы создать в одиночку.</p>
+    </div>
+    <div class="belief-card reveal">
+      <span class="belief-icon">🔒</span>
+      <h3 class="belief-title">Приватность — не опция</h3>
+      <p class="belief-body">Твои данные, разговоры и личность принадлежат тебе. Мы никогда не будем продавать, отслеживать или эксплуатировать тебя. Доверие — наша единственная валюта.</p>
+    </div>
+    <div class="belief-card reveal">
+      <span class="belief-icon">🤝</span>
+      <h3 class="belief-title">Связь важнее транзакции</h3>
+      <p class="belief-body">Мы здесь, чтобы строить, учиться и расти вместе — а не извлекать ценность друг из друга. Цель — коллективный рост, а не индивидуальная выгода.</p>
+    </div>
+    <div class="belief-card reveal">
+      <span class="belief-icon">✨</span>
+      <h3 class="belief-title">Люди важнее алгоритмов</h3>
+      <p class="belief-body">Твой следующий великий соавтор должен быть найден через общие ценности и цели — не через машинное обучение.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="for-whom">
+  <div class="section-label">Для кого</div>
+  <div class="audience-list">
+    <div class="audience-item reveal">
+      <div class="audience-num">01</div>
+      <h3 class="audience-title">У тебя есть идея, но нет команды</h3>
+      <p class="audience-body">Ты придумал стартап, приложение или проект, но боишься поделиться. Мы даём безопасное место, где можно найти соавторов.</p>
+    </div>
+    <div class="audience-item reveal">
+      <div class="audience-num">02</div>
+      <h3 class="audience-title">Есть навыки, но нет идеи</h3>
+      <p class="audience-body">Ты дизайнер, разработчик или маркетолог — и хочешь участвовать в проектах, которые разделяют твои ценности.</p>
+    </div>
+    <div class="audience-item reveal">
+      <div class="audience-num">03</div>
+      <h3 class="audience-title">Устал от токсичных соцсетей</h3>
+      <p class="audience-body">Ты хочешь настоящих связей, а не лайков и алгоритмов. Тебя бесит, что твои данные продают, а контент — кликбейт.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-intro reveal">
+    <h2>Как это<br><em>работает</em></h2>
+    <p>Никакой магии алгоритмов. Только живые люди, ценности и ручная работа по соединению тех, кто подходит друг другу.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <span class="step-num">01</span>
+      <div>
+        <h4 class="step-title">Подай заявку</h4>
+        <p class="step-body">Заполни короткую форму — расскажи о себе, своей идее или том, что ищешь. Это займёт 3 минуты.</p>
+      </div>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">02</span>
+      <div>
+        <h4 class="step-title">Пройди отбор</h4>
+        <p class="step-body">Мы лично просматриваем каждую заявку. В сообщество попадают только те, кто разделяет ценности People Above All.</p>
+      </div>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">03</span>
+      <div>
+        <h4 class="step-title">Получи знакомство</h4>
+        <p class="step-body">Мы соединяем тебя с теми, кто дополняет твои навыки и ценности. Не алгоритм — живой человек делает введение.</p>
+      </div>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">04</span>
+      <div>
+        <h4 class="step-title">Строй вместе</h4>
+        <p class="step-body">Общайся, сотрудничай, запускай проекты. Сообщество за твоей спиной.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder">
+  <div class="founder-left reveal">
+    <div class="founder-avatar">
+      <img src="founder.jpg" alt="Владислав Киселёв" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">
+    </div>
+    <h3 class="founder-name">Владислав Киселёв</h3>
+    <p class="founder-role">Основатель · People Above All</p>
+    <div class="founder-links">
+      <a href="https://www.linkedin.com/in/vladislavkiselev1999/" target="_blank" class="founder-link">LinkedIn</a>
+      <a href="https://instagram.com/vladislavvv_kiselev" target="_blank" class="founder-link">Instagram</a>
+      <a href="https://t.me/people_above_all" target="_blank" class="founder-link">Telegram</a>
+    </div>
+  </div>
+  <div class="founder-right reveal">
+    <div class="founder-label">История основателя</div>
+    <p class="founder-story">
+      За последние годы я побывал в десятках стран и познакомился с сотнями людей —
+      разработчиками, дизайнерами, предпринимателями, философами, просто невероятными личностями.<br><br>
+      И каждый раз замечал одну и ту же боль. Человек рассказывает гениальную идею,
+      а потом шепотом добавляет: <em>«Только никому не говори, а то украдут».</em>
+      И идея остаётся похороненной в заметках телефона.<br><br>
+      Я искренне люблю людей. Вижу красоту в каждом. Ко мне обращаются за советом,
+      я много обжигался и много учился. И понял одно —
+      <em>прозрачные отношения и живые связи ценятся больше всего.</em>
+    </p>
+    <p class="founder-quote">
+      People Above All — это не просто платформа. Это моё желание познакомить тебя
+      с теми удивительными людьми, которых я встретил по всему миру.
+    </p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="reveal">Готов соединиться<br>с <em>правильными</em> людьми?</h2>
+  <p class="reveal">Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.</p>
+  <div class="cta-buttons reveal">
+    <a href="#" class="btn-primary" onclick="openModal('idea'); return false;">Поделиться идеей</a>
+    <a href="#" class="btn-ghost" onclick="openModal('join'); return false;">Добавить себя в каталог</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">People Above All</span>
+  <span class="footer-copy">peopleaboveall.com · 2025</span>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <!-- IDEA FORM -->
+    <div id="form-idea">
+      <h3>Расскажи об <em>идее</em></h3>
+      <p class="modal-sub">Займёт 3 минуты · Владислав ответит лично</p>
+      <div class="form-group">
+        <label>Имя *</label>
+        <input type="text" id="idea-name" placeholder="Как тебя зовут?" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="idea-email" placeholder="твой@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Telegram / Instagram</label>
+        <input type="text" id="idea-social" placeholder="@username">
+      </div>
+      <div class="form-group">
+        <label>Твоя идея *</label>
+        <textarea id="idea-text" placeholder="Опиши в 2-3 предложениях. Не бойся — здесь безопасно." style="height:100px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Кто тебе нужен?</label>
+        <input type="text" id="idea-need" placeholder="Разработчик, дизайнер, маркетолог...">
+      </div>
+      <div class="form-group">
+        <label>Город / Страна</label>
+        <input type="text" id="idea-city" placeholder="Москва · Берлин · Онлайн">
+      </div>
+      <div id="idea-error" style="display:none; color:#8B4513; font-family:'DM Mono',monospace; font-size:11px; margin-bottom:16px; letter-spacing:0.05em;"></div>
+      <button class="btn-primary form-submit" onclick="submitIdea()">
+        <span id="idea-btn-text">Отправить заявку</span>
+      </button>
+      <p class="form-note">Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.</p>
+    </div>
+
+    <!-- JOIN FORM -->
+    <div id="form-join" style="display:none">
+      <h3>Добавь себя в <em>каталог</em></h3>
+      <p class="modal-sub">Расскажи о себе · Владислав познакомит с нужными людьми</p>
+      <div class="form-group">
+        <label>Имя *</label>
+        <input type="text" id="join-name" placeholder="Как тебя зовут?" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="join-email" placeholder="твой@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Telegram / Instagram</label>
+        <input type="text" id="join-social" placeholder="@username">
+      </div>
+      <div class="form-group">
+        <label>Чем занимаешься? *</label>
+        <select id="join-role">
+          <option value="">Выбери роль</option>
+          <option>Разработчик</option>
+          <option>Дизайнер</option>
+          <option>Маркетолог</option>
+          <option>Предприниматель</option>
+          <option>Психолог</option>
+          <option>Врач</option>
+          <option>Исследователь</option>
+          <option>Другое</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Чем можешь помочь людям? *</label>
+        <textarea id="join-help" placeholder="Опиши свою экспертизу и чем готов делиться..." style="height:90px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Что ищешь?</label>
+        <textarea id="join-seek" placeholder="Интересные проекты, соавторы, единомышленники..." style="height:70px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Город / Страна</label>
+        <input type="text" id="join-city" placeholder="Москва · Берлин · Онлайн">
+      </div>
+      <div id="join-error" style="display:none; color:#8B4513; font-family:'DM Mono',monospace; font-size:11px; margin-bottom:16px; letter-spacing:0.05em;"></div>
+      <button class="btn-primary form-submit" onclick="submitJoin()">
+        <span id="join-btn-text">Отправить заявку</span>
+      </button>
+      <p class="form-note">Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.</p>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="form-success" id="form-success">
+      <div class="form-success-icon">✦</div>
+      <h4>Заявка получена</h4>
+      <p>Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── FORMSPREE ENDPOINT ──────────────────────────────────────────
+  // 1. Зайди на formspree.io → New Form → скопируй endpoint
+  // 2. Замени строку ниже на свой URL, например:
+  //    https://formspree.io/f/xpwzabcd
+  const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID';
+  // ───────────────────────────────────────────────────────────────
+
+  function openModal(type) {
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('form-idea').style.display = type === 'idea' ? 'block' : 'none';
+    document.getElementById('form-join').style.display = type === 'join' ? 'block' : 'none';
+    document.getElementById('form-success').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = '⚠ ' + msg;
+    el.style.display = 'block';
+  }
+
+  function hideError(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  function showSuccess() {
+    document.getElementById('form-idea').style.display = 'none';
+    document.getElementById('form-join').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+
+  async function sendToFormspree(data) {
+    const res = await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.ok;
+  }
+
+  async function submitIdea() {
+    hideError('idea-error');
+    const name  = document.getElementById('idea-name').value.trim();
+    const email = document.getElementById('idea-email').value.trim();
+    const text  = document.getElementById('idea-text').value.trim();
+
+    if (!name)  return showError('idea-error', 'Укажи своё имя');
+    if (!email || !email.includes('@')) return showError('idea-error', 'Укажи корректный email');
+    if (!text)  return showError('idea-error', 'Расскажи об идее — это главное');
+
+    const btn = document.getElementById('idea-btn-text');
+    btn.textContent = 'Отправляем...';
+
+    const ok = await sendToFormspree({
+      _subject: '💡 Новая идея — ' + name,
+      type: 'ИДЕЯ',
+      name,
+      email,
+      social:  document.getElementById('idea-social').value.trim(),
+      idea:    text,
+      need:    document.getElementById('idea-need').value.trim(),
+      city:    document.getElementById('idea-city').value.trim(),
+    });
+
+    btn.textContent = 'Отправить заявку';
+    if (ok) showSuccess();
+    else showError('idea-error', 'Ошибка отправки — напиши напрямую в Telegram @people_above_all');
+  }
+
+  async function submitJoin() {
+    hideError('join-error');
+    const name  = document.getElementById('join-name').value.trim();
+    const email = document.getElementById('join-email').value.trim();
+    const role  = document.getElementById('join-role').value;
+    const help  = document.getElementById('join-help').value.trim();
+
+    if (!name)  return showError('join-error', 'Укажи своё имя');
+    if (!email || !email.includes('@')) return showError('join-error', 'Укажи корректный email');
+    if (!role)  return showError('join-error', 'Выбери свою роль');
+    if (!help)  return showError('join-error', 'Расскажи чем можешь помочь людям');
+
+    const btn = document.getElementById('join-btn-text');
+    btn.textContent = 'Отправляем...';
+
+    const ok = await sendToFormspree({
+      _subject: '🙋 Новый участник — ' + name + ' (' + role + ')',
+      type: 'КАТАЛОГ',
+      name,
+      email,
+      social: document.getElementById('join-social').value.trim(),
+      role,
+      help,
+      seek:   document.getElementById('join-seek').value.trim(),
+      city:   document.getElementById('join-city').value.trim(),
+    });
+
+    btn.textContent = 'Отправить заявку';
+    if (ok) showSuccess();
+    else showError('join-error', 'Ошибка отправки — напиши напрямую в Telegram @people_above_all');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Keyboard close
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
