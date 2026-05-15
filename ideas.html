@@ -108,11 +108,10 @@
     flex-wrap: wrap;
   }
   .search-wrapper {
-    flex: 0 1 400px;
-    max-width: 260px;
-   }
-  .top-share-btn, .top-join-btn {
-    flex-shrink: 0;
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    flex: 0 1 auto;
    }
   .search-icon {
     position: absolute;
@@ -443,8 +442,7 @@
     nav { padding: 20px 24px; }
     .hero-mini { padding: 120px 24px 40px; }
     .search-section { padding: 0 24px 20px; flex-direction: column; align-items: stretch; }
-    .search-wrapper { max-width: none; }
-    .top-share-btn { text-align: center; }
+    .top-share-btn { white-space: normal; text-align: center; }
     .filters { padding: 0 24px 32px; }
     .ideas-grid { padding: 20px 24px 60px; }
     footer { padding: 32px 24px; }
