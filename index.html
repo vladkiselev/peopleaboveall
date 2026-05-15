@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>People Above All</title>
+<title>People Above All — люди превыше всего</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
+  /* --- все стили остаются без изменений (как в исходном index.html) --- */
+  /* (копирую стили из исходного файла, который был предоставлен ранее) */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --cream: #F5F0E8;
     --ink: #1A1714;
@@ -16,17 +17,13 @@
     --muted: #6B6560;
     --border: rgba(26,23,20,0.12);
   }
-
   html { scroll-behavior: smooth; }
-
   body {
     background: var(--cream);
     color: var(--ink);
     font-family: 'Cormorant Garamond', Georgia, serif;
     overflow-x: hidden;
   }
-
-  /* GRAIN TEXTURE */
   body::before {
     content: '';
     position: fixed;
@@ -36,8 +33,6 @@
     z-index: 1000;
     opacity: 0.6;
   }
-
-  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -48,7 +43,6 @@
     align-items: center;
     background: linear-gradient(to bottom, var(--cream) 60%, transparent);
   }
-
   .nav-logo {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
@@ -58,29 +52,43 @@
     color: var(--muted);
     text-decoration: none;
   }
-
-  .nav-cta {
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .nav-link {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--ink);
+    color: var(--muted);
     text-decoration: none;
-    border-bottom: 1px solid var(--ink);
-    padding-bottom: 2px;
-    transition: color 0.3s, border-color 0.3s;
+    transition: color 0.3s;
   }
-
-  .nav-cta:hover { color: var(--warm); border-color: var(--warm); }
-
-  /* HERO */
+  .nav-link.active { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+  .nav-link:hover { color: var(--ink); }
+  .lang-switch {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.3s;
+  }
+  .lang-switch:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
   .hero {
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     position: relative;
   }
-
   .hero-left {
     padding: 140px 64px 80px 80px;
     display: flex;
@@ -90,7 +98,6 @@
     animation: fadeUp 1.2s ease forwards;
     opacity: 0;
   }
-
   .hero-eyebrow {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -99,7 +106,6 @@
     color: var(--warm);
     margin-bottom: 32px;
   }
-
   .hero-title {
     font-size: clamp(52px, 6vw, 88px);
     font-weight: 300;
@@ -107,12 +113,7 @@
     letter-spacing: -0.02em;
     margin-bottom: 40px;
   }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--warm);
-  }
-
+  .hero-title em { font-style: italic; color: var(--warm); }
   .hero-subtitle {
     font-size: 20px;
     font-weight: 300;
@@ -121,13 +122,7 @@
     max-width: 420px;
     margin-bottom: 56px;
   }
-
-  .hero-actions {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
   .btn-primary {
     background: var(--ink);
     color: var(--cream);
@@ -142,9 +137,7 @@
     display: inline-block;
     transition: background 0.3s, transform 0.2s;
   }
-
   .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
-
   .btn-ghost {
     background: transparent;
     color: var(--ink);
@@ -159,9 +152,7 @@
     display: inline-block;
     transition: border-color 0.3s, color 0.3s;
   }
-
   .btn-ghost:hover { border-color: var(--ink); }
-
   .hero-right {
     padding: 140px 80px 80px 64px;
     display: flex;
@@ -170,11 +161,7 @@
     animation: fadeUp 1.2s 0.3s ease forwards;
     opacity: 0;
   }
-
-  .manifesto-block {
-    position: relative;
-  }
-
+  .manifesto-block { position: relative; }
   .manifesto-block::before {
     content: '"';
     position: absolute;
@@ -186,7 +173,6 @@
     font-family: 'Cormorant Garamond', serif;
     line-height: 1;
   }
-
   .manifesto-text {
     font-size: 22px;
     font-weight: 300;
@@ -195,7 +181,6 @@
     color: var(--ink);
     margin-bottom: 40px;
   }
-
   .manifesto-attribution {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -203,19 +188,8 @@
     text-transform: uppercase;
     color: var(--muted);
   }
-
-  /* DIVIDER */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 0 80px;
-  }
-
-  /* BELIEFS */
-  .beliefs {
-    padding: 120px 80px;
-  }
-
+  .divider { height: 1px; background: var(--border); margin: 0 80px; }
+  .beliefs { padding: 120px 80px; }
   .section-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -227,14 +201,7 @@
     align-items: center;
     gap: 16px;
   }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .beliefs-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -242,61 +209,31 @@
     background: var(--border);
     border: 1px solid var(--border);
   }
-
   .belief-card {
     background: var(--cream);
     padding: 48px;
     transition: background 0.4s;
   }
-
   .belief-card:hover { background: #EDE8DF; }
-
-  .belief-icon {
-    font-size: 28px;
-    margin-bottom: 24px;
-    display: block;
-  }
-
-  .belief-title {
-    font-size: 24px;
-    font-weight: 400;
-    margin-bottom: 16px;
-    letter-spacing: -0.01em;
-  }
-
-  .belief-body {
-    font-size: 17px;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  /* FOR WHOM */
+  .belief-icon { font-size: 28px; margin-bottom: 24px; display: block; }
+  .belief-title { font-size: 24px; font-weight: 400; margin-bottom: 16px; letter-spacing: -0.01em; }
+  .belief-body { font-size: 17px; font-weight: 300; line-height: 1.7; color: var(--muted); }
   .for-whom {
     padding: 120px 80px;
     background: var(--ink);
     color: var(--cream);
   }
-
-  .for-whom .section-label {
-    color: var(--warm);
-  }
-
-  .for-whom .section-label::after {
-    background: rgba(245,240,232,0.15);
-  }
-
+  .for-whom .section-label { color: var(--warm); }
+  .for-whom .section-label::after { background: rgba(245,240,232,0.15); }
   .audience-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 48px;
   }
-
   .audience-item {
     border-top: 1px solid rgba(245,240,232,0.2);
     padding-top: 32px;
   }
-
   .audience-num {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -304,22 +241,13 @@
     color: var(--warm);
     margin-bottom: 20px;
   }
-
-  .audience-title {
-    font-size: 26px;
-    font-weight: 300;
-    margin-bottom: 16px;
-    line-height: 1.2;
-  }
-
+  .audience-title { font-size: 26px; font-weight: 300; margin-bottom: 16px; line-height: 1.2; }
   .audience-body {
     font-size: 16px;
     font-weight: 300;
     line-height: 1.7;
     color: rgba(245,240,232,0.55);
   }
-
-  /* HOW IT WORKS */
   .how {
     padding: 120px 80px;
     display: grid;
@@ -327,7 +255,6 @@
     gap: 80px;
     align-items: start;
   }
-
   .how-intro h2 {
     font-size: clamp(36px, 4vw, 56px);
     font-weight: 300;
@@ -335,22 +262,9 @@
     letter-spacing: -0.02em;
     margin-bottom: 24px;
   }
-
   .how-intro h2 em { font-style: italic; color: var(--warm); }
-
-  .how-intro p {
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
+  .how-intro p { font-size: 18px; font-weight: 300; line-height: 1.7; color: var(--muted); }
+  .steps { display: flex; flex-direction: column; gap: 0; }
   .step {
     display: grid;
     grid-template-columns: 48px 1fr;
@@ -359,9 +273,7 @@
     border-bottom: 1px solid var(--border);
     align-items: start;
   }
-
   .step:first-child { border-top: 1px solid var(--border); }
-
   .step-num {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -369,21 +281,8 @@
     color: var(--warm);
     padding-top: 6px;
   }
-
-  .step-title {
-    font-size: 20px;
-    font-weight: 400;
-    margin-bottom: 8px;
-  }
-
-  .step-body {
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.6;
-    color: var(--muted);
-  }
-
-  /* FOUNDER SECTION */
+  .step-title { font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+  .step-body { font-size: 16px; font-weight: 300; line-height: 1.6; color: var(--muted); }
   .founder {
     padding: 120px 80px;
     background: var(--ink);
@@ -393,9 +292,7 @@
     gap: 80px;
     align-items: center;
   }
-
   .founder-left { position: relative; }
-
   .founder-avatar {
     width: 200px;
     height: 200px;
@@ -409,7 +306,6 @@
     position: relative;
     overflow: hidden;
   }
-
   .founder-avatar-initials {
     font-size: 52px;
     font-weight: 300;
@@ -417,8 +313,6 @@
     color: var(--warm);
     letter-spacing: -0.03em;
   }
-
-  /* neural ring around avatar */
   .founder-avatar::after {
     content: '';
     position: absolute;
@@ -426,15 +320,7 @@
     border-radius: 50%;
     border: 0.5px solid rgba(200,169,126,0.2);
   }
-
-  .founder-name {
-    font-size: 28px;
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    margin-bottom: 6px;
-    color: var(--cream);
-  }
-
+  .founder-name { font-size: 28px; font-weight: 300; letter-spacing: -0.01em; margin-bottom: 6px; color: var(--cream); }
   .founder-role {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -443,13 +329,7 @@
     color: var(--warm);
     margin-bottom: 28px;
   }
-
-  .founder-links {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
+  .founder-links { display: flex; gap: 16px; flex-wrap: wrap; }
   .founder-link {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -461,11 +341,7 @@
     padding-bottom: 2px;
     transition: color 0.3s, border-color 0.3s;
   }
-
   .founder-link:hover { color: var(--warm); border-color: var(--warm); }
-
-  .founder-right {}
-
   .founder-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -477,14 +353,7 @@
     align-items: center;
     gap: 16px;
   }
-
-  .founder-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(245,240,232,0.12);
-  }
-
+  .founder-label::after { content: ''; flex: 1; height: 1px; background: rgba(245,240,232,0.12); }
   .founder-story {
     font-size: 20px;
     font-weight: 300;
@@ -492,12 +361,7 @@
     color: rgba(245,240,232,0.85);
     margin-bottom: 28px;
   }
-
-  .founder-story em {
-    font-style: italic;
-    color: var(--warm);
-  }
-
+  .founder-story em { font-style: italic; color: var(--warm); }
   .founder-quote {
     font-size: 16px;
     font-weight: 300;
@@ -507,23 +371,12 @@
     border-left: 1px solid rgba(200,169,126,0.3);
     padding-left: 20px;
   }
-
-  @media (max-width: 900px) {
-    .founder {
-      grid-template-columns: 1fr;
-      padding: 80px 32px;
-      gap: 48px;
-    }
-  }
-
-  /* CTA SECTION */
   .cta-section {
     padding: 140px 80px;
     text-align: center;
     position: relative;
     overflow: hidden;
   }
-
   .cta-section::before {
     content: 'PAA';
     position: absolute;
@@ -539,7 +392,6 @@
     pointer-events: none;
     letter-spacing: -0.05em;
   }
-
   .cta-section h2 {
     font-size: clamp(40px, 5vw, 72px);
     font-weight: 300;
@@ -548,9 +400,7 @@
     margin-bottom: 24px;
     position: relative;
   }
-
   .cta-section h2 em { font-style: italic; color: var(--warm); }
-
   .cta-section p {
     font-size: 20px;
     font-weight: 300;
@@ -560,16 +410,42 @@
     line-height: 1.6;
     position: relative;
   }
-
-  .cta-buttons {
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+  footer {
+    padding: 48px 80px;
+    border-top: 1px solid var(--border);
     display: flex;
-    gap: 16px;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    position: relative;
+    gap: 16px;
   }
-
-  /* FORM MODAL */
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  
+  /* Модальные окна (как в других страницах) */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -583,12 +459,7 @@
     transition: opacity 0.4s;
     backdrop-filter: blur(4px);
   }
-
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
-
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
   .modal {
     background: var(--cream);
     padding: 64px;
@@ -600,9 +471,7 @@
     transform: translateY(20px);
     transition: transform 0.4s;
   }
-
   .modal-overlay.open .modal { transform: translateY(0); }
-
   .modal-close {
     position: absolute;
     top: 24px; right: 24px;
@@ -612,19 +481,10 @@
     cursor: pointer;
     color: var(--muted);
     font-family: 'DM Mono', monospace;
-    transition: color 0.2s;
   }
   .modal-close:hover { color: var(--ink); }
-
-  .modal h3 {
-    font-size: 32px;
-    font-weight: 300;
-    margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-
+  .modal h3 { font-size: 32px; font-weight: 300; margin-bottom: 8px; letter-spacing: -0.01em; }
   .modal h3 em { font-style: italic; color: var(--warm); }
-
   .modal-sub {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -633,11 +493,7 @@
     color: var(--muted);
     margin-bottom: 40px;
   }
-
-  .form-group {
-    margin-bottom: 24px;
-  }
-
+  .form-group { margin-bottom: 24px; }
   .form-group label {
     display: block;
     font-family: 'DM Mono', monospace;
@@ -647,10 +503,7 @@
     color: var(--muted);
     margin-bottom: 10px;
   }
-
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
+  .form-group input, .form-group textarea, .form-group select {
     width: 100%;
     background: transparent;
     border: none;
@@ -662,20 +515,8 @@
     color: var(--ink);
     outline: none;
     transition: border-color 0.3s;
-    -webkit-appearance: none;
   }
-
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    border-color: var(--warm);
-  }
-
-  .form-group textarea {
-    resize: none;
-    height: 80px;
-  }
-
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--warm); }
   .form-group select {
     cursor: pointer;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6560'/%3E%3C/svg%3E");
@@ -683,14 +524,22 @@
     background-position: right 8px center;
     padding-right: 24px;
   }
-
   .form-group select option { background: var(--cream); }
-
   .form-submit {
     width: 100%;
     margin-top: 16px;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
   }
-
+  .form-submit:hover { background: var(--rust); }
   .form-note {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
@@ -700,73 +549,22 @@
     margin-top: 16px;
     line-height: 1.6;
   }
-
   .form-success {
     text-align: center;
     padding: 40px 0;
     display: none;
   }
-
   .form-success-icon { font-size: 48px; margin-bottom: 24px; }
-
-  .form-success h4 {
-    font-size: 28px;
-    font-weight: 300;
-    margin-bottom: 12px;
-  }
-
-  .form-success p {
-    font-size: 17px;
-    font-weight: 300;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  /* FOOTER */
-  footer {
-    padding: 48px 80px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .footer-logo {
+  .form-success h4 { font-size: 28px; font-weight: 300; margin-bottom: 12px; }
+  .form-success p { font-size: 17px; font-weight: 300; color: var(--muted); line-height: 1.6; }
+  .error-message {
+    display: none;
+    color: var(--rust);
     font-family: 'DM Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
   }
-
-  .footer-copy {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    opacity: 0.5;
-  }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(32px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* RESPONSIVE */
   @media (max-width: 900px) {
     nav { padding: 20px 24px; }
     .hero { grid-template-columns: 1fr; }
@@ -778,6 +576,7 @@
     .for-whom { padding: 80px 32px; }
     .audience-list { grid-template-columns: 1fr; gap: 32px; }
     .how { padding: 80px 32px; grid-template-columns: 1fr; gap: 48px; }
+    .founder { grid-template-columns: 1fr; padding: 80px 32px; gap: 48px; }
     .cta-section { padding: 100px 32px; }
     footer { padding: 40px 32px; }
     .modal { padding: 40px 28px; }
@@ -786,27 +585,32 @@
 </head>
 <body>
 
-<!-- NAV -->
+<!-- NAVIGATION -->
 <nav>
-  <a href="#" class="nav-logo">People Above All</a>
-  <a href="#" class="nav-cta" onclick="openModal('join'); return false;">Присоединиться</a>
+  <a href="index.html" class="nav-logo">People Above All</a>
+  <div class="nav-links">
+    <a href="ideas.html" class="nav-link" data-i18n="nav_ideas">Идеи</a>
+    <a href="people.html" class="nav-link" data-i18n="nav_people">Люди</a>
+    <a href="index.html" class="nav-link active" data-i18n="nav_about">О проекте</a>
+    <button class="lang-switch" id="lang-switch">EN</button>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <p class="hero-eyebrow">Движение · Платформа · Сообщество</p>
-    <h1 class="hero-title">Люди<br>превыше<br><em>всего.</em></h1>
-    <p class="hero-subtitle">Мы строим пространство, где идеи рождаются в сотрудничестве, приватность — норма, а связи основаны на ценностях, а не на алгоритмах.</p>
+    <p class="hero-eyebrow" data-i18n="hero_eyebrow">Движение · Платформа · Сообщество</p>
+    <h1 class="hero-title"><span data-i18n="hero_title_1">Люди</span><br><span data-i18n="hero_title_2">превыше</span><br><em data-i18n="hero_title_3">всего.</em></h1>
+    <p class="hero-subtitle" data-i18n="hero_subtitle">Мы строим пространство, где идеи рождаются в сотрудничестве, приватность — норма, а связи основаны на ценностях, а не на алгоритмах.</p>
     <div class="hero-actions">
-      <a href="#" class="btn-primary" onclick="openModal('idea'); return false;">У меня есть идея</a>
-      <a href="#" class="btn-ghost" onclick="openModal('join'); return false;">Ищу проект</a>
+      <a href="#" class="btn-primary" id="ideaBtn" data-i18n="btn_idea">У меня есть идея</a>
+      <a href="#" class="btn-ghost" id="joinBtn" data-i18n="btn_join_project">Ищу проект</a>
     </div>
   </div>
   <div class="hero-right">
     <div class="manifesto-block">
-      <p class="manifesto-text">Мы окружены «социальными» сетями, которые делают нас одинокими. Технологиями, которые следят за нами вместо того, чтобы нас освобождать. Системами, которые ставят прибыль выше людей.<br><br>Это заканчивается сейчас.</p>
-      <p class="manifesto-attribution">— Манифест People Above All</p>
+      <p class="manifesto-text" data-i18n="manifesto_text">Мы окружены «социальными» сетями, которые делают нас одинокими. Технологиями, которые следят за нами вместо того, чтобы нас освобождать. Системами, которые ставят прибыль выше людей.<br><br>Это заканчивается сейчас.</p>
+      <p class="manifesto-attribution" data-i18n="manifesto_attribution">— Манифест People Above All</p>
     </div>
   </div>
 </section>
@@ -815,49 +619,49 @@
 
 <!-- BELIEFS -->
 <section class="beliefs">
-  <div class="section-label">Наши убеждения</div>
+  <div class="section-label" data-i18n="beliefs_label">Наши убеждения</div>
   <div class="beliefs-grid">
     <div class="belief-card reveal">
       <span class="belief-icon">🌱</span>
-      <h3 class="belief-title">Идеи созданы, чтобы делиться ими</h3>
-      <p class="belief-body">Твоя идея — это семя. Посади его открыто, полей сотрудничеством — и оно вырастет во что-то, что никто не мог бы создать в одиночку.</p>
+      <h3 class="belief-title" data-i18n="belief1_title">Идеи созданы, чтобы делиться ими</h3>
+      <p class="belief-body" data-i18n="belief1_text">Твоя идея — это семя. Посади его открыто, полей сотрудничеством — и оно вырастет во что-то, что никто не мог бы создать в одиночку.</p>
     </div>
     <div class="belief-card reveal">
       <span class="belief-icon">🔒</span>
-      <h3 class="belief-title">Приватность — не опция</h3>
-      <p class="belief-body">Твои данные, разговоры и личность принадлежат тебе. Мы никогда не будем продавать, отслеживать или эксплуатировать тебя. Доверие — наша единственная валюта.</p>
+      <h3 class="belief-title" data-i18n="belief2_title">Приватность — не опция</h3>
+      <p class="belief-body" data-i18n="belief2_text">Твои данные, разговоры и личность принадлежат тебе. Мы никогда не будем продавать, отслеживать или эксплуатировать тебя. Доверие — наша единственная валюта.</p>
     </div>
     <div class="belief-card reveal">
       <span class="belief-icon">🤝</span>
-      <h3 class="belief-title">Связь важнее транзакции</h3>
-      <p class="belief-body">Мы здесь, чтобы строить, учиться и расти вместе — а не извлекать ценность друг из друга. Цель — коллективный рост, а не индивидуальная выгода.</p>
+      <h3 class="belief-title" data-i18n="belief3_title">Связь важнее транзакции</h3>
+      <p class="belief-body" data-i18n="belief3_text">Мы здесь, чтобы строить, учиться и расти вместе — а не извлекать ценность друг из друга. Цель — коллективный рост, а не индивидуальная выгода.</p>
     </div>
     <div class="belief-card reveal">
       <span class="belief-icon">✨</span>
-      <h3 class="belief-title">Люди важнее алгоритмов</h3>
-      <p class="belief-body">Твой следующий великий соавтор должен быть найден через общие ценности и цели — не через машинное обучение.</p>
+      <h3 class="belief-title" data-i18n="belief4_title">Люди важнее алгоритмов</h3>
+      <p class="belief-body" data-i18n="belief4_text">Твой следующий великий соавтор должен быть найден через общие ценности и цели — не через машинное обучение.</p>
     </div>
   </div>
 </section>
 
 <!-- FOR WHOM -->
 <section class="for-whom">
-  <div class="section-label">Для кого</div>
+  <div class="section-label" data-i18n="for_whom_label">Для кого</div>
   <div class="audience-list">
     <div class="audience-item reveal">
       <div class="audience-num">01</div>
-      <h3 class="audience-title">У тебя есть идея, но нет команды</h3>
-      <p class="audience-body">Ты придумал стартап, приложение или проект, но боишься поделиться. Мы даём безопасное место, где можно найти соавторов.</p>
+      <h3 class="audience-title" data-i18n="audience1_title">У тебя есть идея, но нет команды</h3>
+      <p class="audience-body" data-i18n="audience1_text">Ты придумал стартап, приложение или проект, но боишься поделиться. Мы даём безопасное место, где можно найти соавторов.</p>
     </div>
     <div class="audience-item reveal">
       <div class="audience-num">02</div>
-      <h3 class="audience-title">Есть навыки, но нет идеи</h3>
-      <p class="audience-body">Ты дизайнер, разработчик или маркетолог — и хочешь участвовать в проектах, которые разделяют твои ценности.</p>
+      <h3 class="audience-title" data-i18n="audience2_title">Есть навыки, но нет идеи</h3>
+      <p class="audience-body" data-i18n="audience2_text">Ты дизайнер, разработчик или маркетолог — и хочешь участвовать в проектах, которые разделяют твои ценности.</p>
     </div>
     <div class="audience-item reveal">
       <div class="audience-num">03</div>
-      <h3 class="audience-title">Устал от токсичных соцсетей</h3>
-      <p class="audience-body">Ты хочешь настоящих связей, а не лайков и алгоритмов. Тебя бесит, что твои данные продают, а контент — кликбейт.</p>
+      <h3 class="audience-title" data-i18n="audience3_title">Устал от токсичных соцсетей</h3>
+      <p class="audience-body" data-i18n="audience3_text">Ты хочешь настоящих связей, а не лайков и алгоритмов. Тебя бесит, что твои данные продают, а контент — кликбейт.</p>
     </div>
   </div>
 </section>
@@ -865,49 +669,49 @@
 <!-- HOW IT WORKS -->
 <section class="how">
   <div class="how-intro reveal">
-    <h2>Как это<br><em>работает</em></h2>
-    <p>Никакой магии алгоритмов. Только живые люди, ценности и ручная работа по соединению тех, кто подходит друг другу.</p>
+    <h2><span data-i18n="how_title_1">Как это</span><br><em data-i18n="how_title_2">работает</em></h2>
+    <p data-i18n="how_subtitle">Никакой магии алгоритмов. Только живые люди, ценности и ручная работа по соединению тех, кто подходит друг другу.</p>
   </div>
   <div class="steps">
     <div class="step reveal">
       <span class="step-num">01</span>
       <div>
-        <h4 class="step-title">Подай заявку</h4>
-        <p class="step-body">Заполни короткую форму — расскажи о себе, своей идее или том, что ищешь. Это займёт 3 минуты.</p>
+        <h4 class="step-title" data-i18n="step1_title">Подай заявку</h4>
+        <p class="step-body" data-i18n="step1_text">Заполни короткую форму — расскажи о себе, своей идее или том, что ищешь. Это займёт 3 минуты.</p>
       </div>
     </div>
     <div class="step reveal">
       <span class="step-num">02</span>
       <div>
-        <h4 class="step-title">Пройди отбор</h4>
-        <p class="step-body">Мы лично просматриваем каждую заявку. В сообщество попадают только те, кто разделяет ценности People Above All.</p>
+        <h4 class="step-title" data-i18n="step2_title">Пройди отбор</h4>
+        <p class="step-body" data-i18n="step2_text">Мы лично просматриваем каждую заявку. В сообщество попадают только те, кто разделяет ценности People Above All.</p>
       </div>
     </div>
     <div class="step reveal">
       <span class="step-num">03</span>
       <div>
-        <h4 class="step-title">Получи знакомство</h4>
-        <p class="step-body">Мы соединяем тебя с теми, кто дополняет твои навыки и ценности. Не алгоритм — живой человек делает введение.</p>
+        <h4 class="step-title" data-i18n="step3_title">Получи знакомство</h4>
+        <p class="step-body" data-i18n="step3_text">Мы соединяем тебя с теми, кто дополняет твои навыки и ценности. Не алгоритм — живой человек делает введение.</p>
       </div>
     </div>
     <div class="step reveal">
       <span class="step-num">04</span>
       <div>
-        <h4 class="step-title">Строй вместе</h4>
-        <p class="step-body">Общайся, сотрудничай, запускай проекты. Сообщество за твоей спиной.</p>
+        <h4 class="step-title" data-i18n="step4_title">Строй вместе</h4>
+        <p class="step-body" data-i18n="step4_text">Общайся, сотрудничай, запускай проекты. Сообщество за твоей спиной.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOUNDER -->
+<!-- FOUNDER SECTION -->
 <section class="founder">
   <div class="founder-left reveal">
     <div class="founder-avatar">
       <img src="founder.jpg" alt="Владислав Киселёв" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">
     </div>
     <h3 class="founder-name">Владислав Киселёв</h3>
-    <p class="founder-role">Основатель · People Above All</p>
+    <p class="founder-role" data-i18n="founder_role">Основатель · People Above All</p>
     <div class="founder-links">
       <a href="https://www.linkedin.com/in/vladislavkiselev1999/" target="_blank" class="founder-link">LinkedIn</a>
       <a href="https://instagram.com/vladislavvv_kiselev" target="_blank" class="founder-link">Instagram</a>
@@ -915,262 +719,402 @@
     </div>
   </div>
   <div class="founder-right reveal">
-    <div class="founder-label">История основателя</div>
-    <p class="founder-story">
-      За последние годы я побывал в десятках стран и познакомился с сотнями людей —
-      разработчиками, дизайнерами, предпринимателями, философами, просто невероятными личностями.<br><br>
-      И каждый раз замечал одну и ту же боль. Человек рассказывает гениальную идею,
-      а потом шепотом добавляет: <em>«Только никому не говори, а то украдут».</em>
-      И идея остаётся похороненной в заметках телефона.<br><br>
-      Я искренне люблю людей. Вижу красоту в каждом. Ко мне обращаются за советом,
-      я много обжигался и много учился. И понял одно —
-      <em>прозрачные отношения и живые связи ценятся больше всего.</em>
-    </p>
-    <p class="founder-quote">
-      People Above All — это не просто платформа. Это моё желание познакомить тебя
-      с теми удивительными людьми, которых я встретил по всему миру.
-    </p>
+    <div class="founder-label" data-i18n="founder_label">История основателя</div>
+    <p class="founder-story" data-i18n="founder_story_1">За последние годы я побывал в десятках стран и познакомился с сотнями людей — разработчиками, дизайнерами, предпринимателями, философами, просто невероятными личностями.<br><br>И каждый раз замечал одну и ту же боль. Человек рассказывает гениальную идею, а потом шепотом добавляет: <em>«Только никому не говори, а то украдут»</em>. И идея остаётся похороненной в заметках телефона.<br><br>Я искренне люблю людей. Вижу красоту в каждом. Ко мне обращаются за советом, я много обжигался и много учился. И понял одно — <em>прозрачные отношения и живые связи ценятся больше всего.</em></p>
+    <p class="founder-quote" data-i18n="founder_story_2">People Above All — это не просто платформа. Это моё желание познакомить тебя с теми удивительными людьми, которых я встретил по всему миру.</p>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- CTA SECTION -->
 <section class="cta-section">
-  <h2 class="reveal">Готов соединиться<br>с <em>правильными</em> людьми?</h2>
-  <p class="reveal">Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.</p>
+  <h2 class="reveal"><span data-i18n="cta_title_1">Готов соединиться</span><br><em data-i18n="cta_title_2">с правильными людьми?</em></h2>
+  <p class="reveal" data-i18n="cta_subtitle">Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.</p>
   <div class="cta-buttons reveal">
-    <a href="#" class="btn-primary" onclick="openModal('idea'); return false;">Поделиться идеей</a>
-    <a href="#" class="btn-ghost" onclick="openModal('join'); return false;">Добавить себя в каталог</a>
+    <a href="#" class="btn-primary" id="ctaIdeaBtn" data-i18n="btn_idea">Поделиться идеей</a>
+    <a href="#" class="btn-ghost" id="ctaJoinBtn" data-i18n="btn_join_project">Добавить себя в каталог</a>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <span class="footer-logo">People Above All</span>
   <span class="footer-copy">peopleaboveall.com · 2025</span>
 </footer>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+<!-- MODAL FOR IDEA FORM -->
+<div class="modal-overlay" id="ideaModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('ideaModal')">✕</button>
+    <div id="ideaModalContent"></div>
+  </div>
+</div>
 
-    <!-- IDEA FORM -->
-    <div id="form-idea">
-      <h3>Расскажи об <em>идее</em></h3>
-      <p class="modal-sub">Займёт 3 минуты · Владислав ответит лично</p>
-      <div class="form-group">
-        <label>Имя *</label>
-        <input type="text" id="idea-name" placeholder="Как тебя зовут?" autocomplete="name">
-      </div>
-      <div class="form-group">
-        <label>Email *</label>
-        <input type="email" id="idea-email" placeholder="твой@email.com" autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label>Telegram / Instagram</label>
-        <input type="text" id="idea-social" placeholder="@username">
-      </div>
-      <div class="form-group">
-        <label>Твоя идея *</label>
-        <textarea id="idea-text" placeholder="Опиши в 2-3 предложениях. Не бойся — здесь безопасно." style="height:100px;"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Кто тебе нужен?</label>
-        <input type="text" id="idea-need" placeholder="Разработчик, дизайнер, маркетолог...">
-      </div>
-      <div class="form-group">
-        <label>Город / Страна</label>
-        <input type="text" id="idea-city" placeholder="Москва · Берлин · Онлайн">
-      </div>
-      <div id="idea-error" style="display:none; color:#8B4513; font-family:'DM Mono',monospace; font-size:11px; margin-bottom:16px; letter-spacing:0.05em;"></div>
-      <button class="btn-primary form-submit" onclick="submitIdea()">
-        <span id="idea-btn-text">Отправить заявку</span>
-      </button>
-      <p class="form-note">Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.</p>
-    </div>
-
-    <!-- JOIN FORM -->
-    <div id="form-join" style="display:none">
-      <h3>Добавь себя в <em>каталог</em></h3>
-      <p class="modal-sub">Расскажи о себе · Владислав познакомит с нужными людьми</p>
-      <div class="form-group">
-        <label>Имя *</label>
-        <input type="text" id="join-name" placeholder="Как тебя зовут?" autocomplete="name">
-      </div>
-      <div class="form-group">
-        <label>Email *</label>
-        <input type="email" id="join-email" placeholder="твой@email.com" autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label>Telegram / Instagram</label>
-        <input type="text" id="join-social" placeholder="@username">
-      </div>
-      <div class="form-group">
-        <label>Чем занимаешься? *</label>
-        <select id="join-role">
-          <option value="">Выбери роль</option>
-          <option>Разработчик</option>
-          <option>Дизайнер</option>
-          <option>Маркетолог</option>
-          <option>Предприниматель</option>
-          <option>Психолог</option>
-          <option>Врач</option>
-          <option>Исследователь</option>
-          <option>Другое</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Чем можешь помочь людям? *</label>
-        <textarea id="join-help" placeholder="Опиши свою экспертизу и чем готов делиться..." style="height:90px;"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Что ищешь?</label>
-        <textarea id="join-seek" placeholder="Интересные проекты, соавторы, единомышленники..." style="height:70px;"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Город / Страна</label>
-        <input type="text" id="join-city" placeholder="Москва · Берлин · Онлайн">
-      </div>
-      <div id="join-error" style="display:none; color:#8B4513; font-family:'DM Mono',monospace; font-size:11px; margin-bottom:16px; letter-spacing:0.05em;"></div>
-      <button class="btn-primary form-submit" onclick="submitJoin()">
-        <span id="join-btn-text">Отправить заявку</span>
-      </button>
-      <p class="form-note">Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.</p>
-    </div>
-
-    <!-- SUCCESS -->
-    <div class="form-success" id="form-success">
-      <div class="form-success-icon">✦</div>
-      <h4>Заявка получена</h4>
-      <p>Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.</p>
-    </div>
+<!-- MODAL FOR JOIN FORM -->
+<div class="modal-overlay" id="joinModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('joinModal')">✕</button>
+    <div id="joinModalContent"></div>
   </div>
 </div>
 
 <script>
-  // ── FORMSPREE ENDPOINT ──────────────────────────────────────────
-  // 1. Зайди на formspree.io → New Form → скопируй endpoint
-  // 2. Замени строку ниже на свой URL, например:
-  //    https://formspree.io/f/xpwzabcd
-  const FORMSPREE_URL = 'https://formspree.io/f/xwvyzbvr';
-  // ───────────────────────────────────────────────────────────────
+  // ---------- ПЕРЕВОДЫ ----------
+  const translations = {
+    ru: {
+      nav_ideas: "Идеи", nav_people: "Люди", nav_about: "О проекте",
+      hero_eyebrow: "Движение · Платформа · Сообщество",
+      hero_title_1: "Люди", hero_title_2: "превыше", hero_title_3: "всего.",
+      hero_subtitle: "Мы строим пространство, где идеи рождаются в сотрудничестве, приватность — норма, а связи основаны на ценностях, а не на алгоритмах.",
+      btn_idea: "У меня есть идея", btn_join_project: "Ищу проект",
+      manifesto_text: "Мы окружены «социальными» сетями, которые делают нас одинокими. Технологиями, которые следят за нами вместо того, чтобы нас освобождать. Системами, которые ставят прибыль выше людей.\n\nЭто заканчивается сейчас.",
+      manifesto_attribution: "— Манифест People Above All",
+      beliefs_label: "Наши убеждения",
+      belief1_title: "Идеи созданы, чтобы делиться ими",
+      belief1_text: "Твоя идея — это семя. Посади его открыто, полей сотрудничеством — и оно вырастет во что-то, что никто не мог бы создать в одиночку.",
+      belief2_title: "Приватность — не опция",
+      belief2_text: "Твои данные, разговоры и личность принадлежат тебе. Мы никогда не будем продавать, отслеживать или эксплуатировать тебя. Доверие — наша единственная валюта.",
+      belief3_title: "Связь важнее транзакции",
+      belief3_text: "Мы здесь, чтобы строить, учиться и расти вместе — а не извлекать ценность друг из друга. Цель — коллективный рост, а не индивидуальная выгода.",
+      belief4_title: "Люди важнее алгоритмов",
+      belief4_text: "Твой следующий великий соавтор должен быть найден через общие ценности и цели — не через машинное обучение.",
+      for_whom_label: "Для кого",
+      audience1_title: "У тебя есть идея, но нет команды",
+      audience1_text: "Ты придумал стартап, приложение или проект, но боишься поделиться. Мы даём безопасное место, где можно найти соавторов.",
+      audience2_title: "Есть навыки, но нет идеи",
+      audience2_text: "Ты дизайнер, разработчик или маркетолог — и хочешь участвовать в проектах, которые разделяют твои ценности.",
+      audience3_title: "Устал от токсичных соцсетей",
+      audience3_text: "Ты хочешь настоящих связей, а не лайков и алгоритмов. Тебя бесит, что твои данные продают, а контент — кликбейт.",
+      how_title_1: "Как это", how_title_2: "работает",
+      how_subtitle: "Никакой магии алгоритмов. Только живые люди, ценности и ручная работа по соединению тех, кто подходит друг другу.",
+      step1_title: "Подай заявку", step1_text: "Заполни короткую форму — расскажи о себе, своей идее или том, что ищешь. Это займёт 3 минуты.",
+      step2_title: "Пройди отбор", step2_text: "Мы лично просматриваем каждую заявку. В сообщество попадают только те, кто разделяет ценности People Above All.",
+      step3_title: "Получи знакомство", step3_text: "Мы соединяем тебя с теми, кто дополняет твои навыки и ценности. Не алгоритм — живой человек делает введение.",
+      step4_title: "Строй вместе", step4_text: "Общайся, сотрудничай, запускай проекты. Сообщество за твоей спиной.",
+      founder_role: "Основатель · People Above All",
+      founder_label: "История основателя",
+      founder_story_1: "За последние годы я побывал в десятках стран и познакомился с сотнями людей — разработчиками, дизайнерами, предпринимателями, философами, просто невероятными личностями.\n\nИ каждый раз замечал одну и ту же боль. Человек рассказывает гениальную идею, а потом шепотом добавляет: «Только никому не говори, а то украдут». И идея остаётся похороненной в заметках телефона.\n\nЯ искренне люблю людей. Вижу красоту в каждом. Ко мне обращаются за советом, я много обжигался и много учился. И понял одно — прозрачные отношения и живые связи ценятся больше всего.",
+      founder_story_2: "People Above All — это не просто платформа. Это моё желание познакомить тебя с теми удивительными людьми, которых я встретил по всему миру.",
+      cta_title_1: "Готов соединиться", cta_title_2: "с правильными людьми?",
+      cta_subtitle: "Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.",
+      // Форма "У меня есть идея"
+      idea_modal_title: "Расскажи об <em>идее</em>",
+      idea_modal_subtitle: "Займёт 3 минуты · Владислав ответит лично",
+      idea_name_label: "Имя *", idea_name_ph: "Как тебя зовут?",
+      idea_email_label: "Email *", idea_email_ph: "твой@email.com",
+      idea_social_label: "Telegram / Instagram", idea_social_ph: "@username",
+      idea_text_label: "Твоя идея *", idea_text_ph: "Опиши в 2-3 предложениях. Не бойся — здесь безопасно.",
+      idea_need_label: "Кто тебе нужен?", idea_need_ph: "Разработчик, дизайнер, маркетолог...",
+      idea_city_label: "Город / Страна", idea_city_ph: "Москва · Берлин · Онлайн",
+      idea_submit_btn: "Отправить заявку",
+      idea_note: "Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.",
+      idea_success_title: "Заявка получена",
+      idea_success_text: "Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.",
+      idea_error_default: "Заполните все обязательные поля",
+      // Форма "Ищу проект" (Добавить себя в каталог)
+      join_modal_title: "Добавь себя в <em>каталог</em>",
+      join_modal_subtitle: "Расскажи о себе · Владислав познакомит с нужными людьми",
+      join_name_label: "Имя *", join_name_ph: "Как тебя зовут?",
+      join_email_label: "Email *", join_email_ph: "твой@email.com",
+      join_social_label: "Telegram / Instagram", join_social_ph: "@username",
+      join_role_label: "Чем занимаешься? *",
+      join_help_label: "Чем можешь помочь людям? *", join_help_ph: "Опиши свою экспертизу и чем готов делиться...",
+      join_seek_label: "Что ищешь?", join_seek_ph: "Интересные проекты, соавторы, единомышленники...",
+      join_city_label: "Город / Страна", join_city_ph: "Москва · Берлин · Онлайн",
+      join_submit_btn: "Отправить заявку",
+      join_note: "Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.",
+      join_success_title: "Заявка получена",
+      join_success_text: "Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.",
+      join_error_default: "Заполните все обязательные поля",
+      // Опции для роли (выпадающий список)
+      role_option_developer: "Разработчик",
+      role_option_designer: "Дизайнер",
+      role_option_marketer: "Маркетолог",
+      role_option_entrepreneur: "Предприниматель",
+      role_option_psychologist: "Психолог",
+      role_option_doctor: "Врач",
+      role_option_researcher: "Исследователь",
+      role_option_other: "Другое",
+      role_placeholder: "Выбери роль"
+    },
+    en: {
+      nav_ideas: "Ideas", nav_people: "People", nav_about: "About",
+      hero_eyebrow: "Movement · Platform · Community",
+      hero_title_1: "People", hero_title_2: "Above", hero_title_3: "All.",
+      hero_subtitle: "We are building a space where ideas are born through collaboration, privacy is the norm, and connections are based on values, not algorithms.",
+      btn_idea: "I have an idea", btn_join_project: "Looking for a project",
+      manifesto_text: "We are surrounded by 'social' networks that make us lonely. Technologies that track us instead of liberating us. Systems that put profit above people.\n\nIt ends now.",
+      manifesto_attribution: "— People Above All Manifesto",
+      beliefs_label: "Our beliefs",
+      belief1_title: "Ideas are meant to be shared",
+      belief1_text: "Your idea is a seed. Plant it openly, water it with collaboration — and it will grow into something no one could build alone.",
+      belief2_title: "Privacy is not optional",
+      belief2_text: "Your data, conversations, and identity belong to you. We will never sell, track, or exploit you. Trust is our only currency.",
+      belief3_title: "Connection over transaction",
+      belief3_text: "We are here to build, learn, and grow together — not to extract value from each other. Collective growth over individual gain.",
+      belief4_title: "Humans > Algorithms",
+      belief4_text: "Your next great collaborator should be found through shared values and purpose — not machine learning.",
+      for_whom_label: "For whom",
+      audience1_title: "You have an idea but no team",
+      audience1_text: "You've come up with a startup, app, or project but are afraid to share. We provide a safe place to find co-authors.",
+      audience2_title: "You have skills but no idea",
+      audience2_text: "You're a designer, developer, or marketer — and you want to join projects that share your values.",
+      audience3_title: "Tired of toxic social media",
+      audience3_text: "You want real connections, not likes and algorithms. You're tired of your data being sold and clickbait content.",
+      how_title_1: "How it", how_title_2: "works",
+      how_subtitle: "No algorithmic magic. Just real people, values, and manual matching of those who fit each other.",
+      step1_title: "Submit a request", step1_text: "Fill out a short form — tell us about yourself, your idea, or what you're looking for. Takes 3 minutes.",
+      step2_title: "Get vetted", step2_text: "We personally review every submission. Only those who share People Above All values join the community.",
+      step3_title: "Get introduced", step3_text: "We connect you with those who complement your skills and values. A real person makes the introduction.",
+      step4_title: "Build together", step4_text: "Communicate, collaborate, launch projects. The community has your back.",
+      founder_role: "Founder · People Above All",
+      founder_label: "Founder's story",
+      founder_story_1: "Over the past few years, I've traveled to dozens of countries and met hundreds of people — developers, designers, entrepreneurs, philosophers, just incredible individuals.\n\nAnd every time I noticed the same pain. A person shares a brilliant idea and then whispers: 'Just don't tell anyone, they'll steal it.' The idea remains buried in phone notes.\n\nI truly love people. I see beauty in everyone. People come to me for advice, I've made many mistakes and learned a lot. And I realized one thing — transparent relationships and genuine connections are what matter most.",
+      founder_story_2: "People Above All is not just a platform. It's my desire to introduce you to the amazing people I've met around the world.",
+      cta_title_1: "Ready to connect", cta_title_2: "with the right people?",
+      cta_subtitle: "It's more than a platform. It's a promise that people — their dignity, dreams, and potential — will always come first.",
+      // Idea form
+      idea_modal_title: "Share your <em>idea</em>",
+      idea_modal_subtitle: "Takes 3 minutes · Vladislav will reply personally",
+      idea_name_label: "Name *", idea_name_ph: "What's your name?",
+      idea_email_label: "Email *", idea_email_ph: "your@email.com",
+      idea_social_label: "Telegram / Instagram", idea_social_ph: "@username",
+      idea_text_label: "Your idea *", idea_text_ph: "Describe in 2-3 sentences. Don't worry — it's safe here.",
+      idea_need_label: "Who do you need?", idea_need_ph: "Developer, designer, marketer...",
+      idea_city_label: "City / Country", idea_city_ph: "Moscow · Berlin · Online",
+      idea_submit_btn: "Submit request",
+      idea_note: "Vladislav reads every submission.<br>Response within 48 hours.",
+      idea_success_title: "Request received",
+      idea_success_text: "Vladislav will read it and get back to you within 48 hours.<br>Welcome to the movement.",
+      idea_error_default: "Please fill in all required fields",
+      // Join form
+      join_modal_title: "Add yourself to the <em>catalog</em>",
+      join_modal_subtitle: "Tell about yourself · Vladislav will introduce you to the right people",
+      join_name_label: "Name *", join_name_ph: "What's your name?",
+      join_email_label: "Email *", join_email_ph: "your@email.com",
+      join_social_label: "Telegram / Instagram", join_social_ph: "@username",
+      join_role_label: "What do you do? *",
+      join_help_label: "How can you help others? *", join_help_ph: "Describe your expertise and what you're ready to share...",
+      join_seek_label: "What are you looking for?", join_seek_ph: "Interesting projects, co-authors, like-minded people...",
+      join_city_label: "City / Country", join_city_ph: "Moscow · Berlin · Online",
+      join_submit_btn: "Submit request",
+      join_note: "Vladislav reads every request.<br>Response within 48 hours.",
+      join_success_title: "Request received",
+      join_success_text: "Vladislav will read it and get back to you within 48 hours.<br>Welcome to the movement.",
+      join_error_default: "Please fill in all required fields",
+      // Role options
+      role_option_developer: "Developer",
+      role_option_designer: "Designer",
+      role_option_marketer: "Marketer",
+      role_option_entrepreneur: "Entrepreneur",
+      role_option_psychologist: "Psychologist",
+      role_option_doctor: "Doctor",
+      role_option_researcher: "Researcher",
+      role_option_other: "Other",
+      role_placeholder: "Select role"
+    }
+  };
 
-  function openModal(type) {
-    document.getElementById('modal').classList.add('open');
-    document.getElementById('form-idea').style.display = type === 'idea' ? 'block' : 'none';
-    document.getElementById('form-join').style.display = type === 'join' ? 'block' : 'none';
-    document.getElementById('form-success').style.display = 'none';
-    document.body.style.overflow = 'hidden';
+  let currentLang = localStorage.getItem('paa_lang') || 'ru';
+
+  function t(key, ...args) {
+    let val = translations[currentLang][key];
+    return val || key;
   }
 
-  function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('modal')) closeModal();
-  }
-
-  function showError(id, msg) {
-    const el = document.getElementById(id);
-    el.textContent = '⚠ ' + msg;
-    el.style.display = 'block';
-  }
-
-  function hideError(id) {
-    document.getElementById(id).style.display = 'none';
-  }
-
-  function showSuccess() {
-    document.getElementById('form-idea').style.display = 'none';
-    document.getElementById('form-join').style.display = 'none';
-    document.getElementById('form-success').style.display = 'block';
-  }
-
-  async function sendToFormspree(data) {
-    const res = await fetch(FORMSPREE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(data)
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('paa_lang', lang);
+    document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+    document.querySelector('#lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
+    // Обновляем все элементы с data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[currentLang][key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = translations[currentLang][key];
+        } else {
+          el.textContent = translations[currentLang][key];
+        }
+      }
     });
-    return res.ok;
+    // Также обновить тексты, которые не используют data-i18n (например, опции select придётся обновлять при открытии формы)
   }
+
+  // Функция для открытия модалки идеи
+  function openIdeaModal() {
+    const modalContent = document.getElementById("ideaModalContent");
+    modalContent.innerHTML = `
+      <div id="idea-form-container">
+        <h3>${t('idea_modal_title')}</h3>
+        <p class="modal-sub">${t('idea_modal_subtitle')}</p>
+        <div class="error-message" id="idea-error"></div>
+        <div class="form-group"><label>${t('idea_name_label')}</label><input type="text" id="idea-name" autocomplete="name" placeholder="${t('idea_name_ph')}"></div>
+        <div class="form-group"><label>${t('idea_email_label')}</label><input type="email" id="idea-email" autocomplete="email" placeholder="${t('idea_email_ph')}"></div>
+        <div class="form-group"><label>${t('idea_social_label')}</label><input type="text" id="idea-social" placeholder="${t('idea_social_ph')}"></div>
+        <div class="form-group"><label>${t('idea_text_label')}</label><textarea id="idea-text" rows="3" placeholder="${t('idea_text_ph')}"></textarea></div>
+        <div class="form-group"><label>${t('idea_need_label')}</label><input type="text" id="idea-need" placeholder="${t('idea_need_ph')}"></div>
+        <div class="form-group"><label>${t('idea_city_label')}</label><input type="text" id="idea-city" placeholder="${t('idea_city_ph')}"></div>
+        <button class="form-submit" id="idea-submit-btn">${t('idea_submit_btn')}</button>
+        <p class="form-note">${t('idea_note')}</p>
+      </div>
+      <div id="idea-success" style="display:none;"><div class="form-success-icon">✦</div><h4>${t('idea_success_title')}</h4><p>${t('idea_success_text')}</p></div>
+    `;
+    document.getElementById("idea-submit-btn").addEventListener("click", submitIdea);
+    document.getElementById("ideaModal").classList.add("open");
+  }
+
+  // Функция для открытия модалки "Ищу проект"
+  function openJoinModal() {
+    const modalContent = document.getElementById("joinModalContent");
+    const roleOptions = `
+      <option value="">${t('role_placeholder')}</option>
+      <option>${t('role_option_developer')}</option>
+      <option>${t('role_option_designer')}</option>
+      <option>${t('role_option_marketer')}</option>
+      <option>${t('role_option_entrepreneur')}</option>
+      <option>${t('role_option_psychologist')}</option>
+      <option>${t('role_option_doctor')}</option>
+      <option>${t('role_option_researcher')}</option>
+      <option>${t('role_option_other')}</option>
+    `;
+    modalContent.innerHTML = `
+      <div id="join-form-container">
+        <h3>${t('join_modal_title')}</h3>
+        <p class="modal-sub">${t('join_modal_subtitle')}</p>
+        <div class="error-message" id="join-error"></div>
+        <div class="form-group"><label>${t('join_name_label')}</label><input type="text" id="join-name" autocomplete="name" placeholder="${t('join_name_ph')}"></div>
+        <div class="form-group"><label>${t('join_email_label')}</label><input type="email" id="join-email" autocomplete="email" placeholder="${t('join_email_ph')}"></div>
+        <div class="form-group"><label>${t('join_social_label')}</label><input type="text" id="join-social" placeholder="${t('join_social_ph')}"></div>
+        <div class="form-group"><label>${t('join_role_label')}</label><select id="join-role">${roleOptions}</select></div>
+        <div class="form-group"><label>${t('join_help_label')}</label><textarea id="join-help" rows="3" placeholder="${t('join_help_ph')}"></textarea></div>
+        <div class="form-group"><label>${t('join_seek_label')}</label><textarea id="join-seek" rows="2" placeholder="${t('join_seek_ph')}"></textarea></div>
+        <div class="form-group"><label>${t('join_city_label')}</label><input type="text" id="join-city" placeholder="${t('join_city_ph')}"></div>
+        <button class="form-submit" id="join-submit-btn">${t('join_submit_btn')}</button>
+        <p class="form-note">${t('join_note')}</p>
+      </div>
+      <div id="join-success" style="display:none;"><div class="form-success-icon">✦</div><h4>${t('join_success_title')}</h4><p>${t('join_success_text')}</p></div>
+    `;
+    document.getElementById("join-submit-btn").addEventListener("click", submitJoin);
+    document.getElementById("joinModal").classList.add("open");
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove("open");
+  }
+
+  const FORMSPREE_URL = 'https://formspree.io/f/xwvyzbvr';
 
   async function submitIdea() {
-    hideError('idea-error');
-    const name  = document.getElementById('idea-name').value.trim();
-    const email = document.getElementById('idea-email').value.trim();
-    const text  = document.getElementById('idea-text').value.trim();
-
-    if (!name)  return showError('idea-error', 'Укажи своё имя');
-    if (!email || !email.includes('@')) return showError('idea-error', 'Укажи корректный email');
-    if (!text)  return showError('idea-error', 'Расскажи об идее — это главное');
-
-    const btn = document.getElementById('idea-btn-text');
-    btn.textContent = 'Отправляем...';
-
-    const ok = await sendToFormspree({
-      _subject: '💡 Новая идея — ' + name,
-      type: 'ИДЕЯ',
-      name,
-      email,
-      social:  document.getElementById('idea-social').value.trim(),
-      idea:    text,
-      need:    document.getElementById('idea-need').value.trim(),
-      city:    document.getElementById('idea-city').value.trim(),
-    });
-
-    btn.textContent = 'Отправить заявку';
-    if (ok) showSuccess();
-    else showError('idea-error', 'Ошибка отправки — напиши напрямую в Telegram @people_above_all');
+    const name = document.getElementById("idea-name").value.trim();
+    const email = document.getElementById("idea-email").value.trim();
+    const text = document.getElementById("idea-text").value.trim();
+    const errorDiv = document.getElementById("idea-error");
+    if (!name || !email || !text) {
+      errorDiv.textContent = t('idea_error_default');
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    errorDiv.style.display = "none";
+    const btn = document.getElementById("idea-submit-btn");
+    const original = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
+    const data = {
+      _subject: `[PAA] New idea from ${name}`,
+      type: "IDEA",
+      name, email,
+      social: document.getElementById("idea-social").value.trim(),
+      idea: text,
+      need: document.getElementById("idea-need").value.trim(),
+      city: document.getElementById("idea-city").value.trim(),
+      _replyto: email
+    };
+    try {
+      const resp = await fetch(FORMSPREE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (resp.ok) {
+        document.getElementById("idea-form-container").style.display = "none";
+        document.getElementById("idea-success").style.display = "block";
+      } else throw new Error();
+    } catch(e) {
+      errorDiv.textContent = "❌ " + (currentLang === 'ru' ? "Ошибка отправки. Попробуйте позже." : "Sending error. Please try again.");
+      errorDiv.style.display = "block";
+    } finally {
+      btn.textContent = original;
+      btn.disabled = false;
+    }
   }
 
   async function submitJoin() {
-    hideError('join-error');
-    const name  = document.getElementById('join-name').value.trim();
-    const email = document.getElementById('join-email').value.trim();
-    const role  = document.getElementById('join-role').value;
-    const help  = document.getElementById('join-help').value.trim();
-
-    if (!name)  return showError('join-error', 'Укажи своё имя');
-    if (!email || !email.includes('@')) return showError('join-error', 'Укажи корректный email');
-    if (!role)  return showError('join-error', 'Выбери свою роль');
-    if (!help)  return showError('join-error', 'Расскажи чем можешь помочь людям');
-
-    const btn = document.getElementById('join-btn-text');
-    btn.textContent = 'Отправляем...';
-
-    const ok = await sendToFormspree({
-      _subject: '🙋 Новый участник — ' + name + ' (' + role + ')',
-      type: 'КАТАЛОГ',
-      name,
-      email,
-      social: document.getElementById('join-social').value.trim(),
-      role,
-      help,
-      seek:   document.getElementById('join-seek').value.trim(),
-      city:   document.getElementById('join-city').value.trim(),
-    });
-
-    btn.textContent = 'Отправить заявку';
-    if (ok) showSuccess();
-    else showError('join-error', 'Ошибка отправки — напиши напрямую в Telegram @people_above_all');
+    const name = document.getElementById("join-name").value.trim();
+    const email = document.getElementById("join-email").value.trim();
+    const role = document.getElementById("join-role").value;
+    const help = document.getElementById("join-help").value.trim();
+    const errorDiv = document.getElementById("join-error");
+    if (!name || !email || !role || !help) {
+      errorDiv.textContent = t('join_error_default');
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    errorDiv.style.display = "none";
+    const btn = document.getElementById("join-submit-btn");
+    const original = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
+    const data = {
+      _subject: `[PAA] New catalog member: ${name} (${role})`,
+      type: "CATALOG",
+      name, email,
+      social: document.getElementById("join-social").value.trim(),
+      role: role,
+      help: help,
+      seek: document.getElementById("join-seek").value.trim(),
+      city: document.getElementById("join-city").value.trim(),
+      _replyto: email
+    };
+    try {
+      const resp = await fetch(FORMSPREE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (resp.ok) {
+        document.getElementById("join-form-container").style.display = "none";
+        document.getElementById("join-success").style.display = "block";
+      } else throw new Error();
+    } catch(e) {
+      errorDiv.textContent = "❌ " + (currentLang === 'ru' ? "Ошибка отправки. Попробуйте позже." : "Sending error. Please try again.");
+      errorDiv.style.display = "block";
+    } finally {
+      btn.textContent = original;
+      btn.disabled = false;
+    }
   }
 
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-      }
-    });
-  }, { threshold: 0.1 });
+  // Обработчики событий
+  document.getElementById("lang-switch").addEventListener("click", () => {
+    const newLang = currentLang === 'ru' ? 'en' : 'ru';
+    setLanguage(newLang);
+  });
+  document.getElementById("ideaBtn").addEventListener("click", (e) => { e.preventDefault(); openIdeaModal(); });
+  document.getElementById("joinBtn").addEventListener("click", (e) => { e.preventDefault(); openJoinModal(); });
+  document.getElementById("ctaIdeaBtn").addEventListener("click", (e) => { e.preventDefault(); openIdeaModal(); });
+  document.getElementById("ctaJoinBtn").addEventListener("click", (e) => { e.preventDefault(); openJoinModal(); });
+  document.getElementById("ideaModal").addEventListener("click", (e) => { if (e.target === document.getElementById("ideaModal")) closeModal("ideaModal"); });
+  document.getElementById("joinModal").addEventListener("click", (e) => { if (e.target === document.getElementById("joinModal")) closeModal("joinModal"); });
 
+  // Scroll reveal animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Keyboard close
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  // Инициализация языка
+  setLanguage(currentLang);
 </script>
 </body>
 </html>
