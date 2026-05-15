@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Идеи сообщества — People Above All</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1714;
+    --warm: #C8A97E;
+    --rust: #8B4513;
+    --muted: #6B6560;
+    --border: rgba(26,23,20,0.12);
+  }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--cream) 60%, transparent);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-logo:hover { color: var(--ink); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-link.active { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+  .nav-link:hover { color: var(--ink); }
+  .lang-switch {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.3s;
+  }
+  .lang-switch:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .hero-mini {
+    padding: 160px 80px 60px 80px;
+    text-align: center;
+  }
+  .hero-mini h1 {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .hero-mini h1 em { font-style: italic; color: var(--warm); }
+  .hero-mini p {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .search-section {
+    padding: 0 80px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--muted);
+    pointer-events: none;
+    font-family: 'DM Mono', monospace;
+  }
+  .search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0 12px 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .search-input:focus {
+    border-bottom-color: var(--warm);
+  }
+  .search-input::placeholder {
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .top-share-btn {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.3s;
+  }
+  .top-share-btn:hover { background: var(--rust); }
+  .search-highlight {
+    background-color: rgba(200, 169, 126, 0.25);
+    color: var(--warm);
+    font-weight: 400;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+  .filters {
+    padding: 0 80px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--muted);
+  }
+  .filter-chip.active, .filter-chip:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .ideas-grid {
+    padding: 20px 80px 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 32px;
+  }
+  .idea-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 32px;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  .idea-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.02);
+    border-color: var(--warm);
+  }
+  .idea-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 16px;
+  }
+  .idea-title {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .idea-summary {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 24px;
+    flex: 1;
+  }
+  .idea-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .idea-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(26,23,20,0.05);
+    padding: 4px 12px;
+    color: var(--muted);
+  }
+  .idea-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-top: auto;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 80px;
+    color: var(--muted);
+    font-size: 18px;
+  }
+  .btn-share-bottom {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: background 0.3s;
+    margin-top: 20px;
+  }
+  .btn-share-bottom:hover { background: var(--rust); }
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,23,20,0.7);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal {
+    background: var(--cream);
+    padding: 64px;
+    max-width: 560px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.4s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute;
+    top: 24px; right: 24px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .modal-close:hover { color: var(--ink); }
+  .modal h3 {
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .modal h3 em { font-style: italic; color: var(--warm); }
+  .modal-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .form-group {
+    margin-bottom: 24px;
+  }
+  .form-group label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--warm);
+  }
+  .form-group select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6560'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+  }
+  .form-group select option { background: var(--cream); }
+  .form-submit {
+    width: 100%;
+    margin-top: 16px;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .form-submit:hover { background: var(--rust); }
+  .form-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+  .form-success {
+    text-align: center;
+    padding: 40px 0;
+    display: none;
+  }
+  .form-success-icon { font-size: 48px; margin-bottom: 24px; }
+  .form-success h4 {
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 12px;
+  }
+  .form-success p {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .error-message {
+    display: none;
+    color: var(--rust);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  footer {
+    padding: 48px 80px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .hero-mini { padding: 120px 24px 40px; }
+    .search-section { padding: 0 24px 20px; flex-direction: column; align-items: stretch; }
+    .search-wrapper { max-width: none; }
+    .top-share-btn { text-align: center; }
+    .filters { padding: 0 24px 32px; }
+    .ideas-grid { padding: 20px 24px 60px; }
+    footer { padding: 32px 24px; }
+    .modal { padding: 40px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">People Above All</a>
+  <div class="nav-links">
+    <a href="ideas.html" class="nav-link active" data-i18n="nav_ideas">Идеи</a>
+    <a href="people.html" class="nav-link" data-i18n="nav_people">Люди</a>
+    <a href="index.html" class="nav-link" data-i18n="nav_about">О проекте</a>
+    <button class="lang-switch" id="lang-switch">EN</button>
+  </div>
+</nav>
+
+<main>
+  <div class="hero-mini">
+    <h1><span data-i18n="hero_title_start">Сад</span> <em data-i18n="hero_title_em">идей</em></h1>
+    <p data-i18n="hero_subtitle">Идеи, которые ищут команду. Смотри, вдохновляйся, присоединяйся к тем, кто уже начал.</p>
+  </div>
+
+  <div class="search-section">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="Поиск по идеям...">
+    </div>
+    <button class="top-share-btn" id="topShareBtn" data-i18n="share_idea_btn">Поделиться своей идеей</button>
+  </div>
+
+  <div class="filters" id="filter-bar"></div>
+  <div class="ideas-grid" id="ideas-grid"></div>
+
+  <div style="text-align: center; padding: 0 80px 100px;">
+    <button class="btn-share-bottom" id="bottomShareBtn" data-i18n="share_idea_btn">Поделиться своей идеей</button>
+  </div>
+</main>
+
+<footer>
+  <span class="footer-logo">People Above All</span>
+  <span class="footer-copy">peopleaboveall.com · 2025</span>
+</footer>
+
+<!-- Модальное окно для подачи идеи -->
+<div class="modal-overlay" id="ideaModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeIdeaModal()">✕</button>
+    <div id="idea-modal-content"></div>
+  </div>
+</div>
+
+<!-- Модальное окно для формы присоединения к идее -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContactModal()">✕</button>
+    <div id="contact-modal-content"></div>
+  </div>
+</div>
+
+<script>
+  // Данные идей
+  const ideasData = {
+    ru: [
+      { id: 1, title: "AI-коуч для эмоционального интеллекта", summary: "Приложение, которое анализирует голос и помогает развивать эмпатию в реальных разговорах.", fullDescription: "Мы создаём инструмент для улучшения эмоционального интеллекта через AI. Пользователь говорит в микрофон во время диалогов, нейросеть предлагает подсказки, как лучше выразить эмпатию. Ищем NLP-специалиста и психолога для валидации.", category: "AI", tags: ["#нейросети", "#психология", "#edtech"], author: "Алексей, ML-инженер", lookingFor: "NLP-разработчик, психолог, тестировщик" },
+      { id: 2, title: "Платформа для обмена вещами в сообществах", summary: "Локальный сервис для бесплатного обмена вещами внутри ЖК или районов, с системой доверия.", fullDescription: "Устали от переполненных свалок? Создаём платформу, где соседи могут отдавать ненужные вещи и брать нужные. Система рейтинга и верификация через местные сообщества. Нужны разработчик на React и маркетолог для пилота в 3 районах.", category: "Eco", tags: ["#экология", "#sharing", "#community"], author: "Мария, урбанист", lookingFor: "React-разработчик, SMM-менеджер, пилотные районы" },
+      { id: 3, title: "Курсы по финансовой грамотности для подростков", summary: "Бесплатные интерактивные уроки с геймификацией и реальными кейсами.", fullDescription: "Миссия — научить подростков 14-18 лет управлять деньгами, не попадать в долги и планировать бюджет. Сделали прототип, ищем педагога и дизайнера для создания контента и игровых механик.", category: "Education", tags: ["#образование", "#финансы", "#kids"], author: "Егор, финансовый консультант", lookingFor: "Педагог, UI/UX дизайнер, спонсоры" },
+      { id: 4, title: "Коворкинг для родителей с детьми", summary: "Пространство, где можно работать и оставить ребёнка с няней-воспитателем.", fullDescription: "Идея — коворкинг с интегрированным детским клубом. Помещение на первых этажах жилых комплексов. Ищем архитектора, управляющего и партнёра с опытом в девелопменте.", category: "Business", tags: ["#коворкинг", "#family", "#realestate"], author: "Анна, HR-директор", lookingFor: "Архитектор, операционный директор, инвестор" },
+      { id: 5, title: "Open Source проект по очистке воды", summary: "Недорогой фильтр для удалённых деревень, использующий местные материалы.", fullDescription: "Разрабатываем конструкцию фильтра из золы, песка и активированного угля. Чертежи в открытом доступе. Нужны химики-экологи, волонтёры для тестирования в Индии и Африке.", category: "Tech", tags: ["#cleantech", "#opensource", "#water"], author: "Дмитрий, инженер", lookingFor: "Эколог, полевые испытатели, грантовый менеджер" }
+    ],
+    en: [
+      { id: 1, title: "AI Coach for Emotional Intelligence", summary: "App that analyzes voice and helps develop empathy in real conversations.", fullDescription: "We are building a tool to improve emotional intelligence with AI. The user speaks into the mic during dialogues, the AI suggests better empathic responses. Looking for NLP specialist and psychologist for validation.", category: "AI", tags: ["#neuralnets", "#psychology", "#edtech"], author: "Alexey, ML Engineer", lookingFor: "NLP developer, psychologist, tester" },
+      { id: 2, title: "Community Item Swap Platform", summary: "Local service for free exchange of goods within neighborhoods, with a trust system.", fullDescription: "Tired of overflowing landfills? We're creating a platform where neighbors can give away unwanted items and take what they need. Rating system + local community verification. Need React dev and marketer for pilot in 3 districts.", category: "Eco", tags: ["#ecology", "#sharing", "#community"], author: "Maria, Urbanist", lookingFor: "React developer, SMM manager, pilot districts" },
+      { id: 3, title: "Financial Literacy for Teens", summary: "Free interactive lessons with gamification and real-life cases.", fullDescription: "Mission: teach teenagers 14-18 how to manage money, avoid debt, and plan budgets. Prototype ready. Looking for educator and designer to create content and game mechanics.", category: "Education", tags: ["#education", "#finance", "#kids"], author: "Egor, Financial Advisor", lookingFor: "Teacher, UI/UX designer, sponsors" },
+      { id: 4, title: "Coworking for Parents with Kids", summary: "Space where you can work and leave your child with a nanny-educator.", fullDescription: "Coworking with integrated kids' club. Premises on ground floors of residential complexes. Looking for architect, manager, and partner with real estate development experience.", category: "Business", tags: ["#coworking", "#family", "#realestate"], author: "Anna, HR Director", lookingFor: "Architect, operations director, investor" },
+      { id: 5, title: "Open Source Water Purification", summary: "Low-cost filter for remote villages using local materials.", fullDescription: "Developing a filter design from ash, sand, and activated carbon. Open-source blueprints. Need environmental chemists, volunteers for testing in India and Africa.", category: "Tech", tags: ["#cleantech", "#opensource", "#water"], author: "Dmitry, Engineer", lookingFor: "Ecologist, field testers, grant manager" }
+    ]
+  };
+
+  // Переводы (полные, с заголовками, лейблами, плейсхолдерами)
+  const translations = {
+    ru: {
+      nav_ideas: "Идеи", nav_people: "Люди", nav_about: "О проекте",
+      hero_title_start: "Сад", hero_title_em: "идей", hero_subtitle: "Идеи, которые ищут команду. Смотри, вдохновляйся, присоединяйся к тем, кто уже начал.",
+      share_idea_btn: "Поделиться своей идеей",
+      filter_all: "Все", empty_state: "Пока нет идей в этой категории. Будь первым — поделись своей!",
+      join_button: "Хочу присоединиться",
+      short_label: "Коротко:",
+      looking_for_label: "Ищу:",
+      author_label: "Автор:",
+      search_placeholder: "Поиск по идеям...",
+      
+      idea_modal_title: "Расскажи об <em>идее</em>",
+      idea_modal_subtitle: "Займёт 3 минуты · Владислав ответит лично",
+      idea_name_label: "Имя *",
+      idea_email_label: "Email *",
+      idea_social_label: "Telegram / Instagram",
+      idea_text_label: "Твоя идея *",
+      idea_need_label: "Кто тебе нужен?",
+      idea_city_label: "Город / Страна",
+      idea_name_ph: "Как тебя зовут?",
+      idea_email_ph: "твой@email.com",
+      idea_social_ph: "@username",
+      idea_text_ph: "Опиши в 2-3 предложениях. Не бойся — здесь безопасно.",
+      idea_need_ph: "Разработчик, дизайнер, маркетолог...",
+      idea_city_ph: "Москва · Берлин · Онлайн",
+      idea_submit_btn: "Отправить заявку",
+      idea_note: "Владислав лично читает каждую заявку.<br>Ответ в течение 48 часов.",
+      idea_success_title: "Заявка получена",
+      idea_success_text: "Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.",
+      idea_error_default: "Заполните все обязательные поля",
+      
+      contact_modal_title: "Присоединиться к идее <span style='color: var(--warm); font-style: italic;'>%s</span>",
+      contact_modal_subtitle: "Заполните форму — основатель свяжет вас с автором",
+      contact_name_label: "Ваше имя *",
+      contact_contact_label: "Email или Telegram *",
+      contact_message_label: "Сообщение (почему вы хотите присоединиться?)",
+      contact_name_ph: "Как тебя зовут?",
+      contact_contact_ph: "твой@email.com или @username",
+      contact_message_ph: "Напишите, чем вы можете помочь и почему вас заинтересовала эта идея",
+      contact_submit_btn: "Отправить запрос",
+      contact_note: "Владислав лично прочитает сообщение и, если автор идеи согласен, сделает интро.",
+      contact_success_title: "Запрос отправлен",
+      contact_success_text: "Владислав свяжется с вами в ближайшее время.",
+      contact_error_default: "Заполните все обязательные поля"
+    },
+    en: {
+      nav_ideas: "Ideas", nav_people: "People", nav_about: "About",
+      hero_title_start: "Garden of", hero_title_em: "Ideas", hero_subtitle: "Ideas seeking a team. Browse, get inspired, join those who have already started.",
+      share_idea_btn: "Share your idea",
+      filter_all: "All", empty_state: "No ideas in this category yet. Be the first — share yours!",
+      join_button: "I want to join",
+      short_label: "In short:",
+      looking_for_label: "Looking for:",
+      author_label: "Author:",
+      search_placeholder: "Search ideas...",
+      
+      idea_modal_title: "Share your <em>idea</em>",
+      idea_modal_subtitle: "Takes 3 minutes · Vladislav will reply personally",
+      idea_name_label: "Name *",
+      idea_email_label: "Email *",
+      idea_social_label: "Telegram / Instagram",
+      idea_text_label: "Your idea *",
+      idea_need_label: "Who do you need?",
+      idea_city_label: "City / Country",
+      idea_name_ph: "What's your name?",
+      idea_email_ph: "your@email.com",
+      idea_social_ph: "@username",
+      idea_text_ph: "Describe in 2-3 sentences. Don't worry — it's safe here.",
+      idea_need_ph: "Developer, designer, marketer...",
+      idea_city_ph: "Moscow · Berlin · Online",
+      idea_submit_btn: "Submit request",
+      idea_note: "Vladislav reads every submission.<br>Response within 48 hours.",
+      idea_success_title: "Request received",
+      idea_success_text: "Vladislav will read it and get back to you within 48 hours.<br>Welcome to the movement.",
+      idea_error_default: "Please fill in all required fields",
+      
+      contact_modal_title: "Join the idea <span style='color: var(--warm); font-style: italic;'>%s</span>",
+      contact_modal_subtitle: "Fill out the form — founder will connect you with the author",
+      contact_name_label: "Your name *",
+      contact_contact_label: "Email or Telegram *",
+      contact_message_label: "Message (why do you want to join?)",
+      contact_name_ph: "What's your name?",
+      contact_contact_ph: "your@email.com or @username",
+      contact_message_ph: "Write how you can help and why this idea interests you",
+      contact_submit_btn: "Send request",
+      contact_note: "Vladislav will read your message and, if the idea's author agrees, will make an introduction.",
+      contact_success_title: "Request sent",
+      contact_success_text: "Vladislav will contact you shortly.",
+      contact_error_default: "Please fill in all required fields"
+    }
+  };
+
+  let currentLang = localStorage.getItem('paa_lang') || 'ru';
+  let activeFilter = "all";
+  let currentIdea = null;
+  let searchQuery = "";
+  let searchDebounceTimer = null;
+
+  function t(key, ...args) {
+    let val = translations[currentLang][key];
+    if (typeof val === 'string' && args.length) val = val.replace('%s', args[0]);
+    return val || key;
+  }
+
+  function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  function highlightText(text, query) {
+    if (!query || !text) return text;
+    try {
+      const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+      return text.replace(regex, `<span class="search-highlight">$1</span>`);
+    } catch(e) { return text; }
+  }
+
+  function updateSearchPlaceholder() {
+    const inp = document.getElementById("search-input");
+    if (inp) inp.placeholder = t('search_placeholder');
+  }
+  function updateShareButtons() {
+    const txt = t('share_idea_btn');
+    const top = document.getElementById("topShareBtn");
+    const bottom = document.getElementById("bottomShareBtn");
+    if (top) top.textContent = txt;
+    if (bottom) bottom.textContent = txt;
+  }
+  function updateDetailModalButton() {
+    const btn = document.getElementById("detail-join-btn");
+    if (btn) btn.textContent = t('join_button');
+  }
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('paa_lang', lang);
+    document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+    document.querySelector('#lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
+    });
+    updateSearchPlaceholder();
+    updateShareButtons();
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) { searchInput.value = ""; searchQuery = ""; }
+    renderFilters();
+    renderIdeas();
+    updateDetailModalButton();
+    if (document.getElementById("ideaModal").classList.contains("open")) closeIdeaModal();
+    if (document.getElementById("contactModal").classList.contains("open")) closeContactModal();
+  }
+
+  function ideaMatchesSearch(idea, query) {
+    if (!query) return true;
+    const q = query.toLowerCase().trim();
+    const fields = [idea.title, idea.summary, idea.fullDescription, idea.author, ...idea.tags].join(' ').toLowerCase();
+    return fields.includes(q);
+  }
+  function getFilteredIdeas() {
+    let filtered = ideasData[currentLang];
+    if (activeFilter !== "all") filtered = filtered.filter(i => i.category === activeFilter);
+    if (searchQuery) filtered = filtered.filter(i => ideaMatchesSearch(i, searchQuery));
+    return filtered;
+  }
+  function renderIdeas() {
+    const grid = document.getElementById("ideas-grid");
+    const filtered = getFilteredIdeas();
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="empty-state">${t('empty_state')}</div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(idea => `
+      <div class="idea-card" onclick="showIdeaDetail(${idea.id})">
+        <div class="idea-category">${idea.category}</div>
+        <h3 class="idea-title">${highlightText(idea.title, searchQuery)}</h3>
+        <p class="idea-summary">${highlightText(idea.summary, searchQuery)}</p>
+        <div class="idea-tags">${idea.tags.map(tag => `<span class="idea-tag">${highlightText(tag, searchQuery)}</span>`).join('')}</div>
+        <div class="idea-author">${highlightText(idea.author, searchQuery)}</div>
+      </div>
+    `).join('');
+  }
+
+  function getUniqueCategories() {
+    const cats = ideasData[currentLang].map(i => i.category);
+    return ["all", ...new Set(cats)];
+  }
+  function renderFilters() {
+    const cats = getUniqueCategories();
+    const bar = document.getElementById("filter-bar");
+    const allLabel = t('filter_all');
+    bar.innerHTML = cats.map(c => `<button class="filter-chip ${activeFilter === c ? 'active' : ''}" data-category="${c}">${c === 'all' ? allLabel : c}</button>`).join('');
+    document.querySelectorAll('.filter-chip').forEach(btn => btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.category;
+      renderFilters();
+      renderIdeas();
+    }));
+  }
+  function onSearchInput(e) {
+    if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => { searchQuery = e.target.value; renderIdeas(); }, 300);
+  }
+
+  // Модалка деталей идеи
+  function createDetailModal() {
+    if (document.getElementById("detail-modal")) return;
+    const div = document.createElement('div');
+    div.id = "detail-modal";
+    div.className = "modal-overlay";
+    div.innerHTML = `
+      <div class="modal">
+        <button class="modal-close" onclick="closeDetailModal()">✕</button>
+        <h3 id="detail-idea-title" style="font-size:32px;font-weight:300;"></h3>
+        <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; color:var(--warm); margin:12px 0 20px;" id="detail-idea-category"></div>
+        <p style="font-size:18px; font-weight:300; line-height:1.6; margin-bottom:24px;" id="detail-idea-summary"></p>
+        <p style="font-size:18px; font-weight:300; line-height:1.6; margin-bottom:24px;" id="detail-idea-full"></p>
+        <div style="margin-bottom:24px;" id="detail-idea-looking"></div>
+        <div style="margin-bottom:32px;" id="detail-idea-author"></div>
+        <button id="detail-join-btn" class="btn-primary" style="background:var(--ink); color:var(--cream); width:100%; padding:14px; border:none; cursor:pointer;">${t('join_button')}</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    div.addEventListener("click", e => { if (e.target === div) closeDetailModal(); });
+  }
+  function closeDetailModal() { document.getElementById("detail-modal")?.classList.remove("open"); }
+  function showIdeaDetail(id) {
+    const idea = ideasData[currentLang].find(i => i.id === id);
+    if (!idea) return;
+    document.getElementById("detail-idea-title").innerHTML = idea.title;
+    document.getElementById("detail-idea-category").textContent = idea.category;
+    document.getElementById("detail-idea-summary").innerHTML = `<strong>${t('short_label')}</strong> ${idea.summary}`;
+    document.getElementById("detail-idea-full").textContent = idea.fullDescription;
+    document.getElementById("detail-idea-looking").innerHTML = `<strong>${t('looking_for_label')}</strong> ${idea.lookingFor}`;
+    document.getElementById("detail-idea-author").innerHTML = `<strong>${t('author_label')}</strong> ${idea.author}`;
+    const btn = document.getElementById("detail-join-btn");
+    if (btn) {
+      btn.textContent = t('join_button');
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      newBtn.addEventListener("click", () => openJoinFormForIdea(idea.id));
+      newBtn.id = "detail-join-btn";
+    }
+    document.getElementById("detail-modal").classList.add("open");
+  }
+
+  // Форма подачи идеи
+  function openIdeaForm() {
+    const modalContent = document.getElementById("idea-modal-content");
+    modalContent.innerHTML = `
+      <div id="idea-form-container">
+        <h3>${t('idea_modal_title')}</h3>
+        <p class="modal-sub">${t('idea_modal_subtitle')}</p>
+        <div class="error-message" id="idea-error"></div>
+        <div class="form-group"><label>${t('idea_name_label')}</label><input type="text" id="idea-name" autocomplete="name" placeholder="${t('idea_name_ph')}"></div>
+        <div class="form-group"><label>${t('idea_email_label')}</label><input type="email" id="idea-email" autocomplete="email" placeholder="${t('idea_email_ph')}"></div>
+        <div class="form-group"><label>${t('idea_social_label')}</label><input type="text" id="idea-social" placeholder="${t('idea_social_ph')}"></div>
+        <div class="form-group"><label>${t('idea_text_label')}</label><textarea id="idea-text" rows="3" placeholder="${t('idea_text_ph')}"></textarea></div>
+        <div class="form-group"><label>${t('idea_need_label')}</label><input type="text" id="idea-need" placeholder="${t('idea_need_ph')}"></div>
+        <div class="form-group"><label>${t('idea_city_label')}</label><input type="text" id="idea-city" placeholder="${t('idea_city_ph')}"></div>
+        <button class="form-submit" id="idea-submit-btn">${t('idea_submit_btn')}</button>
+        <p class="form-note">${t('idea_note')}</p>
+      </div>
+      <div id="idea-success" style="display:none;"><div class="form-success-icon">✦</div><h4>${t('idea_success_title')}</h4><p>${t('idea_success_text')}</p></div>
+    `;
+    document.getElementById("idea-submit-btn").addEventListener("click", submitIdeaForm);
+    document.getElementById("ideaModal").classList.add("open");
+  }
+  function closeIdeaModal() { document.getElementById("ideaModal").classList.remove("open"); }
+  async function submitIdeaForm() {
+    const name = document.getElementById("idea-name").value.trim();
+    const email = document.getElementById("idea-email").value.trim();
+    const text = document.getElementById("idea-text").value.trim();
+    const errorDiv = document.getElementById("idea-error");
+    if (!name || !email || !text) {
+      errorDiv.textContent = t('idea_error_default');
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    errorDiv.style.display = "none";
+    const btn = document.getElementById("idea-submit-btn");
+    const original = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
+    const data = {
+      _subject: `[PAA] New idea from ${name}`,
+      type: "IDEA",
+      name, email,
+      social: document.getElementById("idea-social").value.trim(),
+      idea: text,
+      need: document.getElementById("idea-need").value.trim(),
+      city: document.getElementById("idea-city").value.trim(),
+      _replyto: email
+    };
+    const FORMSPREE_URL = 'https://formspree.io/f/xwvyzbvr';
+    try {
+      const resp = await fetch(FORMSPREE_URL, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) });
+      if (resp.ok) {
+        document.getElementById("idea-form-container").style.display = "none";
+        document.getElementById("idea-success").style.display = "block";
+      } else throw new Error();
+    } catch(e) {
+      errorDiv.textContent = "❌ " + (currentLang === 'ru' ? "Ошибка отправки. Попробуйте позже." : "Sending error. Please try again.");
+      errorDiv.style.display = "block";
+    } finally {
+      btn.textContent = original;
+      btn.disabled = false;
+    }
+  }
+
+  // Форма присоединения к идее
+  function openJoinFormForIdea(ideaId) {
+    closeDetailModal();
+    const idea = ideasData[currentLang].find(i => i.id === ideaId);
+    if (!idea) return;
+    currentIdea = idea;
+    const modalContent = document.getElementById("contact-modal-content");
+    modalContent.innerHTML = `
+      <div id="contact-form-container">
+        <h3>${t('contact_modal_title', idea.title)}</h3>
+        <p class="modal-sub">${t('contact_modal_subtitle')}</p>
+        <div class="error-message" id="contact-error"></div>
+        <div class="form-group"><label>${t('contact_name_label')}</label><input type="text" id="contact-name" autocomplete="name" placeholder="${t('contact_name_ph')}"></div>
+        <div class="form-group"><label>${t('contact_contact_label')}</label><input type="text" id="contact-contact" autocomplete="email" placeholder="${t('contact_contact_ph')}"></div>
+        <div class="form-group"><label>${t('contact_message_label')}</label><textarea id="contact-message" rows="3" placeholder="${t('contact_message_ph')}"></textarea></div>
+        <button class="form-submit" id="contact-submit-btn">${t('contact_submit_btn')}</button>
+        <p class="form-note">${t('contact_note')}</p>
+      </div>
+      <div id="contact-success" style="display:none;"><div class="form-success-icon">✦</div><h4>${t('contact_success_title')}</h4><p>${t('contact_success_text')}</p></div>
+    `;
+    document.getElementById("contact-submit-btn").addEventListener("click", submitIdeaContact);
+    document.getElementById("contactModal").classList.add("open");
+  }
+  function closeContactModal() { document.getElementById("contactModal").classList.remove("open"); }
+  async function submitIdeaContact() {
+    const name = document.getElementById("contact-name").value.trim();
+    const contact = document.getElementById("contact-contact").value.trim();
+    const message = document.getElementById("contact-message").value.trim();
+    const errorDiv = document.getElementById("contact-error");
+    if (!name || !contact) {
+      errorDiv.textContent = t('contact_error_default');
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    errorDiv.style.display = "none";
+    const btn = document.getElementById("contact-submit-btn");
+    const original = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
+    const data = {
+      _subject: `[PAA] Join request for idea: ${currentIdea.title}`,
+      from_name: name,
+      from_contact: contact,
+      idea_title: currentIdea.title,
+      idea_author: currentIdea.author,
+      message: message,
+      _replyto: contact,
+    };
+    const FORMSPREE_URL = 'https://formspree.io/f/xwvyzbvr';
+    try {
+      const resp = await fetch(FORMSPREE_URL, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) });
+      if (resp.ok) {
+        document.getElementById("contact-form-container").style.display = "none";
+        document.getElementById("contact-success").style.display = "block";
+      } else throw new Error();
+    } catch(e) {
+      errorDiv.textContent = "❌ " + (currentLang === 'ru' ? "Ошибка отправки. Попробуйте позже." : "Sending error. Please try again.");
+      errorDiv.style.display = "block";
+    } finally {
+      btn.textContent = original;
+      btn.disabled = false;
+    }
+  }
+
+  // Инициализация
+  document.getElementById("lang-switch").addEventListener("click", () => setLanguage(currentLang === 'ru' ? 'en' : 'ru'));
+  document.getElementById("topShareBtn").addEventListener("click", openIdeaForm);
+  document.getElementById("bottomShareBtn").addEventListener("click", openIdeaForm);
+  document.getElementById("ideaModal").addEventListener("click", e => { if (e.target === document.getElementById("ideaModal")) closeIdeaModal(); });
+  document.getElementById("contactModal").addEventListener("click", e => { if (e.target === document.getElementById("contactModal")) closeContactModal(); });
+  const searchInp = document.getElementById("search-input");
+  if (searchInp) searchInp.addEventListener("input", onSearchInput);
+  createDetailModal();
+  setLanguage(currentLang);
+</script>
+</body>
+</html>
