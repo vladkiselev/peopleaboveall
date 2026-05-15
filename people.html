@@ -112,8 +112,9 @@
   }
   .search-wrapper {
     position: relative;
-    flex: 1;
+    width: 100%;
     max-width: 400px;
+    flex: 0 1 auto;
   }
   .search-icon {
     position: absolute;
@@ -149,6 +150,7 @@
     text-transform: uppercase;
   }
   .top-join-btn {
+    flex-shrink: 0;
     background: var(--ink);
     color: var(--cream);
     font-family: 'DM Mono', monospace;
@@ -449,7 +451,7 @@
     .hero-mini { padding: 120px 24px 40px; }
     .search-section { padding: 0 24px 20px; flex-direction: column; align-items: stretch; }
     .search-wrapper { max-width: none; }
-    .top-join-btn { text-align: center; }
+    .top-join-btn { white-space: normal; text-align: center; }
     .filters { padding: 0 24px 32px; }
     .people-grid { padding: 20px 24px 60px; }
     footer { padding: 32px 24px; }
@@ -493,7 +495,7 @@
 
 <footer>
   <span class="footer-logo">People Above All</span>
-  <span class="footer-copy">peopleaboveall.com · 2025</span>
+  <span class="footer-copy">peopleaboveall.com · 2026</span>
 </footer>
 
 <!-- Модальное окно для формы добавления в каталог -->
