@@ -200,6 +200,24 @@
     color: var(--cream);
     border-color: var(--ink);
   }
+  .contact-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--muted);
+  }
+  .contact-btn:hover {
+    background: var(--ink);
+    color: var(--cream) !important;
+    border-color: var(--ink);
+  }
   .people-grid {
     padding: 20px 80px 100px;
     display: grid;
@@ -794,7 +812,7 @@
         <div class="person-skills">${person.skills.map(s => `<span class="skill-tag">${highlightText(s, searchQuery)}</span>`).join('')}</div>
         <div class="person-location">📍 ${person.location}</div>
         <div style="margin-top: 20px;">
-          <button class="filter-chip" style="background:transparent;" onclick="openContactModal(${person.id})">${t('contact_btn')}</button>
+          <button class=\"contact-btn\" onclick=\"openContactModal(${person.id})\">${t('contact_btn')}</button>
         </div>
       </div>
     `).join('');
