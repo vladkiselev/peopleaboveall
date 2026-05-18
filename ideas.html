@@ -563,7 +563,7 @@
     const grid = document.getElementById('ideas-grid');
     grid.innerHTML = '<div class="empty-state" style="opacity:0.5">Загружаем...</div>';
     try {
-      const resp = await fetch(IDEAS_CSV_URL);
+      const resp = await fetch(IDEAS_CSV_URL + '&t=' + Date.now());
       if (!resp.ok) throw new Error('fetch failed');
       const text = await resp.text();
       const rows = parseCSV(text);
