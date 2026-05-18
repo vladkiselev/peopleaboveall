@@ -541,7 +541,7 @@
       fullDescription: r.full_ru || '',
       category:        r.category_ru || '',
       tags:            (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
-      author:          r.author || '',
+      author:          r.author_ru || '',
       lookingFor:      r.need_ru || '',
       location:        r.city_ru || '',
     }));
@@ -552,7 +552,7 @@
       fullDescription: r.full_en || '',
       category:        r.category_en || '',
       tags:            (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
-      author:          r.author || '',
+      author:          r.author_en || '',
       lookingFor:      r.need_en || '',
       location:        r.city_en || '',
     }));
