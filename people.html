@@ -549,7 +549,7 @@
       role:   r.role_ru || '',
       bio:    r.help_ru || '',
       skills: (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
-      location: r.city || '',
+      location: r.city_ru || '',
       social: r.social || '',
     }));
     const en = visible.map(r => ({
@@ -558,7 +558,7 @@
       role:   r.role_en || '',
       bio:    r.help_en || '',
       skills: (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
-      location: r.city || '',
+      location: r.city_en || '',
       social: r.social || '',
     }));
     return { ru, en };
