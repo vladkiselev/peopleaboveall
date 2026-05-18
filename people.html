@@ -516,24 +516,70 @@
 
 <script>
   // ---------- ДАННЫЕ УЧАСТНИКОВ ----------
-  const peopleData = {
-    ru: [
-      { id: 1, name: "Алексей Смирнов", role: "ML-инженер", bio: "Разрабатываю нейросети для обработки естественного языка. Ищу проекты на стыке AI и психологии.", skills: ["Python", "NLP", "PyTorch"], location: "Москва · Онлайн", contactAllowed: true, fullName: "Алексей Смирнов" },
-      { id: 2, name: "Мария Орлова", role: "Дизайнер интерфейсов", bio: "Проектирую интерфейсы для EdTech и финтеха. Верю, что дизайн должен решать реальные проблемы людей.", skills: ["Figma", "UI/UX", "Дизайн-мышление"], location: "Берлин · Удалённо", contactAllowed: true, fullName: "Мария Орлова" },
-      { id: 3, name: "Егор Волков", role: "Предприниматель", bio: "Запустил два стартапа в сфере устойчивого развития. Сейчас ищу команду для нового эко-проекта.", skills: ["Стратегия", "Бизнес-модели", "Поиск инвестиций"], location: "Лиссабон · Европа", contactAllowed: true, fullName: "Егор Волков" },
-      { id: 4, name: "Анна Крылова", role: "Психолог", bio: "Работаю с эмоциональным выгоранием и командной эффективностью. Провожу воркшопы для стартапов.", skills: ["Коучинг", "Терапия", "Командообразование"], location: "Онлайн", contactAllowed: true, fullName: "Анна Крылова" },
-      { id: 5, name: "Дмитрий Шевченко", role: "Эко-инженер", bio: "Занимаюсь очисткой воды и возобновляемой энергией. Участвую в Open Source проектах.", skills: ["Химия", "Технологии очистки", "Прототипирование"], location: "Киев · Удалённо", contactAllowed: true, fullName: "Дмитрий Шевченко" },
-      { id: 6, name: "Елена Морозова", role: "Маркетолог", bio: "Специалист по комьюнити-маркетингу и партнёрствам. Помогаю проектам находить первых пользователей.", skills: ["SMM", "PR", "Аналитика"], location: "Амстердам · Онлайн", contactAllowed: true, fullName: "Елена Морозова" }
-    ],
-    en: [
-      { id: 1, name: "Alexey Smirnov", role: "ML Engineer", bio: "Building NLP models. Looking for projects at the intersection of AI and psychology.", skills: ["Python", "NLP", "PyTorch"], location: "Moscow · Online", contactAllowed: true, fullName: "Alexey Smirnov" },
-      { id: 2, name: "Maria Orlova", role: "UI/UX Designer", bio: "Designing interfaces for EdTech and fintech. I believe design should solve real human problems.", skills: ["Figma", "UI/UX", "Design Thinking"], location: "Berlin · Remote", contactAllowed: true, fullName: "Maria Orlova" },
-      { id: 3, name: "Egor Volkov", role: "Entrepreneur", bio: "Launched two startups in sustainable development. Now looking for a team for a new eco-project.", skills: ["Strategy", "Business Models", "Fundraising"], location: "Lisbon · Europe", contactAllowed: true, fullName: "Egor Volkov" },
-      { id: 4, name: "Anna Krylova", role: "Psychologist", bio: "Working with burnout and team effectiveness. Conducting workshops for startups.", skills: ["Coaching", "Therapy", "Team Building"], location: "Online", contactAllowed: true, fullName: "Anna Krylova" },
-      { id: 5, name: "Dmitry Shevchenko", role: "Eco-Engineer", bio: "Specializing in water purification and renewable energy. Participating in open source projects.", skills: ["Chemistry", "Purification Tech", "Prototyping"], location: "Kyiv · Remote", contactAllowed: true, fullName: "Dmitry Shevchenko" },
-      { id: 6, name: "Elena Morozova", role: "Marketer", bio: "Community marketing and partnerships. Helping projects find first users.", skills: ["SMM", "PR", "Analytics"], location: "Amsterdam · Online", contactAllowed: true, fullName: "Elena Morozova" }
-    ]
-  };
+  // ── GOOGLE SHEETS CSV ───────────────────────────────────────────
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMEdg_iBj9kvqbOkNWijq5HaHzcgKvNQGb4ucRjyMGZInPBYgKHBlYXa2dgW3B2BeI8C2uXRgxGw5O/pub?gid=0&single=true&output=csv';
+  // ───────────────────────────────────────────────────────────────
+
+  let peopleData = { ru: [], en: [] };
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    return lines.slice(1).map(line => {
+      const values = [];
+      let cur = '', inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQuotes = !inQuotes; }
+        else if (ch === ',' && !inQuotes) { values.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      values.push(cur.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
+      return obj;
+    });
+  }
+
+  function csvToPeople(rows) {
+    const visible = rows.filter(r => (r.visible || '').toLowerCase() === 'yes');
+    const ru = visible.map(r => ({
+      id:     parseInt(r.id) || 0,
+      name:   r.name_ru || r.name_en || '',
+      role:   r.role_ru || '',
+      bio:    r.help_ru || '',
+      skills: (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
+      location: r.city || '',
+      social: r.social || '',
+    }));
+    const en = visible.map(r => ({
+      id:     parseInt(r.id) || 0,
+      name:   r.name_en || r.name_ru || '',
+      role:   r.role_en || '',
+      bio:    r.help_en || '',
+      skills: (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
+      location: r.city || '',
+      social: r.social || '',
+    }));
+    return { ru, en };
+  }
+
+  async function loadPeople() {
+    const grid = document.getElementById('people-grid');
+    grid.innerHTML = '<div class="empty-state" style="opacity:0.5">Загружаем...</div>';
+    try {
+      const resp = await fetch(SHEET_CSV_URL);
+      if (!resp.ok) throw new Error('fetch failed');
+      const text = await resp.text();
+      const rows = parseCSV(text);
+      peopleData = csvToPeople(rows);
+      renderFilters();
+      renderPeople();
+    } catch(e) {
+      grid.innerHTML = '<div class="empty-state">Не удалось загрузить данные. Попробуйте обновить страницу.</div>';
+      console.error('Sheet load error:', e);
+    }
+  }
 
   // ---------- ПЕРЕВОДЫ (полные, с заголовками, лейблами, плейсхолдерами) ----------
   const translations = {
@@ -723,7 +769,7 @@
   function personMatchesSearch(person, query) {
     if (!query) return true;
     const q = query.toLowerCase().trim();
-    const fields = [person.name, person.role, person.bio, ...person.skills].join(' ').toLowerCase();
+    const fields = [person.name, person.role, person.bio, person.location, ...(person.skills || [])].join(' ').toLowerCase();
     return fields.includes(q);
   }
   function getFilteredPeople() {
@@ -931,7 +977,19 @@
   document.getElementById("contactModal").addEventListener("click", e => { if (e.target === document.getElementById("contactModal")) closeContactModal(); });
   const searchInp = document.getElementById("search-input");
   if (searchInp) searchInp.addEventListener("input", onSearchInput);
-  setLanguage(currentLang);
+
+  // Применяем язык без рендера карточек (данных ещё нет)
+  document.documentElement.lang = currentLang === 'ru' ? 'ru' : 'en';
+  document.querySelector('#lang-switch').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
+  });
+  updateSearchPlaceholder();
+  updateJoinButtons();
+
+  // Загружаем людей из Google Sheets
+  loadPeople();
 </script>
 </body>
 </html>
