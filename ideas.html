@@ -807,7 +807,11 @@
     document.getElementById("detail-idea-title").innerHTML = idea.title;
     document.getElementById("detail-idea-category").textContent = idea.category;
     document.getElementById("detail-idea-summary").innerHTML = `<strong>${t('short_label')}</strong> ${idea.summary}`;
-    document.getElementById("detail-idea-full").textContent = idea.fullDescription;
+    document.getElementById("detail-idea-full").innerHTML = (idea.fullDescription || '')
+      .split(/\n\n|\n/)
+      .filter(p => p.trim())
+      .map(p => `<p style="margin-bottom:14px;">${p.trim()}</p>`)
+      .join('');
     document.getElementById("detail-idea-looking").innerHTML = `<strong>${t('looking_for_label')}</strong> ${idea.lookingFor}`;
     document.getElementById("detail-idea-author").innerHTML = `<strong>${t('author_label')}</strong> ${idea.author}`;
     const btn = document.getElementById("detail-join-btn");
