@@ -507,22 +507,74 @@
 
 <script>
   // Данные идей
-  const ideasData = {
-    ru: [
-      { id: 1, title: "AI-коуч для эмоционального интеллекта", summary: "Приложение, которое анализирует голос и помогает развивать эмпатию в реальных разговорах.", fullDescription: "Мы создаём инструмент для улучшения эмоционального интеллекта через AI. Пользователь говорит в микрофон во время диалогов, нейросеть предлагает подсказки, как лучше выразить эмпатию. Ищем NLP-специалиста и психолога для валидации.", category: "AI", tags: ["#нейросети", "#психология", "#edtech"], author: "Алексей, ML-инженер", lookingFor: "NLP-разработчик, психолог, тестировщик" },
-      { id: 2, title: "Платформа для обмена вещами в сообществах", summary: "Локальный сервис для бесплатного обмена вещами внутри ЖК или районов, с системой доверия.", fullDescription: "Устали от переполненных свалок? Создаём платформу, где соседи могут отдавать ненужные вещи и брать нужные. Система рейтинга и верификация через местные сообщества. Нужны разработчик на React и маркетолог для пилота в 3 районах.", category: "Eco", tags: ["#экология", "#sharing", "#community"], author: "Мария, урбанист", lookingFor: "React-разработчик, SMM-менеджер, пилотные районы" },
-      { id: 3, title: "Курсы по финансовой грамотности для подростков", summary: "Бесплатные интерактивные уроки с геймификацией и реальными кейсами.", fullDescription: "Миссия — научить подростков 14-18 лет управлять деньгами, не попадать в долги и планировать бюджет. Сделали прототип, ищем педагога и дизайнера для создания контента и игровых механик.", category: "Education", tags: ["#образование", "#финансы", "#kids"], author: "Егор, финансовый консультант", lookingFor: "Педагог, UI/UX дизайнер, спонсоры" },
-      { id: 4, title: "Коворкинг для родителей с детьми", summary: "Пространство, где можно работать и оставить ребёнка с няней-воспитателем.", fullDescription: "Идея — коворкинг с интегрированным детским клубом. Помещение на первых этажах жилых комплексов. Ищем архитектора, управляющего и партнёра с опытом в девелопменте.", category: "Business", tags: ["#коворкинг", "#family", "#realestate"], author: "Анна, HR-директор", lookingFor: "Архитектор, операционный директор, инвестор" },
-      { id: 5, title: "Open Source проект по очистке воды", summary: "Недорогой фильтр для удалённых деревень, использующий местные материалы.", fullDescription: "Разрабатываем конструкцию фильтра из золы, песка и активированного угля. Чертежи в открытом доступе. Нужны химики-экологи, волонтёры для тестирования в Индии и Африке.", category: "Tech", tags: ["#cleantech", "#opensource", "#water"], author: "Дмитрий, инженер", lookingFor: "Эколог, полевые испытатели, грантовый менеджер" }
-    ],
-    en: [
-      { id: 1, title: "AI Coach for Emotional Intelligence", summary: "App that analyzes voice and helps develop empathy in real conversations.", fullDescription: "We are building a tool to improve emotional intelligence with AI. The user speaks into the mic during dialogues, the AI suggests better empathic responses. Looking for NLP specialist and psychologist for validation.", category: "AI", tags: ["#neuralnets", "#psychology", "#edtech"], author: "Alexey, ML Engineer", lookingFor: "NLP developer, psychologist, tester" },
-      { id: 2, title: "Community Item Swap Platform", summary: "Local service for free exchange of goods within neighborhoods, with a trust system.", fullDescription: "Tired of overflowing landfills? We're creating a platform where neighbors can give away unwanted items and take what they need. Rating system + local community verification. Need React dev and marketer for pilot in 3 districts.", category: "Eco", tags: ["#ecology", "#sharing", "#community"], author: "Maria, Urbanist", lookingFor: "React developer, SMM manager, pilot districts" },
-      { id: 3, title: "Financial Literacy for Teens", summary: "Free interactive lessons with gamification and real-life cases.", fullDescription: "Mission: teach teenagers 14-18 how to manage money, avoid debt, and plan budgets. Prototype ready. Looking for educator and designer to create content and game mechanics.", category: "Education", tags: ["#education", "#finance", "#kids"], author: "Egor, Financial Advisor", lookingFor: "Teacher, UI/UX designer, sponsors" },
-      { id: 4, title: "Coworking for Parents with Kids", summary: "Space where you can work and leave your child with a nanny-educator.", fullDescription: "Coworking with integrated kids' club. Premises on ground floors of residential complexes. Looking for architect, manager, and partner with real estate development experience.", category: "Business", tags: ["#coworking", "#family", "#realestate"], author: "Anna, HR Director", lookingFor: "Architect, operations director, investor" },
-      { id: 5, title: "Open Source Water Purification", summary: "Low-cost filter for remote villages using local materials.", fullDescription: "Developing a filter design from ash, sand, and activated carbon. Open-source blueprints. Need environmental chemists, volunteers for testing in India and Africa.", category: "Tech", tags: ["#cleantech", "#opensource", "#water"], author: "Dmitry, Engineer", lookingFor: "Ecologist, field testers, grant manager" }
-    ]
-  };
+  // ── GOOGLE SHEETS CSV ───────────────────────────────────────────
+  const IDEAS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTtwuJ91wnYA6unNvhq-VBah5aizgQtpih3lCvAlbSR6PUrL5-DYmqpQ-mvIRj-2c-Y-w8LlTa0a1Ps/pub?gid=0&single=true&output=csv';
+  // ───────────────────────────────────────────────────────────────
+
+  let ideasData = { ru: [], en: [] };
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    return lines.slice(1).map(line => {
+      const values = [];
+      let cur = '', inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQuotes = !inQuotes; }
+        else if (ch === ',' && !inQuotes) { values.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      values.push(cur.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
+      return obj;
+    });
+  }
+
+  function csvToIdeas(rows) {
+    const visible = rows.filter(r => (r.visible || '').toLowerCase() === 'yes');
+    const ru = visible.map(r => ({
+      id:              parseInt(r.id) || 0,
+      title:           r.title_ru || '',
+      summary:         r.summary_ru || '',
+      fullDescription: r.full_ru || '',
+      category:        r.category_ru || '',
+      tags:            (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
+      author:          r.author || '',
+      lookingFor:      r.need_ru || '',
+      location:        r.city_ru || '',
+    }));
+    const en = visible.map(r => ({
+      id:              parseInt(r.id) || 0,
+      title:           r.title_en || '',
+      summary:         r.summary_en || '',
+      fullDescription: r.full_en || '',
+      category:        r.category_en || '',
+      tags:            (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
+      author:          r.author || '',
+      lookingFor:      r.need_en || '',
+      location:        r.city_en || '',
+    }));
+    return { ru, en };
+  }
+
+  async function loadIdeas() {
+    const grid = document.getElementById('ideas-grid');
+    grid.innerHTML = '<div class="empty-state" style="opacity:0.5">Загружаем...</div>';
+    try {
+      const resp = await fetch(IDEAS_CSV_URL);
+      if (!resp.ok) throw new Error('fetch failed');
+      const text = await resp.text();
+      const rows = parseCSV(text);
+      ideasData = csvToIdeas(rows);
+      renderFilters();
+      renderIdeas();
+    } catch(e) {
+      grid.innerHTML = '<div class="empty-state">Не удалось загрузить данные. Попробуйте обновить страницу.</div>';
+      console.error('Sheet load error:', e);
+    }
+  }
 
   // Переводы (полные, с заголовками, лейблами, плейсхолдерами)
   const translations = {
@@ -680,7 +732,7 @@
   function ideaMatchesSearch(idea, query) {
     if (!query) return true;
     const q = query.toLowerCase().trim();
-    const fields = [idea.title, idea.summary, idea.fullDescription, idea.author, ...idea.tags].join(' ').toLowerCase();
+    const fields = [idea.title, idea.summary, idea.fullDescription, idea.author, idea.lookingFor, ...(idea.tags || [])].join(' ').toLowerCase();
     return fields.includes(q);
   }
   function getFilteredIdeas() {
@@ -908,7 +960,19 @@
   const searchInp = document.getElementById("search-input");
   if (searchInp) searchInp.addEventListener("input", onSearchInput);
   createDetailModal();
-  setLanguage(currentLang);
+
+  // Применяем язык без рендера (данных ещё нет)
+  document.documentElement.lang = currentLang === 'ru' ? 'ru' : 'en';
+  document.querySelector('#lang-switch').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
+  });
+  updateSearchPlaceholder();
+  updateShareButtons();
+
+  // Загружаем идеи из Google Sheets
+  loadIdeas();
 </script>
 </body>
 </html>
