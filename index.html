@@ -584,6 +584,25 @@
     footer { padding: 40px 32px; }
     .modal { padding: 40px 28px; }
   }
+  #scroll-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 44px;
+    height: 44px;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, background 0.3s;
+    z-index: 99;
+    font-family: 'DM Mono', monospace;
+  }
+  #scroll-top.visible { opacity: 1; pointer-events: all; }
+  #scroll-top:hover { background: var(--warm); }
 </style>
 </head>
 <body>
@@ -1118,6 +1137,13 @@
 
   // Инициализация языка
   setLanguage(currentLang);
+  
+  window.addEventListener('scroll', () => {
+    document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
+  });
 </script>
+
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Наверх">↑</button>
+  
 </body>
 </html>
