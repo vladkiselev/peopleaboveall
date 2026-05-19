@@ -996,6 +996,7 @@
   document.getElementById("bottomJoinBtn").addEventListener("click", openJoinFormModal);
   document.getElementById("joinModal").addEventListener("click", e => { if (e.target === document.getElementById("joinModal")) closeJoinModal(); });
   document.getElementById("contactModal").addEventListener("click", e => { if (e.target === document.getElementById("contactModal")) closeContactModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeJoinModal(); closeContactModal(); } });
   const searchInp = document.getElementById("search-input");
   if (searchInp) searchInp.addEventListener("input", onSearchInput);
 
