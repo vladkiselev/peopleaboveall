@@ -964,6 +964,7 @@
   document.getElementById("bottomShareBtn").addEventListener("click", openIdeaForm);
   document.getElementById("ideaModal").addEventListener("click", e => { if (e.target === document.getElementById("ideaModal")) closeIdeaModal(); });
   document.getElementById("contactModal").addEventListener("click", e => { if (e.target === document.getElementById("contactModal")) closeContactModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeIdeaModal(); closeContactModal(); } });
   const searchInp = document.getElementById("search-input");
   if (searchInp) searchInp.addEventListener("input", onSearchInput);
   createDetailModal();
