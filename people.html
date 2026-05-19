@@ -497,6 +497,18 @@
   }
   #scroll-top.visible { opacity: 1; pointer-events: all; }
   #scroll-top:hover { background: var(--warm); }
+
+  @keyframes sk-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .sk { background: var(--muted); opacity: 0.15; border-radius: 4px; animation: sk-pulse 1.6s ease-in-out infinite; }
+  .sk-role { height: 10px; width: 60px; margin-bottom: 14px; }
+  .sk-name { height: 22px; width: 75%; margin-bottom: 12px; }
+  .sk-line { height: 11px; width: 100%; margin-bottom: 7px; }
+  .sk-line2 { height: 11px; width: 80%; margin-bottom: 18px; }
+  .sk-tags { display: flex; gap: 8px; margin-bottom: 18px; }
+  .sk-tag { height: 24px; width: 72px; border-radius: 40px; }
+  .sk-city { height: 10px; width: 50%; margin-bottom: 18px; }
+  .sk-btn { height: 34px; width: 100px; border-radius: 40px; }
+
 </style>
 </head>
 <body>
@@ -606,7 +618,8 @@
 
   async function loadPeople() {
     const grid = document.getElementById('people-grid');
-    grid.innerHTML = '<div class="empty-state" style="opacity:0.5">Загружаем...</div>';
+    const skCard = `<div class="person-card"><div class="sk sk-role"></div><div class="sk sk-name"></div><div class="sk sk-line"></div><div class="sk sk-line2"></div><div class="sk-tags"><div class="sk sk-tag"></div><div class="sk sk-tag"></div></div><div class="sk sk-city"></div><div class="sk sk-btn"></div></div>`;
+    grid.innerHTML = skCard + skCard + skCard;
     try {
       const resp = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
       if (!resp.ok) throw new Error('fetch failed');
