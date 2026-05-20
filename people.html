@@ -916,6 +916,12 @@
         <div class="form-group"><label>${t('join_help_label')}</label><textarea id="join-help" rows="3" placeholder="${t('join_help_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_seek_label')}</label><textarea id="join-seek" rows="2" placeholder="${t('join_seek_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_city_label')}</label><input type="text" id="join-city" placeholder="${t('join_city_ph')}"></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+          <input type="checkbox" id="consent-join" style="margin-top:4px;cursor:pointer;">
+          <label for="consent-join" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.5;cursor:pointer;">
+            ${currentLang === 'ru' ? 'Я согласен с' : 'I agree to the'} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">Privacy Policy</a> ${currentLang === 'ru' ? 'и' : 'and'} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">Terms of Use</a>
+          </label>
+        </div>
         <button class="form-submit" id="join-submit-btn">${t('join_submit_btn')}</button>
         <p class="form-note">${t('join_note')}</p>
       </div>
@@ -935,6 +941,13 @@
       errorDiv.textContent = t('join_error_default');
       errorDiv.style.display = "block";
       setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    const consent = document.getElementById('consent-join');
+    if (consent && !consent.checked) {
+      errorDiv.textContent = currentLang === 'ru' ? 'Подтвердите согласие с политикой конфиденциальности' : 'Please accept the Privacy Policy';
+      errorDiv.style.display = 'block';
+      setTimeout(() => errorDiv.style.display = 'none', 3000);
       return;
     }
     errorDiv.style.display = "none";
