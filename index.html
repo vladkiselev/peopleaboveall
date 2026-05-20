@@ -799,6 +799,10 @@
   // ---------- ПЕРЕВОДЫ ----------
   const translations = {
     ru: {
+      consent_label_1: 'Я согласен с',
+      consent_privacy: 'Privacy Policy',
+      consent_label_2: 'и',
+      consent_terms: 'Terms of Use',  
       nav_ideas: "Идеи", nav_people: "Люди", nav_about: "О проекте",
       hero_eyebrow: "Движение · Платформа · Сообщество",
       hero_title_1: "Люди", hero_title_2: "превыше", hero_title_3: "всего.",
@@ -875,6 +879,10 @@
       role_placeholder: "Выбери роль"
     },
     en: {
+      consent_label_1: 'I agree to the',
+      consent_privacy: 'Privacy Policy',
+      consent_label_2: 'and',
+      consent_terms: 'Terms of Use',  
       nav_ideas: "Ideas", nav_people: "People", nav_about: "About",
       hero_eyebrow: "Movement · Platform · Community",
       hero_title_1: "People", hero_title_2: "Above", hero_title_3: "All.",
@@ -992,6 +1000,12 @@
         <div class="form-group"><label>${t('idea_text_label')}</label><textarea id="idea-text" rows="3" placeholder="${t('idea_text_ph')}"></textarea></div>
         <div class="form-group"><label>${t('idea_need_label')}</label><input type="text" id="idea-need" placeholder="${t('idea_need_ph')}"></div>
         <div class="form-group"><label>${t('idea_city_label')}</label><input type="text" id="idea-city" placeholder="${t('idea_city_ph')}"></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+          <input type="checkbox" id="consent-idea" style="margin-top:4px;cursor:pointer;">
+          <label for="consent-idea" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.5;cursor:pointer;">
+            ${t('consent_label_1')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_privacy')}</a> ${t('consent_label_2')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_terms')}</a>
+          </label>
+        </div>
         <button class="form-submit" id="idea-submit-btn">${t('idea_submit_btn')}</button>
         <p class="form-note">${t('idea_note')}</p>
       </div>
@@ -1027,7 +1041,13 @@
         <div class="form-group"><label>${t('join_help_label')}</label><textarea id="join-help" rows="3" placeholder="${t('join_help_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_seek_label')}</label><textarea id="join-seek" rows="2" placeholder="${t('join_seek_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_city_label')}</label><input type="text" id="join-city" placeholder="${t('join_city_ph')}"></div>
-        <button class="form-submit" id="join-submit-btn">${t('join_submit_btn')}</button>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+          <input type="checkbox" id="consent-idea" style="margin-top:4px;cursor:pointer;">
+          <label for="consent-idea" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.5;cursor:pointer;">
+            ${t('consent_label_1')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_privacy')}</a> ${t('consent_label_2')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_terms')}</a>
+          </label>
+        </div>
+        <button class="form-submit" id="idea-submit-btn">${t('idea_submit_btn')}</button>
         <p class="form-note">${t('join_note')}</p>
       </div>
       <div id="join-success" style="display:none;"><div class="form-success-icon">✦</div><h4>${t('join_success_title')}</h4><p>${t('join_success_text')}</p></div>
