@@ -889,6 +889,12 @@
         <div class="form-group"><label>${t('idea_text_label')}</label><textarea id="idea-text" rows="3" placeholder="${t('idea_text_ph')}"></textarea></div>
         <div class="form-group"><label>${t('idea_need_label')}</label><input type="text" id="idea-need" placeholder="${t('idea_need_ph')}"></div>
         <div class="form-group"><label>${t('idea_city_label')}</label><input type="text" id="idea-city" placeholder="${t('idea_city_ph')}"></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
+          <input type="checkbox" id="consent-idea" style="margin-top:4px;cursor:pointer;">
+          <label for="consent-idea" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.5;cursor:pointer;">
+            ${currentLang === 'ru' ? 'Я согласен с' : 'I agree to the'} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">Privacy Policy</a> ${currentLang === 'ru' ? 'и' : 'and'} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">Terms of Use</a>
+          </label>
+        </div>
         <button class="form-submit" id="idea-submit-btn">${t('idea_submit_btn')}</button>
         <p class="form-note">${t('idea_note')}</p>
       </div>
@@ -907,6 +913,13 @@
       errorDiv.textContent = t('idea_error_default');
       errorDiv.style.display = "block";
       setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    const consent = document.getElementById('consent-idea');
+    if (consent && !consent.checked) {
+      errorDiv.textContent = currentLang === 'ru' ? 'Подтвердите согласие с политикой конфиденциальности' : 'Please accept the Privacy Policy';
+      errorDiv.style.display = 'block';
+      setTimeout(() => errorDiv.style.display = 'none', 3000);
       return;
     }
     errorDiv.style.display = "none";
