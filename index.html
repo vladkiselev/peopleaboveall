@@ -27,7 +27,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   /* --- все стили остаются без изменений (как в исходном index.html) --- */
-  /* (копирую стили из исходного файла, который был предоставлен ранее) */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --cream: #F5F0E8;
@@ -465,7 +464,7 @@
   }
   .reveal.visible { opacity: 1; transform: translateY(0); }
   
-  /* Модальные окна (как в других страницах) */
+  /* Модальные окна */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -660,26 +659,10 @@
 <section class="beliefs">
   <div class="section-label" data-i18n="beliefs_label">Наши убеждения</div>
   <div class="beliefs-grid">
-    <div class="belief-card reveal">
-      <span class="belief-icon">🌱</span>
-      <h3 class="belief-title" data-i18n="belief1_title">Идеи созданы, чтобы делиться ими</h3>
-      <p class="belief-body" data-i18n="belief1_text">Твоя идея — это семя. Посади его открыто, полей сотрудничеством — и оно вырастет во что-то, что никто не мог бы создать в одиночку.</p>
-    </div>
-    <div class="belief-card reveal">
-      <span class="belief-icon">🔒</span>
-      <h3 class="belief-title" data-i18n="belief2_title">Приватность — не опция</h3>
-      <p class="belief-body" data-i18n="belief2_text">Твои данные, разговоры и личность принадлежат тебе. Мы никогда не будем продавать, отслеживать или эксплуатировать тебя. Доверие — наша единственная валюта.</p>
-    </div>
-    <div class="belief-card reveal">
-      <span class="belief-icon">🤝</span>
-      <h3 class="belief-title" data-i18n="belief3_title">Связь важнее транзакции</h3>
-      <p class="belief-body" data-i18n="belief3_text">Мы здесь, чтобы строить, учиться и расти вместе — а не извлекать ценность друг из друга. Цель — коллективный рост, а не индивидуальная выгода.</p>
-    </div>
-    <div class="belief-card reveal">
-      <span class="belief-icon">✨</span>
-      <h3 class="belief-title" data-i18n="belief4_title">Люди важнее алгоритмов</h3>
-      <p class="belief-body" data-i18n="belief4_text">Твой следующий великий соавтор должен быть найден через общие ценности и цели — не через машинное обучение.</p>
-    </div>
+    <div class="belief-card reveal"><span class="belief-icon">🌱</span><h3 class="belief-title" data-i18n="belief1_title">Идеи созданы, чтобы делиться ими</h3><p class="belief-body" data-i18n="belief1_text">Твоя идея — это семя. Посади его открыто, полей сотрудничеством — и оно вырастет во что-то, что никто не мог бы создать в одиночку.</p></div>
+    <div class="belief-card reveal"><span class="belief-icon">🔒</span><h3 class="belief-title" data-i18n="belief2_title">Приватность — не опция</h3><p class="belief-body" data-i18n="belief2_text">Твои данные, разговоры и личность принадлежат тебе. Мы никогда не будем продавать, отслеживать или эксплуатировать тебя. Доверие — наша единственная валюта.</p></div>
+    <div class="belief-card reveal"><span class="belief-icon">🤝</span><h3 class="belief-title" data-i18n="belief3_title">Связь важнее транзакции</h3><p class="belief-body" data-i18n="belief3_text">Мы здесь, чтобы строить, учиться и расти вместе — а не извлекать ценность друг из друга. Цель — коллективный рост, а не индивидуальная выгода.</p></div>
+    <div class="belief-card reveal"><span class="belief-icon">✨</span><h3 class="belief-title" data-i18n="belief4_title">Люди важнее алгоритмов</h3><p class="belief-body" data-i18n="belief4_text">Твой следующий великий соавтор должен быть найден через общие ценности и цели — не через машинное обучение.</p></div>
   </div>
 </section>
 
@@ -687,75 +670,30 @@
 <section class="for-whom">
   <div class="section-label" data-i18n="for_whom_label">Для кого</div>
   <div class="audience-list">
-    <div class="audience-item reveal">
-      <div class="audience-num">01</div>
-      <h3 class="audience-title" data-i18n="audience1_title">У тебя есть идея, но нет команды</h3>
-      <p class="audience-body" data-i18n="audience1_text">Ты придумал стартап, приложение или проект, но боишься поделиться. Мы даём безопасное место, где можно найти соавторов.</p>
-    </div>
-    <div class="audience-item reveal">
-      <div class="audience-num">02</div>
-      <h3 class="audience-title" data-i18n="audience2_title">Есть навыки, но нет идеи</h3>
-      <p class="audience-body" data-i18n="audience2_text">Ты дизайнер, разработчик или маркетолог — и хочешь участвовать в проектах, которые разделяют твои ценности.</p>
-    </div>
-    <div class="audience-item reveal">
-      <div class="audience-num">03</div>
-      <h3 class="audience-title" data-i18n="audience3_title">Устал от токсичных соцсетей</h3>
-      <p class="audience-body" data-i18n="audience3_text">Ты хочешь настоящих связей, а не лайков и алгоритмов. Тебя бесит, что твои данные продают, а контент — кликбейт.</p>
-    </div>
+    <div class="audience-item reveal"><div class="audience-num">01</div><h3 class="audience-title" data-i18n="audience1_title">У тебя есть идея, но нет команды</h3><p class="audience-body" data-i18n="audience1_text">Ты придумал стартап, приложение или проект, но боишься поделиться. Мы даём безопасное место, где можно найти соавторов.</p></div>
+    <div class="audience-item reveal"><div class="audience-num">02</div><h3 class="audience-title" data-i18n="audience2_title">Есть навыки, но нет идеи</h3><p class="audience-body" data-i18n="audience2_text">Ты дизайнер, разработчик или маркетолог — и хочешь участвовать в проектах, которые разделяют твои ценности.</p></div>
+    <div class="audience-item reveal"><div class="audience-num">03</div><h3 class="audience-title" data-i18n="audience3_title">Устал от токсичных соцсетей</h3><p class="audience-body" data-i18n="audience3_text">Ты хочешь настоящих связей, а не лайков и алгоритмов. Тебя бесит, что твои данные продают, а контент — кликбейт.</p></div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section class="how">
-  <div class="how-intro reveal">
-    <h2><span data-i18n="how_title_1">Как это</span><br><em data-i18n="how_title_2">работает</em></h2>
-    <p data-i18n="how_subtitle">Никакой магии алгоритмов. Только живые люди, ценности и ручная работа по соединению тех, кто подходит друг другу.</p>
-  </div>
+  <div class="how-intro reveal"><h2><span data-i18n="how_title_1">Как это</span><br><em data-i18n="how_title_2">работает</em></h2><p data-i18n="how_subtitle">Никакой магии алгоритмов. Только живые люди, ценности и ручная работа по соединению тех, кто подходит друг другу.</p></div>
   <div class="steps">
-    <div class="step reveal">
-      <span class="step-num">01</span>
-      <div>
-        <h4 class="step-title" data-i18n="step1_title">Подай заявку</h4>
-        <p class="step-body" data-i18n="step1_text">Заполни короткую форму — расскажи о себе, своей идее или том, что ищешь. Это займёт 3 минуты.</p>
-      </div>
-    </div>
-    <div class="step reveal">
-      <span class="step-num">02</span>
-      <div>
-        <h4 class="step-title" data-i18n="step2_title">Пройди отбор</h4>
-        <p class="step-body" data-i18n="step2_text">Мы лично просматриваем каждую заявку. В сообщество попадают только те, кто разделяет ценности People Above All.</p>
-      </div>
-    </div>
-    <div class="step reveal">
-      <span class="step-num">03</span>
-      <div>
-        <h4 class="step-title" data-i18n="step3_title">Получи знакомство</h4>
-        <p class="step-body" data-i18n="step3_text">Мы соединяем тебя с теми, кто дополняет твои навыки и ценности. Не алгоритм — живой человек делает введение.</p>
-      </div>
-    </div>
-    <div class="step reveal">
-      <span class="step-num">04</span>
-      <div>
-        <h4 class="step-title" data-i18n="step4_title">Строй вместе</h4>
-        <p class="step-body" data-i18n="step4_text">Общайся, сотрудничай, запускай проекты. Сообщество за твоей спиной.</p>
-      </div>
-    </div>
+    <div class="step reveal"><span class="step-num">01</span><div><h4 class="step-title" data-i18n="step1_title">Подай заявку</h4><p class="step-body" data-i18n="step1_text">Заполни короткую форму — расскажи о себе, своей идее или том, что ищешь. Это займёт 3 минуты.</p></div></div>
+    <div class="step reveal"><span class="step-num">02</span><div><h4 class="step-title" data-i18n="step2_title">Пройди отбор</h4><p class="step-body" data-i18n="step2_text">Мы лично просматриваем каждую заявку. В сообщество попадают только те, кто разделяет ценности People Above All.</p></div></div>
+    <div class="step reveal"><span class="step-num">03</span><div><h4 class="step-title" data-i18n="step3_title">Получи знакомство</h4><p class="step-body" data-i18n="step3_text">Мы соединяем тебя с теми, кто дополняет твои навыки и ценности. Не алгоритм — живой человек делает введение.</p></div></div>
+    <div class="step reveal"><span class="step-num">04</span><div><h4 class="step-title" data-i18n="step4_title">Строй вместе</h4><p class="step-body" data-i18n="step4_text">Общайся, сотрудничай, запускай проекты. Сообщество за твоей спиной.</p></div></div>
   </div>
 </section>
 
 <!-- FOUNDER SECTION -->
 <section class="founder">
   <div class="founder-left reveal">
-    <div class="founder-avatar">
-      <img src="founder.jpg" alt="Владислав Киселёв" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">
-    </div>
+    <div class="founder-avatar"><img src="founder.jpg" alt="Владислав Киселёв" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
     <h3 class="founder-name">Владислав Киселёв</h3>
     <p class="founder-role" data-i18n="founder_role">Основатель · People Above All</p>
-    <div class="founder-links">
-      <a href="https://www.linkedin.com/in/vladislavkiselev1999/" target="_blank" class="founder-link">LinkedIn</a>
-      <a href="https://instagram.com/vladislavvv_kiselev" target="_blank" class="founder-link">Instagram</a>
-      <a href="https://t.me/people_above_all" target="_blank" class="founder-link">Telegram</a>
-    </div>
+    <div class="founder-links"><a href="https://www.linkedin.com/in/vladislavkiselev1999/" target="_blank" class="founder-link">LinkedIn</a><a href="https://instagram.com/vladislavvv_kiselev" target="_blank" class="founder-link">Instagram</a><a href="https://t.me/people_above_all" target="_blank" class="founder-link">Telegram</a></div>
   </div>
   <div class="founder-right reveal">
     <div class="founder-label" data-i18n="founder_label">История основателя</div>
@@ -768,10 +706,7 @@
 <section class="cta-section">
   <h2 class="reveal"><span data-i18n="cta_title_1">Готов соединиться</span><br><em data-i18n="cta_title_2">с правильными людьми?</em></h2>
   <p class="reveal" data-i18n="cta_subtitle">Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.</p>
-  <div class="cta-buttons reveal">
-    <a href="#" class="btn-primary" id="ctaIdeaBtn" data-i18n="btn_idea">Поделиться идеей</a>
-    <a href="#" class="btn-ghost" id="ctaJoinBtn" data-i18n="btn_join_project">Добавить себя в каталог</a>
-  </div>
+  <div class="cta-buttons reveal"><a href="#" class="btn-primary" id="ctaIdeaBtn" data-i18n="btn_idea">Поделиться идеей</a><a href="#" class="btn-ghost" id="ctaJoinBtn" data-i18n="btn_join_project">Добавить себя в каталог</a></div>
 </section>
 
 <footer>
@@ -838,7 +773,6 @@
       founder_story_2: "People Above All — это не просто платформа. Это моё желание познакомить тебя с теми удивительными людьми, которых я встретил по всему миру.",
       cta_title_1: "Готов соединиться", cta_title_2: "с правильными людьми?",
       cta_subtitle: "Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.",
-      // Форма "У меня есть идея"
       idea_modal_title: "Расскажи об <em>идее</em>",
       idea_modal_subtitle: "Займёт 3 минуты · Владислав ответит лично",
       idea_name_label: "Имя *", idea_name_ph: "Как тебя зовут?",
@@ -852,7 +786,6 @@
       idea_success_title: "Заявка получена",
       idea_success_text: "Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.",
       idea_error_default: "Заполните все обязательные поля",
-      // Форма "Ищу проект" (Добавить себя в каталог)
       join_modal_title: "Добавь себя в <em>каталог</em>",
       join_modal_subtitle: "Расскажи о себе · Владислав познакомит с нужными людьми",
       join_name_label: "Имя *", join_name_ph: "Как тебя зовут?",
@@ -867,7 +800,6 @@
       join_success_title: "Заявка получена",
       join_success_text: "Владислав лично прочитает её и напишет в течение 48 часов.<br>Добро пожаловать в движение.",
       join_error_default: "Заполните все обязательные поля",
-      // Опции для роли (выпадающий список)
       role_option_developer: "Разработчик",
       role_option_designer: "Дизайнер",
       role_option_marketer: "Маркетолог",
@@ -918,7 +850,6 @@
       founder_story_2: "People Above All is not just a platform. It's my desire to introduce you to the amazing people I've met around the world.",
       cta_title_1: "Ready to connect", cta_title_2: "with the right people?",
       cta_subtitle: "It's more than a platform. It's a promise that people — their dignity, dreams, and potential — will always come first.",
-      // Idea form
       idea_modal_title: "Share your <em>idea</em>",
       idea_modal_subtitle: "Takes 3 minutes · Vladislav will reply personally",
       idea_name_label: "Name *", idea_name_ph: "What's your name?",
@@ -932,7 +863,6 @@
       idea_success_title: "Request received",
       idea_success_text: "Vladislav will read it and get back to you within 48 hours.<br>Welcome to the movement.",
       idea_error_default: "Please fill in all required fields",
-      // Join form
       join_modal_title: "Add yourself to the <em>catalog</em>",
       join_modal_subtitle: "Tell about yourself · Vladislav will introduce you to the right people",
       join_name_label: "Name *", join_name_ph: "What's your name?",
@@ -947,7 +877,6 @@
       join_success_title: "Request received",
       join_success_text: "Vladislav will read it and get back to you within 48 hours.<br>Welcome to the movement.",
       join_error_default: "Please fill in all required fields",
-      // Role options
       role_option_developer: "Developer",
       role_option_designer: "Designer",
       role_option_marketer: "Marketer",
@@ -972,7 +901,6 @@
     localStorage.setItem('paa_lang', lang);
     document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
     document.querySelector('#lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
-    // Обновляем все элементы с data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (translations[currentLang][key]) {
@@ -983,10 +911,8 @@
         }
       }
     });
-    // Также обновить тексты, которые не используют data-i18n (например, опции select придётся обновлять при открытии формы)
   }
 
-  // Функция для открытия модалки идеи
   function openIdeaModal() {
     const modalContent = document.getElementById("ideaModalContent");
     modalContent.innerHTML = `
@@ -1015,7 +941,6 @@
     document.getElementById("ideaModal").classList.add("open");
   }
 
-  // Функция для открытия модалки "Ищу проект"
   function openJoinModal() {
     const modalContent = document.getElementById("joinModalContent");
     const roleOptions = `
@@ -1047,7 +972,7 @@
             ${t('consent_label_1')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_privacy')}</a> ${t('consent_label_2')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_terms')}</a>
           </label>
         </div>
-        <button class="form-submit" id="idea-submit-btn">${t('idea_submit_btn')}</button>
+        <button class="form-submit" id="join-submit-btn">${t('join_submit_btn')}</button>
         <p class="form-note">${t('join_note')}</p>
       </div>
       <div id="join-success" style="display:none;"><div class="form-success-icon">✦</div><h4>${t('join_success_title')}</h4><p>${t('join_success_text')}</p></div>
@@ -1067,12 +992,18 @@
     const email = document.getElementById("idea-email").value.trim();
     const text = document.getElementById("idea-text").value.trim();
     const errorDiv = document.getElementById("idea-error");
+    const consentCheckbox = document.getElementById("consent-idea");
+
     if (!name || !email || !text) {
-    const consent = document.getElementById('consent-idea');
-    if (consent && !consent.checked) {
+      errorDiv.textContent = t('idea_error_default');
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    if (consentCheckbox && !consentCheckbox.checked) {
       errorDiv.textContent = currentLang === 'ru' ? 'Подтвердите согласие с политикой конфиденциальности' : 'Please accept the Privacy Policy';
-      errorDiv.style.display = 'block';
-      setTimeout(() => errorDiv.style.display = 'none', 3000);
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
       return;
     }
     errorDiv.style.display = "none";
@@ -1115,12 +1046,18 @@
     const role = document.getElementById("join-role").value;
     const help = document.getElementById("join-help").value.trim();
     const errorDiv = document.getElementById("join-error");
+    const consentCheckbox = document.getElementById("consent-join");
+
     if (!name || !email || !role || !help) {
-    const consent = document.getElementById('consent-join');
-    if (consent && !consent.checked) {
+      errorDiv.textContent = t('join_error_default');
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
+      return;
+    }
+    if (consentCheckbox && !consentCheckbox.checked) {
       errorDiv.textContent = currentLang === 'ru' ? 'Подтвердите согласие с политикой конфиденциальности' : 'Please accept the Privacy Policy';
-      errorDiv.style.display = 'block';
-      setTimeout(() => errorDiv.style.display = 'none', 3000);
+      errorDiv.style.display = "block";
+      setTimeout(() => errorDiv.style.display = "none", 3000);
       return;
     }
     errorDiv.style.display = "none";
@@ -1158,7 +1095,6 @@
     }
   }
 
-  // Обработчики событий
   document.getElementById("lang-switch").addEventListener("click", () => {
     const newLang = currentLang === 'ru' ? 'en' : 'ru';
     setLanguage(newLang);
@@ -1170,13 +1106,11 @@
   document.getElementById("ideaModal").addEventListener("click", (e) => { if (e.target === document.getElementById("ideaModal")) closeModal("ideaModal"); });
   document.getElementById("joinModal").addEventListener("click", (e) => { if (e.target === document.getElementById("joinModal")) closeModal("joinModal"); });
 
-  // Scroll reveal animation
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Инициализация языка
   setLanguage(currentLang);
   
   window.addEventListener('scroll', () => {
