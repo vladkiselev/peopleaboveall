@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy & Terms — People Above All</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F5F0E8;
+    --ink:   #1A1714;
+    --warm:  #C8A97E;
+    --muted: #6B6560;
+    --border: rgba(26,23,20,0.12);
+  }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+  nav {
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 10;
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-right { display: flex; align-items: center; gap: 24px; }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--ink); }
+  .lang-btn {
+    background: none;
+    border: 0.5px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .page-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+  }
+
+  .doc-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+  }
+  .doc-tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 24px 12px 0;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: all 0.2s;
+  }
+  .doc-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .doc-section { display: none; }
+  .doc-section.active { display: block; }
+
+  .doc-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 20px;
+  }
+  .doc-title {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .doc-title em { font-style: italic; color: var(--warm); }
+  .doc-updated {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 56px;
+    opacity: 0.6;
+  }
+
+  .doc-body h2 {
+    font-size: 22px;
+    font-weight: 400;
+    margin: 48px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .doc-body h2::before {
+    content: '—';
+    color: var(--warm);
+    margin-right: 10px;
+    font-weight: 300;
+  }
+  .doc-body p {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .doc-body ul {
+    margin: 0 0 16px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .doc-body ul li {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink);
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .doc-body ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--warm);
+    font-size: 22px;
+    line-height: 1.55;
+  }
+  .doc-body a {
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .doc-body a:hover { border-color: var(--ink); }
+
+  .doc-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  .contact-block {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 32px 40px;
+    margin-top: 56px;
+  }
+  .contact-block p {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 8px;
+  }
+  .contact-block a {
+    color: var(--warm);
+    text-decoration: none;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(200,169,126,0.3);
+  }
+
+  footer {
+    padding: 24px 48px;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 20px 24px; }
+    .page-wrap { padding: 48px 24px 80px; }
+    footer { padding: 20px 24px; flex-direction: column; gap: 8px; }
+    .contact-block { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">People Above All</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link" data-ru="О проекте" data-en="About">О проекте</a>
+    <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="doc-tabs">
+    <button class="doc-tab active" onclick="switchTab('privacy')" id="tab-privacy" data-ru="Политика конфиденциальности" data-en="Privacy Policy">Политика конфиденциальности</button>
+    <button class="doc-tab" onclick="switchTab('terms')" id="tab-terms" data-ru="Условия использования" data-en="Terms of Use">Условия использования</button>
+  </div>
+
+  <!-- PRIVACY POLICY -->
+  <div class="doc-section active" id="section-privacy">
+    <p class="doc-eyebrow" data-ru="Документ · Privacy Policy" data-en="Document · Privacy Policy">Документ · Privacy Policy</p>
+    <h1 class="doc-title" data-ru="Политика<br><em>конфиденциальности</em>" data-en="Privacy<br><em>Policy</em>">Политика<br><em>конфиденциальности</em></h1>
+    <p class="doc-updated" data-ru="Последнее обновление: май 2025" data-en="Last updated: May 2025">Последнее обновление: май 2025</p>
+
+    <div class="doc-body" id="privacy-body">
+
+      <h2 data-ru="Кто мы" data-en="Who we are">Кто мы</h2>
+      <p data-ru="People Above All — проект Владислава Киселёва (peopleaboveall.com). Мы соединяем людей через личные рекомендации и доверие. Связаться с нами можно по адресу: vladislav.kiselevv@gmail.com" data-en="People Above All is a project by Vladislav Kiselev (peopleaboveall.com). We connect people through personal recommendations and trust. You can contact us at: vladislav.kiselevv@gmail.com">
+        People Above All — проект Владислава Киселёва (peopleaboveall.com). Мы соединяем людей через личные рекомендации и доверие. Связаться с нами можно по адресу: vladislav.kiselevv@gmail.com
+      </p>
+
+      <h2 data-ru="Какие данные мы собираем" data-en="What data we collect">Какие данные мы собираем</h2>
+      <p data-ru="При заполнении формы на сайте мы можем получить следующие данные:" data-en="When you fill out a form on our site, we may receive the following data:">При заполнении формы на сайте мы можем получить следующие данные:</p>
+      <ul>
+        <li data-ru="Имя (или псевдоним)" data-en="Name (or alias)">Имя (или псевдоним)</li>
+        <li data-ru="Адрес электронной почты" data-en="Email address">Адрес электронной почты</li>
+        <li data-ru="Имя пользователя в Telegram или Instagram" data-en="Telegram or Instagram username">Имя пользователя в Telegram или Instagram</li>
+        <li data-ru="Город или страна проживания" data-en="City or country of residence">Город или страна проживания</li>
+        <li data-ru="Профессиональная информация (роль, навыки, интересы)" data-en="Professional information (role, skills, interests)">Профессиональная информация (роль, навыки, интересы)</li>
+        <li data-ru="Описание идеи или проекта (если применимо)" data-en="Description of your idea or project (if applicable)">Описание идеи или проекта (если применимо)</li>
+      </ul>
+      <p data-ru="Мы не собираем данные автоматически — без вашего активного участия (заполнения формы)." data-en="We do not collect data automatically — only through your active participation (filling out a form).">Мы не собираем данные автоматически — без вашего активного участия (заполнения формы).</p>
+
+      <h2 data-ru="Зачем мы собираем данные" data-en="Why we collect data">Зачем мы собираем данные</h2>
+      <ul>
+        <li data-ru="Чтобы познакомить вас с подходящими людьми из нашей сети" data-en="To introduce you to suitable people from our network">Чтобы познакомить вас с подходящими людьми из нашей сети</li>
+        <li data-ru="Чтобы добавить вас в каталог участников (только с вашего согласия)" data-en="To add you to the participant directory (only with your consent)">Чтобы добавить вас в каталог участников (только с вашего согласия)</li>
+        <li data-ru="Чтобы связаться с вами по поводу вашей заявки" data-en="To contact you regarding your application">Чтобы связаться с вами по поводу вашей заявки</li>
+      </ul>
+      <p data-ru="Мы не используем ваши данные для рекламы, таргетинга или продажи третьим лицам." data-en="We do not use your data for advertising, targeting, or selling to third parties.">Мы не используем ваши данные для рекламы, таргетинга или продажи третьим лицам.</p>
+
+      <h2 data-ru="Где хранятся данные" data-en="Where data is stored">Где хранятся данные</h2>
+      <p data-ru="Данные из форм обрабатываются через сервис Formspree (formspree.io) и хранятся в защищённых таблицах Google Sheets, доступных только Владиславу Киселёву. Ни один третий сервис не имеет доступа к вашим данным без вашего ведома." data-en="Form data is processed through Formspree (formspree.io) and stored in secure Google Sheets accessible only to Vladislav Kiselev. No third-party service has access to your data without your knowledge.">
+        Данные из форм обрабатываются через сервис Formspree (formspree.io) и хранятся в защищённых таблицах Google Sheets, доступных только Владиславу Киселёву. Ни один третий сервис не имеет доступа к вашим данным без вашего ведома.
+      </p>
+
+      <h2 data-ru="Как долго хранятся данные" data-en="How long data is stored">Как долго хранятся данные</h2>
+      <p data-ru="Мы храним ваши данные до тех пор, пока это необходимо для оказания услуги, либо до получения вашего запроса на удаление. По вашему запросу данные будут удалены в течение 30 дней." data-en="We store your data for as long as necessary to provide the service, or until we receive your deletion request. Upon your request, data will be deleted within 30 days.">
+        Мы храним ваши данные до тех пор, пока это необходимо для оказания услуги, либо до получения вашего запроса на удаление. По вашему запросу данные будут удалены в течение 30 дней.
+      </p>
+
+      <h2 data-ru="Ваши права" data-en="Your rights">Ваши права</h2>
+      <p data-ru="В соответствии с GDPR (ЕС) и применимым законодательством о защите данных вы имеете право:" data-en="In accordance with GDPR (EU) and applicable data protection laws, you have the right to:">В соответствии с GDPR (ЕС) и применимым законодательством о защите данных вы имеете право:</p>
+      <ul>
+        <li data-ru="Получить доступ к своим данным" data-en="Access your personal data">Получить доступ к своим данным</li>
+        <li data-ru="Исправить неточные данные" data-en="Correct inaccurate data">Исправить неточные данные</li>
+        <li data-ru="Запросить удаление данных" data-en="Request deletion of your data">Запросить удаление данных</li>
+        <li data-ru="Отозвать согласие на обработку в любой момент" data-en="Withdraw consent to processing at any time">Отозвать согласие на обработку в любой момент</li>
+        <li data-ru="Подать жалобу в надзорный орган (для жителей ЕС)" data-en="Lodge a complaint with a supervisory authority (for EU residents)">Подать жалобу в надзорный орган (для жителей ЕС)</li>
+      </ul>
+      <p data-ru="Для реализации любого из этих прав напишите нам: vladislav.kiselevv@gmail.com" data-en="To exercise any of these rights, contact us at: vladislav.kiselevv@gmail.com">Для реализации любого из этих прав напишите нам: <a href="mailto:vladislav.kiselevv@gmail.com">vladislav.kiselevv@gmail.com</a></p>
+
+      <h2 data-ru="Cookies" data-en="Cookies">Cookies</h2>
+      <p data-ru="Наш сайт не использует рекламные или трекинговые cookies. Мы используем localStorage только для сохранения выбранного языка интерфейса. Никакие данные не передаются третьим лицам." data-en="Our site does not use advertising or tracking cookies. We use localStorage only to save your chosen interface language. No data is shared with third parties.">
+        Наш сайт не использует рекламные или трекинговые cookies. Мы используем localStorage только для сохранения выбранного языка интерфейса. Никакие данные не передаются третьим лицам.
+      </p>
+
+      <h2 data-ru="Изменения в политике" data-en="Changes to this policy">Изменения в политике</h2>
+      <p data-ru="Мы можем обновлять эту политику. Дата последнего обновления указана в начале документа. Продолжая пользоваться сайтом после изменений, вы принимаете обновлённую политику." data-en="We may update this policy. The date of the last update is shown at the top of the document. By continuing to use the site after changes, you accept the updated policy.">
+        Мы можем обновлять эту политику. Дата последнего обновления указана в начале документа. Продолжая пользоваться сайтом после изменений, вы принимаете обновлённую политику.
+      </p>
+
+      <div class="contact-block">
+        <p data-ru="Вопросы по конфиденциальности данных:" data-en="Questions about data privacy:">Вопросы по конфиденциальности данных:</p>
+        <a href="mailto:vladislav.kiselevv@gmail.com">vladislav.kiselevv@gmail.com</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TERMS OF USE -->
+  <div class="doc-section" id="section-terms">
+    <p class="doc-eyebrow" data-ru="Документ · Terms of Use" data-en="Document · Terms of Use">Документ · Terms of Use</p>
+    <h1 class="doc-title" data-ru="Условия<br><em>использования</em>" data-en="Terms<br><em>of Use</em>">Условия<br><em>использования</em></h1>
+    <p class="doc-updated" data-ru="Последнее обновление: май 2025" data-en="Last updated: May 2025">Последнее обновление: май 2025</p>
+
+    <div class="doc-body" id="terms-body">
+
+      <h2 data-ru="О сервисе" data-en="About the service">О сервисе</h2>
+      <p data-ru="People Above All (peopleaboveall.com) — платформа для соединения людей через личные рекомендации. Сервис создан и управляется Владиславом Киселёвым. Используя сайт, вы соглашаетесь с настоящими условиями." data-en="People Above All (peopleaboveall.com) is a platform for connecting people through personal recommendations. The service is created and managed by Vladislav Kiselev. By using the site, you agree to these terms.">
+        People Above All (peopleaboveall.com) — платформа для соединения людей через личные рекомендации. Сервис создан и управляется Владиславом Киселёвым. Используя сайт, вы соглашаетесь с настоящими условиями.
+      </p>
+
+      <h2 data-ru="Правила использования" data-en="Rules of use">Правила использования</h2>
+      <p data-ru="Используя сайт, вы соглашаетесь:" data-en="By using the site, you agree to:">Используя сайт, вы соглашаетесь:</p>
+      <ul>
+        <li data-ru="Предоставлять достоверную информацию о себе при заполнении форм" data-en="Provide accurate information about yourself when filling out forms">Предоставлять достоверную информацию о себе при заполнении форм</li>
+        <li data-ru="Не использовать сервис в мошеннических или незаконных целях" data-en="Not use the service for fraudulent or illegal purposes">Не использовать сервис в мошеннических или незаконных целях</li>
+        <li data-ru="Уважительно относиться к другим участникам сообщества" data-en="Treat other community members with respect">Уважительно относиться к другим участникам сообщества</li>
+        <li data-ru="Не распространять персональные данные других участников без их согласия" data-en="Not share other participants' personal data without their consent">Не распространять персональные данные других участников без их согласия</li>
+        <li data-ru="Не использовать контакты из каталога для спама или нежелательных рассылок" data-en="Not use contacts from the directory for spam or unsolicited messages">Не использовать контакты из каталога для спама или нежелательных рассылок</li>
+      </ul>
+
+      <h2 data-ru="Отбор участников" data-en="Participant selection">Отбор участников</h2>
+      <p data-ru="People Above All оставляет за собой право отклонить любую заявку или удалить участника из каталога без объяснения причин. Мы строим сообщество на основе доверия и ценностей — это требует ручного отбора." data-en="People Above All reserves the right to decline any application or remove a participant from the directory without explanation. We are building a community based on trust and values — this requires manual curation.">
+        People Above All оставляет за собой право отклонить любую заявку или удалить участника из каталога без объяснения причин. Мы строим сообщество на основе доверия и ценностей — это требует ручного отбора.
+      </p>
+
+      <h2 data-ru="Ограничение ответственности" data-en="Limitation of liability">Ограничение ответственности</h2>
+      <p data-ru="People Above All является посредником в знакомствах между людьми. Мы не несём ответственности за результаты сотрудничества, деловые договорённости или иные отношения, возникшие между участниками после знакомства через платформу." data-en="People Above All acts as an intermediary in introductions between people. We are not responsible for the outcomes of collaborations, business arrangements, or other relationships that arise between participants after meeting through the platform.">
+        People Above All является посредником в знакомствах между людьми. Мы не несём ответственности за результаты сотрудничества, деловые договорённости или иные отношения, возникшие между участниками после знакомства через платформу.
+      </p>
+
+      <h2 data-ru="Интеллектуальная собственность" data-en="Intellectual property">Интеллектуальная собственность</h2>
+      <p data-ru="Весь контент сайта (тексты, дизайн, логотип) принадлежит People Above All. Идеи, которыми делятся участники через формы, остаются собственностью их авторов. Мы не претендуем на права на ваши идеи." data-en="All site content (texts, design, logo) belongs to People Above All. Ideas shared by participants through forms remain the property of their authors. We do not claim rights to your ideas.">
+        Весь контент сайта (тексты, дизайн, логотип) принадлежит People Above All. Идеи, которыми делятся участники через формы, остаются собственностью их авторов. Мы не претендуем на права на ваши идеи.
+      </p>
+
+      <h2 data-ru="Применимое право" data-en="Applicable law">Применимое право</h2>
+      <p data-ru="Настоящие условия регулируются законодательством Российской Федерации. Для пользователей из ЕС также применяется Регламент GDPR (EU) 2016/679." data-en="These terms are governed by the laws of the Russian Federation. For users from the EU, Regulation GDPR (EU) 2016/679 also applies.">
+        Настоящие условия регулируются законодательством Российской Федерации. Для пользователей из ЕС также применяется Регламент GDPR (EU) 2016/679.
+      </p>
+
+      <h2 data-ru="Изменения условий" data-en="Changes to terms">Изменения условий</h2>
+      <p data-ru="Мы можем обновлять эти условия. Продолжая использовать сайт после публикации изменений, вы принимаете обновлённые условия." data-en="We may update these terms. By continuing to use the site after changes are published, you accept the updated terms.">
+        Мы можем обновлять эти условия. Продолжая использовать сайт после публикации изменений, вы принимаете обновлённые условия.
+      </p>
+
+      <div class="contact-block">
+        <p data-ru="Вопросы по условиям использования:" data-en="Questions about terms of use:">Вопросы по условиям использования:</p>
+        <a href="mailto:vladislav.kiselevv@gmail.com">vladislav.kiselevv@gmail.com</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo">People Above All</span>
+  <span class="footer-copy">peopleaboveall.com · 2025</span>
+</footer>
+
+<script>
+  let lang = localStorage.getItem('paa_lang') || 'ru';
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.getElementById('lang-btn').textContent = lang === 'ru' ? 'EN' : 'RU';
+    document.querySelectorAll('[data-ru]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-' + lang);
+    });
+  }
+
+  function toggleLang() {
+    lang = lang === 'ru' ? 'en' : 'ru';
+    localStorage.setItem('paa_lang', lang);
+    applyLang();
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.doc-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('section-' + tab).classList.add('active');
+  }
+
+  applyLang();
+</script>
+</body>
+</html>
