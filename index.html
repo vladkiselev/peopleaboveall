@@ -776,7 +776,7 @@
 
 <footer>
   <span class="footer-logo">People Above All</span>
-  <span class="footer-copy">peopleaboveall.com · 2026</span>
+  <span class="footer-copy">peopleaboveall.com · 2026 · <a href="privacy.html" style="color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);">Privacy Policy</a></span>
 </footer>
 
 <!-- MODAL FOR IDEA FORM -->
@@ -1042,8 +1042,8 @@
         <div class="form-group"><label>${t('join_seek_label')}</label><textarea id="join-seek" rows="2" placeholder="${t('join_seek_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_city_label')}</label><input type="text" id="join-city" placeholder="${t('join_city_ph')}"></div>
         <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;">
-          <input type="checkbox" id="consent-idea" style="margin-top:4px;cursor:pointer;">
-          <label for="consent-idea" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.5;cursor:pointer;">
+          <input type="checkbox" id="consent-join" style="margin-top:4px;cursor:pointer;">
+          <label for="consent-join" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.5;cursor:pointer;">
             ${t('consent_label_1')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_privacy')}</a> ${t('consent_label_2')} <a href="privacy.html" target="_blank" style="color:var(--ink);border-bottom:1px solid var(--border);">${t('consent_terms')}</a>
           </label>
         </div>
@@ -1068,9 +1068,11 @@
     const text = document.getElementById("idea-text").value.trim();
     const errorDiv = document.getElementById("idea-error");
     if (!name || !email || !text) {
-      errorDiv.textContent = t('idea_error_default');
-      errorDiv.style.display = "block";
-      setTimeout(() => errorDiv.style.display = "none", 3000);
+    const consent = document.getElementById('consent-idea');
+    if (consent && !consent.checked) {
+      errorDiv.textContent = currentLang === 'ru' ? 'Подтвердите согласие с политикой конфиденциальности' : 'Please accept the Privacy Policy';
+      errorDiv.style.display = 'block';
+      setTimeout(() => errorDiv.style.display = 'none', 3000);
       return;
     }
     errorDiv.style.display = "none";
@@ -1114,9 +1116,11 @@
     const help = document.getElementById("join-help").value.trim();
     const errorDiv = document.getElementById("join-error");
     if (!name || !email || !role || !help) {
-      errorDiv.textContent = t('join_error_default');
-      errorDiv.style.display = "block";
-      setTimeout(() => errorDiv.style.display = "none", 3000);
+    const consent = document.getElementById('consent-join');
+    if (consent && !consent.checked) {
+      errorDiv.textContent = currentLang === 'ru' ? 'Подтвердите согласие с политикой конфиденциальности' : 'Please accept the Privacy Policy';
+      errorDiv.style.display = 'block';
+      setTimeout(() => errorDiv.style.display = 'none', 3000);
       return;
     }
     errorDiv.style.display = "none";
