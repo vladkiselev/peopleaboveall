@@ -617,6 +617,7 @@
       name:   r.name_ru || r.name_en || '',
       role:   r.role_ru || '',
       bio:    r.help_ru || '',
+      seek:   r.seek_ru || '',
       skills: (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
       location: r.city_ru || '',
       social: r.social || '',
@@ -626,6 +627,7 @@
       name:   r.name_en || r.name_ru || '',
       role:   r.role_en || '',
       bio:    r.help_en || '',
+      seek:   r.seek_en || '',
       skills: (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
       location: r.city_en || '',
       social: r.social || '',
@@ -992,6 +994,11 @@
       <div id="contact-form-container">
         <h3>${t('contact_modal_title', person.name.split(' ')[0])}</h3>
         <p class="modal-sub">${t('contact_modal_subtitle')}</p>
+        ${person.seek ? `
+        <div style="margin-bottom:24px; padding:16px 20px; background:rgba(26,23,20,0.04); border-left:2px solid var(--warm);">
+          <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--warm); margin-bottom:8px;">${currentLang === 'ru' ? 'Что ищет' : 'Looking for'}</p>
+          <p style="font-size:16px; font-weight:300; line-height:1.6; color:var(--ink);">${person.seek}</p>
+        </div>` : ''}
         <div class="error-message" id="contact-error"></div>
         <div class="form-group"><label>${t('contact_name_label')}</label><input type="text" id="contact-name" autocomplete="name" placeholder="${t('contact_name_ph')}"></div>
         <div class="form-group"><label>${t('contact_contact_label')}</label><input type="text" id="contact-contact" autocomplete="email" placeholder="${t('contact_contact_ph')}"></div>
