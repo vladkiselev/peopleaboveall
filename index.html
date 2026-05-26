@@ -20,6 +20,51 @@
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "wtfw3o88vo");
+
+  // ── STATS COUNTER ──────────────────────────────────────────
+  const PEOPLE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMEdg_iBj9kvqbOkNWijq5HaHzcgKvNQGb4ucRjyMGZInPBYgKHBlYXa2dgW3B2BeI8C2uXRgxGw5O/pub?gid=0&single=true&output=csv';
+  const IDEAS_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTtwuJ91wnYA6unNvhq-VBah5aizgQtpih3lCvAlbSR6PUrL5-DYmqpQ-mvIRj-2c-Y-w8LlTa0a1Ps/pub?gid=0&single=true&output=csv';
+
+  function parseCSVRows(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    return lines.slice(1).map(line => {
+      const values = []; let cur = '', inQ = false;
+      for (let ch of line) {
+        if (ch === '"') inQ = !inQ;
+        else if (ch === ',' && !inQ) { values.push(cur.trim()); cur = ''; }
+        else cur += ch;
+      }
+      values.push(cur.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
+      return obj;
+    });
+  }
+
+  async function loadStats() {
+    try {
+      const [pr, ir] = await Promise.all([
+        fetch(PEOPLE_CSV + '&t=' + Date.now()).then(r => r.text()),
+        fetch(IDEAS_CSV  + '&t=' + Date.now()).then(r => r.text())
+      ]);
+      const people  = parseCSVRows(pr).filter(r => (r.visible||'').toLowerCase() === 'yes');
+      const ideas   = parseCSVRows(ir).filter(r => (r.visible||'').toLowerCase() === 'yes');
+      const cities  = new Set([
+        ...people.map(r => (r.city||'').trim().toLowerCase()).filter(Boolean),
+        ...ideas.map(r => (r.city_ru||r.city||'').trim().toLowerCase()).filter(Boolean)
+      ]);
+
+      document.getElementById('stat-people').textContent   = people.length;
+      document.getElementById('stat-ideas').textContent    = ideas.length;
+      document.getElementById('stat-countries').textContent = cities.size;
+      document.getElementById('hero-stats').style.display  = 'flex';
+    } catch(e) { console.error('Stats error:', e); }
+  }
+
+  loadStats();
+  // ───────────────────────────────────────────────────────────
+
 </script>
 <title>People Above All — люди превыше всего</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -619,6 +664,41 @@
   }
   #scroll-top.visible { opacity: 1; pointer-events: all; }
   #scroll-top:hover { background: var(--warm); }
+
+  /* STATS COUNTER */
+  .hero-stats {
+    display: flex;
+    gap: 28px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--warm);
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-stat-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--border);
+    margin: 0 4px;
+  }
 </style>
 </head>
 <body>
@@ -640,6 +720,23 @@
     <p class="hero-eyebrow" data-i18n="hero_eyebrow">Движение · Платформа · Сообщество</p>
     <h1 class="hero-title"><span data-i18n="hero_title_1">Люди</span><br><span data-i18n="hero_title_2">превыше</span><br><em data-i18n="hero_title_3">всего.</em></h1>
     <p class="hero-subtitle" data-i18n="hero_subtitle">Мы строим пространство, где идеи рождаются в сотрудничестве, приватность — норма, а связи основаны на ценностях, а не на алгоритмах.</p>
+    
+    <div class="hero-stats" id="hero-stats" style="display:none;">
+      <div class="hero-stat">
+        <span class="hero-stat-num" id="stat-people">—</span>
+        <span class="hero-stat-label" id="stat-people-label" data-i18n="stat_people">людей</span>
+      </div>
+      <div class="hero-stat-dot"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" id="stat-ideas">—</span>
+        <span class="hero-stat-label" id="stat-ideas-label" data-i18n="stat_ideas">идей</span>
+      </div>
+      <div class="hero-stat-dot"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" id="stat-countries">—</span>
+        <span class="hero-stat-label" id="stat-countries-label" data-i18n="stat_countries">стран</span>
+      </div>
+    </div>
     <div class="hero-actions">
       <a href="#" class="btn-primary" id="ideaBtn" data-i18n="btn_idea">У меня есть идея</a>
       <a href="#" class="btn-ghost" id="joinBtn" data-i18n="btn_join_project">Найти своих</a>
@@ -741,6 +838,7 @@
       nav_ideas: "Идеи", nav_people: "Люди", nav_about: "О проекте",
       hero_eyebrow: "Движение · Платформа · Сообщество",
       hero_title_1: "Люди", hero_title_2: "превыше", hero_title_3: "всего.",
+      stat_people: "людей", stat_ideas: "идей", stat_countries: "стран",
       hero_subtitle: "Мы строим пространство, где идеи рождаются в сотрудничестве, приватность — норма, а связи основаны на ценностях, а не на алгоритмах.",
       btn_idea: "У меня есть идея", btn_join_project: "Найти своих",
       manifesto_text: "Мы окружены «социальными» сетями, которые делают нас одинокими. Технологиями, которые следят за нами вместо того, чтобы нас освобождать. Системами, которые ставят прибыль выше людей.\n\nЭто заканчивается сейчас.",
@@ -819,6 +917,7 @@
       nav_ideas: "Ideas", nav_people: "People", nav_about: "About",
       hero_eyebrow: "Movement · Platform · Community",
       hero_title_1: "People", hero_title_2: "Above", hero_title_3: "All.",
+      stat_people: "people", stat_ideas: "ideas", stat_countries: "countries",
       hero_subtitle: "We are building a space where ideas are born through collaboration, privacy is the norm, and connections are based on values, not algorithms.",
       btn_idea: "I have an idea", btn_join_project: "Find my people",
       manifesto_text: "We are surrounded by 'social' networks that make us lonely. Technologies that track us instead of liberating us. Systems that put profit above people.\n\nIt ends now.",
