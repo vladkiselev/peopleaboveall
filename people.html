@@ -526,6 +526,16 @@
   .sk-city { height: 10px; width: 50%; margin-bottom: 18px; }
   .sk-btn { height: 34px; width: 100px; border-radius: 40px; }
 
+
+  .page-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-top: 12px;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -645,6 +655,12 @@
       const text = await resp.text();
       const rows = parseCSV(text);
       peopleData = csvToPeople(rows);
+      const pc = document.getElementById('people-counter');
+      if (pc) {
+        const cnt = peopleData[currentLang].length;
+        pc.textContent = currentLang === 'ru' ? cnt + ' человек в каталоге' : cnt + ' people in the atlas';
+        pc.style.display = 'block';
+      }
       renderFilters();
       renderPeople();
     } catch(e) {
