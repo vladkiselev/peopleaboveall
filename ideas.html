@@ -497,6 +497,16 @@
  .sk-tag { height: 24px; width: 72px; border-radius: 40px; }
  .sk-city { height: 10px; width: 50%; margin-bottom: 18px; }
  .sk-btn { height: 34px; width: 100px; border-radius: 40px; }
+
+  .page-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-top: 12px;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -515,6 +525,7 @@
   <div class="hero-mini">
     <h1><span data-i18n="hero_title_start">Сад</span> <em data-i18n="hero_title_em">идей</em></h1>
     <p data-i18n="hero_subtitle">Идеи, которые ищут команду. Смотри, вдохновляйся, присоединяйся к тем, кто уже начал.</p>
+  <p class="page-counter" id="ideas-counter"></p>
   </div>
 
   <div class="search-section">
@@ -618,6 +629,12 @@
       const text = await resp.text();
       const rows = parseCSV(text);
       ideasData = csvToIdeas(rows);
+      const ic = document.getElementById('ideas-counter');
+      if (ic) {
+        const cnt = ideasData[currentLang].length;
+        ic.textContent = currentLang === 'ru' ? cnt + ' идей в поиске команды' : cnt + ' ideas looking for a team';
+        ic.style.display = 'block';
+      }
       renderFilters();
       renderIdeas();
     } catch(e) {
