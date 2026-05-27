@@ -1044,6 +1044,11 @@
     document.getElementById("ideaModal").classList.add("open");
   }
 
+  function toggleCustomRole(select) {
+    const group = document.getElementById('custom-role-group');
+    if (group) group.style.display = select.value === 'other' ? 'block' : 'none';
+  }
+
   function openJoinModal() {
     const modalContent = document.getElementById("joinModalContent");
     const roleOptions = `
@@ -1055,7 +1060,7 @@
       <option>${t('role_option_psychologist')}</option>
       <option>${t('role_option_doctor')}</option>
       <option>${t('role_option_researcher')}</option>
-      <option>${t('role_option_other')}</option>
+      <option value="other">${t('role_option_other')}</option>
     `;
     modalContent.innerHTML = `
       <div id="join-form-container">
@@ -1065,7 +1070,8 @@
         <div class="form-group"><label>${t('join_name_label')}</label><input type="text" id="join-name" autocomplete="name" placeholder="${t('join_name_ph')}"></div>
         <div class="form-group"><label>${t('join_email_label')}</label><input type="email" id="join-email" autocomplete="email" placeholder="${t('join_email_ph')}"></div>
         <div class="form-group"><label>${t('join_social_label')}</label><input type="text" id="join-social" placeholder="${t('join_social_ph')}"></div>
-        <div class="form-group"><label>${t('join_role_label')}</label><select id="join-role">${roleOptions}</select></div>
+        <div class="form-group"><label>${t('join_role_label')}</label><select id="join-role" onchange="toggleCustomRole(this)">${roleOptions}</select></div>
+        <div class="form-group" id="custom-role-group" style="display:none;"><label>${currentLang === 'ru' ? 'Укажи свою роль *' : 'Specify your role *'}</label><input type="text" id="join-role-custom" placeholder="${currentLang === 'ru' ? 'Например: Юрист, Архитектор...' : 'E.g. Lawyer, Architect...'}"></div>
         <div class="form-group"><label>${t('join_help_label')}</label><textarea id="join-help" rows="3" placeholder="${t('join_help_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_seek_label')}</label><textarea id="join-seek" rows="2" placeholder="${t('join_seek_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_city_label')}</label><input type="text" id="join-city" placeholder="${t('join_city_ph')}"></div>
@@ -1146,7 +1152,9 @@
   async function submitJoin() {
     const name = document.getElementById("join-name").value.trim();
     const email = document.getElementById("join-email").value.trim();
-    const role = document.getElementById("join-role").value;
+    const role = document.getElementById("join-role").value === 'other'
+      ? (document.getElementById("join-role-custom")?.value.trim() || '')
+      : document.getElementById("join-role").value;
     const help = document.getElementById("join-help").value.trim();
     const errorDiv = document.getElementById("join-error");
     const consentCheckbox = document.getElementById("consent-join");
