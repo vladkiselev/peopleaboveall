@@ -250,6 +250,7 @@
     transition: all 0.3s;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
   }
   .person-card:hover {
     transform: translateY(-4px);
@@ -275,8 +276,97 @@
     font-weight: 300;
     line-height: 1.6;
     color: var(--muted);
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .person-see-more {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  /* PROFILE MODAL */
+  .profile-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,23,20,0.6);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .profile-modal-overlay.open { opacity: 1; pointer-events: all; }
+  .profile-modal {
+    background: var(--cream);
+    max-width: 600px;
+    width: 92%;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+    padding: 52px;
+  }
+  .profile-modal-overlay.open .profile-modal { transform: translateY(0); }
+  .profile-modal-close {
+    position: absolute;
+    top: 20px; right: 24px;
+    background: none; border: none;
+    font-size: 18px; cursor: pointer;
+    color: var(--muted); font-family: 'DM Mono', monospace;
+    transition: color 0.2s;
+  }
+  .profile-modal-close:hover { color: var(--ink); }
+  .profile-modal-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--warm);
+    margin-bottom: 12px;
+  }
+  .profile-modal-name {
+    font-size: 36px; font-weight: 300;
+    letter-spacing: -0.01em; margin-bottom: 8px;
+  }
+  .profile-modal-location {
+    font-size: 14px; color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .profile-modal-divider {
+    height: 1px; background: var(--border); margin: 24px 0;
+  }
+  .profile-modal-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--warm);
+    margin-bottom: 10px;
+  }
+  .profile-modal-text {
+    font-size: 17px; font-weight: 300;
+    line-height: 1.75; color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .profile-modal-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 32px;
+  }
+  .profile-modal-actions {
+    display: flex; gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .profile-modal { padding: 36px 24px; }
   }
   .person-skills {
     display: flex;
@@ -874,17 +964,57 @@
       return;
     }
     grid.innerHTML = filtered.map(person => `
-      <div class="person-card">
+      <div class="person-card" onclick="openProfileModal(${person.id})">
         <div class="person-role">${highlightText(person.role, searchQuery)}</div>
         <h3 class="person-name">${highlightText(person.name, searchQuery)}</h3>
         <p class="person-bio">${highlightText(person.bio, searchQuery)}</p>
+        ${person.bio && person.bio.length > 120 ? `<p class="person-see-more">${currentLang === 'ru' ? 'Читать далее →' : 'Read more →'}</p>` : ''}
         <div class="person-skills">${person.skills.map(s => `<span class="skill-tag">${highlightText(s, searchQuery)}</span>`).join('')}</div>
         <div class="person-location">📍 ${person.location}</div>
-        <div style="margin-top: 20px;">
-          <button class=\"contact-btn\" onclick=\"openContactModal(${person.id})\">${t('contact_btn')}</button>
-        </div>
       </div>
     `).join('');
+  }
+
+  // ---- Profile Modal ----
+  function openProfileModal(id) {
+    const person = peopleData[currentLang].find(p => p.id === id);
+    if (!person) return;
+
+    const overlay = document.getElementById('profileModal');
+    overlay.innerHTML = `
+      <div class="profile-modal">
+        <button class="profile-modal-close" onclick="closeProfileModal()">✕</button>
+        <div class="profile-modal-role">${person.role}</div>
+        <h2 class="profile-modal-name">${person.name}</h2>
+        <div class="profile-modal-location">📍 ${person.location}</div>
+        <div class="profile-modal-divider"></div>
+        ${person.bio ? `
+          <div class="profile-modal-label">${currentLang === 'ru' ? 'Чем помогу' : 'How I can help'}</div>
+          <p class="profile-modal-text">${person.bio}</p>
+        ` : ''}
+        ${person.seek ? `
+          <div class="profile-modal-label">${currentLang === 'ru' ? 'Что ищу' : 'Looking for'}</div>
+          <p class="profile-modal-text">${person.seek}</p>
+        ` : ''}
+        ${person.skills && person.skills.length ? `
+          <div class="profile-modal-label">${currentLang === 'ru' ? 'Теги' : 'Tags'}</div>
+          <div class="profile-modal-tags">${person.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+        ` : ''}
+        <div class="profile-modal-divider"></div>
+        <div class="profile-modal-actions">
+          <button class="btn-join-bottom" onclick="closeProfileModal(); openContactModal(${person.id});" style="font-size:11px; padding:14px 28px;">
+            ${currentLang === 'ru' ? 'Связаться' : 'Contact'}
+          </button>
+        </div>
+      </div>
+    `;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProfileModal() {
+    document.getElementById('profileModal').classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   function getUniqueRoles() {
@@ -1094,7 +1224,7 @@
   document.getElementById("bottomJoinBtn").addEventListener("click", openJoinFormModal);
   document.getElementById("joinModal").addEventListener("click", e => { if (e.target === document.getElementById("joinModal")) closeJoinModal(); });
   document.getElementById("contactModal").addEventListener("click", e => { if (e.target === document.getElementById("contactModal")) closeContactModal(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeJoinModal(); closeContactModal(); } });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeJoinModal(); closeContactModal(); closeProfileModal(); } });
   const searchInp = document.getElementById("search-input");
   if (searchInp) searchInp.addEventListener("input", onSearchInput);
 
@@ -1114,6 +1244,9 @@
     document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
   });
 </script>
+
+<!-- PROFILE MODAL -->
+<div class="profile-modal-overlay" id="profileModal" onclick="if(event.target===this)closeProfileModal()"></div>
 
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Наверх">↑</button>
   
