@@ -1049,7 +1049,7 @@
         <div class="form-group"><label>${t('join_email_label')}</label><input type="email" id="join-email" autocomplete="email" placeholder="${t('join_email_ph')}"></div>
         <div class="form-group"><label>${t('join_social_label')}</label><input type="text" id="join-social" placeholder="${t('join_social_ph')}"></div>
         <div class="form-group"><label>${t('join_role_label')}</label>
-          <select id="join-role">
+          <select id="join-role" onchange="toggleCustomRole(this)">
             <option value="">${currentLang === 'ru' ? 'Выбери роль' : 'Select role'}</option>
             <option>${currentLang === 'ru' ? 'Разработчик' : 'Developer'}</option>
             <option>${currentLang === 'ru' ? 'Дизайнер' : 'Designer'}</option>
@@ -1058,8 +1058,12 @@
             <option>${currentLang === 'ru' ? 'Психолог' : 'Psychologist'}</option>
             <option>${currentLang === 'ru' ? 'Врач' : 'Doctor'}</option>
             <option>${currentLang === 'ru' ? 'Исследователь' : 'Researcher'}</option>
-            <option>${currentLang === 'ru' ? 'Другое' : 'Other'}</option>
+            <option value="other">${currentLang === 'ru' ? 'Другое' : 'Other'}</option>
           </select>
+        </div>
+        <div class="form-group" id="custom-role-group" style="display:none;">
+          <label>${currentLang === 'ru' ? 'Укажи свою роль *' : 'Specify your role *'}</label>
+          <input type="text" id="join-role-custom" placeholder="${currentLang === 'ru' ? 'Например: Юрист, Архитектор...' : 'E.g. Lawyer, Architect...'}">
         </div>
         <div class="form-group"><label>${t('join_help_label')}</label><textarea id="join-help" rows="3" placeholder="${t('join_help_ph')}"></textarea></div>
         <div class="form-group"><label>${t('join_seek_label')}</label><textarea id="join-seek" rows="2" placeholder="${t('join_seek_ph')}"></textarea></div>
@@ -1079,10 +1083,18 @@
     document.getElementById("joinModal").classList.add("open");
   }
   function closeJoinModal() { document.getElementById("joinModal").classList.remove("open"); }
+  function toggleCustomRole(select) {
+    const group = document.getElementById('custom-role-group');
+    if (group) group.style.display = select.value === 'other' ? 'block' : 'none';
+  }
+
   async function submitJoinRequest() {
     const name = document.getElementById("join-name").value.trim();
     const email = document.getElementById("join-email").value.trim();
-    const role = document.getElementById("join-role").value;
+    const roleSelect = document.getElementById("join-role").value;
+    const role = roleSelect === 'other'
+      ? (document.getElementById("join-role-custom")?.value.trim() || '')
+      : roleSelect;
     const help = document.getElementById("join-help").value.trim();
     const errorDiv = document.getElementById("join-error");
     if (!name || !email || !role || !help) {
