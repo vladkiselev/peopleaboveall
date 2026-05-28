@@ -632,6 +632,8 @@
       const text = await resp.text();
       const rows = parseCSV(text);
       ideasData = csvToIdeas(rows);
+      const supportBtn = document.getElementById('support-btn');
+      if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
       const ic = document.getElementById('ideas-counter');
       if (ic) {
         const cnt = ideasData[currentLang].length;
