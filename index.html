@@ -811,6 +811,7 @@
 <footer>
   <span class="footer-logo">People Above All</span>
   <span class="footer-copy">peopleaboveall.com · 2026 · <a href="privacy.html" style="color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);">Privacy Policy</a></span>
+  <a href="https://app.lava.top/peopleaboveall" target="_blank" id="support-btn" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream);background:var(--ink);padding:8px 16px;text-decoration:none;transition:background 0.3s;" onmouseover="this.style.background='#C8A97E'" onmouseout="this.style.background='var(--ink)'" data-ru="Поддержать проект" data-en="Support the movement">Поддержать проект</a>
 </footer>
 
 <!-- MODAL FOR IDEA FORM -->
@@ -1014,6 +1015,8 @@
         }
       }
     });
+    const supportBtn = document.getElementById('support-btn');
+    if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
   }
 
   function openIdeaModal() {
