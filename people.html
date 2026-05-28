@@ -937,14 +937,14 @@
       const key = el.getAttribute('data-i18n');
       if (translations[currentLang][key]) el.textContent = translations[currentLang][key];
     });
+    const supportBtn = document.getElementById('support-btn');
+    if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
     updateSearchPlaceholder();
     updateJoinButtons();
     const searchInput = document.getElementById("search-input");
     if (searchInput) { searchInput.value = ""; searchQuery = ""; }
     renderFilters();
     renderPeople();
-    const supportBtn = document.getElementById('support-btn');
-    if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
   }
 
   function personMatchesSearch(person, query) {
