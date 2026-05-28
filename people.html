@@ -746,6 +746,8 @@
       const text = await resp.text();
       const rows = parseCSV(text);
       peopleData = csvToPeople(rows);
+      const supportBtn = document.getElementById('support-btn');
+      if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
       const pc = document.getElementById('people-counter');
       if (pc) {
         const cnt = peopleData[currentLang].length;
