@@ -686,54 +686,30 @@
 
 <script>
   // ---------- ДАННЫЕ УЧАСТНИКОВ ----------
-  // ── GOOGLE SHEETS CSV ───────────────────────────────────────────
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMEdg_iBj9kvqbOkNWijq5HaHzcgKvNQGb4ucRjyMGZInPBYgKHBlYXa2dgW3B2BeI8C2uXRgxGw5O/pub?gid=0&single=true&output=csv';
-  // ───────────────────────────────────────────────────────────────
+  // ── SUPABASE ─────────────────────────────────────────────────
+  const SUPABASE_URL = 'https://gqcqvaawyeyifgfdqhoi.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxY3F2YWF3eWV5aWZnZmRxaG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMDMyOTIsImV4cCI6MjA5NTU3OTI5Mn0.EHUjl6orIrhkSHD4bVSgV02JXASlZhqF-j64HE3LgKE';
+
+  async function sbFetch(table) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?visible=eq.true&order=id.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    return res.json();
+  }
+  // ─────────────────────────────────────────────────────────────
 
   let peopleData = { ru: [], en: [] };
 
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    return lines.slice(1).map(line => {
-      const values = [];
-      let cur = '', inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') { inQuotes = !inQuotes; }
-        else if (ch === ',' && !inQuotes) { values.push(cur.trim()); cur = ''; }
-        else { cur += ch; }
-      }
-      values.push(cur.trim());
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
-      return obj;
-    });
-  }
-
-  function csvToPeople(rows) {
-    const visible = rows.filter(r => (r.visible || '').toLowerCase() === 'yes');
-    const ru = visible.map(r => ({
-      id:     parseInt(r.id) || 0,
-      name:   r.name_ru || r.name_en || '',
-      role:   r.role_ru || '',
-      bio:    r.help_ru || '',
-      seek:   r.seek_ru || '',
-      skills: (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
-      location: r.city_ru || '',
-      social: r.social || '',
-    }));
-    const en = visible.map(r => ({
-      id:     parseInt(r.id) || 0,
-      name:   r.name_en || r.name_ru || '',
-      role:   r.role_en || '',
-      bio:    r.help_en || '',
-      seek:   r.seek_en || '',
-      skills: (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
-      location: r.city_en || '',
-      social: r.social || '',
-    }));
-    return { ru, en };
+  function rowToPerson(r, lang) {
+    return {
+      id:       r.id,
+      name:     r[`name_${lang}`] || r.name_ru || '',
+      role:     r[`role_${lang}`] || r.role_ru || '',
+      bio:      r[`help_${lang}`] || r.help_ru || '',
+      seek:     r[`seek_${lang}`] || r.seek_ru || '',
+      skills:   (r[`tags_${lang}`] || r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
+      location: r[`city_${lang}`] || r.city_ru || '',
+    };
   }
 
   async function loadPeople() {
@@ -741,24 +717,23 @@
     const skCard = `<div class="person-card"><div class="sk sk-role"></div><div class="sk sk-name"></div><div class="sk sk-line"></div><div class="sk sk-line2"></div><div class="sk-tags"><div class="sk sk-tag"></div><div class="sk sk-tag"></div></div><div class="sk sk-city"></div><div class="sk sk-btn"></div></div>`;
     grid.innerHTML = skCard + skCard + skCard;
     try {
-      const resp = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
-      if (!resp.ok) throw new Error('fetch failed');
-      const text = await resp.text();
-      const rows = parseCSV(text);
-      peopleData = csvToPeople(rows);
+      const rows = await sbFetch('people');
+      peopleData = {
+        ru: rows.map(r => rowToPerson(r, 'ru')),
+        en: rows.map(r => rowToPerson(r, 'en'))
+      };
       const supportBtn = document.getElementById('support-btn');
       if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
       const pc = document.getElementById('people-counter');
       if (pc) {
-        const cnt = peopleData[currentLang].length;
-        pc.textContent = currentLang === 'ru' ? cnt + ' человек в каталоге' : cnt + ' people in the atlas';
+        pc.textContent = currentLang === 'ru' ? `${rows.length} человек в каталоге` : `${rows.length} people in the atlas`;
         pc.style.display = 'block';
       }
       renderFilters();
       renderPeople();
     } catch(e) {
       grid.innerHTML = '<div class="empty-state">Не удалось загрузить данные. Попробуйте обновить страницу.</div>';
-      console.error('Sheet load error:', e);
+      console.error('Supabase error:', e);
     }
   }
 
@@ -1257,10 +1232,8 @@
 
   // Загружаем людей из Google Sheets
   loadPeople();
-    
   const supportBtn = document.getElementById('support-btn');
-  if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
-
+  if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
   window.addEventListener('scroll', () => {
     document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
   });
