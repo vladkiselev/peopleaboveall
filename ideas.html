@@ -218,6 +218,32 @@
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 32px;
   }
+  .idea-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+  .like-btn {
+    background: none;
+    border: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .like-btn:hover { border-color: var(--warm); color: var(--warm); }
+  .like-btn.liked { border-color: var(--warm); color: var(--warm); background: rgba(200,169,126,0.08); }
+  .like-btn:disabled { opacity: 0.5; cursor: default; }
+
   .idea-card {
     background: var(--cream);
     border: 1px solid var(--border);
@@ -570,56 +596,72 @@
 
 <script>
   // Данные идей
-  // ── GOOGLE SHEETS CSV ───────────────────────────────────────────
-  const IDEAS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTtwuJ91wnYA6unNvhq-VBah5aizgQtpih3lCvAlbSR6PUrL5-DYmqpQ-mvIRj-2c-Y-w8LlTa0a1Ps/pub?gid=0&single=true&output=csv';
-  // ───────────────────────────────────────────────────────────────
+  // ── SUPABASE ─────────────────────────────────────────────────
+  const SUPABASE_URL = 'https://gqcqvaawyeyifgfdqhoi.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxY3F2YWF3eWV5aWZnZmRxaG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMDMyOTIsImV4cCI6MjA5NTU3OTI5Mn0.EHUjl6orIrhkSHD4bVSgV02JXASlZhqF-j64HE3LgKE';
 
-  let ideasData = { ru: [], en: [] };
-
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    return lines.slice(1).map(line => {
-      const values = [];
-      let cur = '', inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') { inQuotes = !inQuotes; }
-        else if (ch === ',' && !inQuotes) { values.push(cur.trim()); cur = ''; }
-        else { cur += ch; }
-      }
-      values.push(cur.trim());
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
-      return obj;
+  async function sbFetch(table) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?visible=eq.true&order=id.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
+    return res.json();
   }
 
-  function csvToIdeas(rows) {
-    const visible = rows.filter(r => (r.visible || '').toLowerCase() === 'yes');
-    const ru = visible.map(r => ({
-      id:              parseInt(r.id) || 0,
-      title:           r.title_ru || '',
-      summary:         r.summary_ru || '',
-      fullDescription: r.full_ru || '',
-      category:        r.category_ru || '',
-      tags:            (r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
-      author:          r.author_ru || '',
-      lookingFor:      r.need_ru || '',
-      location:        r.city_ru || '',
-    }));
-    const en = visible.map(r => ({
-      id:              parseInt(r.id) || 0,
-      title:           r.title_en || '',
-      summary:         r.summary_en || '',
-      fullDescription: r.full_en || '',
-      category:        r.category_en || '',
-      tags:            (r.tags_en || '').split(' ').map(t => t.trim()).filter(Boolean),
-      author:          r.author_en || '',
-      lookingFor:      r.need_en || '',
-      location:        r.city_en || '',
-    }));
-    return { ru, en };
+  // Fingerprint для защиты от двойного лайка
+  function getFingerprint() {
+    let fp = localStorage.getItem('paa_fp');
+    if (!fp) {
+      fp = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('paa_fp', fp);
+    }
+    return fp;
+  }
+
+  // Лайк / анлайк
+  async function toggleLike(ideaId, e) {
+    e.stopPropagation();
+    const btn = document.getElementById(`like-btn-${ideaId}`);
+    const countEl = document.getElementById(`like-count-${ideaId}`);
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/toggle_like`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ p_idea_id: ideaId, p_fingerprint: getFingerprint() })
+      });
+      const data = await res.json();
+      if (countEl) countEl.textContent = data.likes;
+      btn.classList.toggle('liked', data.liked);
+      ['ru','en'].forEach(lang => {
+        const idea = ideasData[lang].find(i => i.id === ideaId);
+        if (idea) idea.likes = data.likes;
+      });
+    } catch(err) { console.error('Like error:', err); }
+    btn.disabled = false;
+  }
+  // ─────────────────────────────────────────────────────────────
+
+  let ideasData = { ru: [], en: [] };
+  let likedIdeas = new Set(JSON.parse(localStorage.getItem('paa_liked') || '[]'));
+
+  function rowToIdea(r, lang) {
+    return {
+      id:              r.id,
+      title:           r[`title_${lang}`] || r.title_ru || '',
+      summary:         r[`summary_${lang}`] || r.summary_ru || '',
+      fullDescription: r[`full_${lang}`] || r.full_ru || '',
+      category:        r[`category_${lang}`] || r.category_ru || '',
+      tags:            (r[`tags_${lang}`] || r.tags_ru || '').split(' ').map(t => t.trim()).filter(Boolean),
+      author:          r[`author_${lang}`] || r.author_ru || '',
+      lookingFor:      r[`need_${lang}`] || r.need_ru || '',
+      location:        r[`city_${lang}`] || r.city_ru || '',
+      likes:           r.likes || 0,
+    };
   }
 
   async function loadIdeas() {
@@ -627,24 +669,23 @@
     const skCard = `<div class="idea-card"><div class="sk sk-role"></div><div class="sk sk-name"></div><div class="sk sk-line"></div><div class="sk sk-line2"></div><div class="sk-tags"><div class="sk sk-tag"></div><div class="sk sk-tag"></div></div><div class="sk sk-city"></div><div class="sk sk-btn"></div></div>`;
     grid.innerHTML = skCard + skCard + skCard;
     try {
-      const resp = await fetch(IDEAS_CSV_URL + '&t=' + Date.now());
-      if (!resp.ok) throw new Error('fetch failed');
-      const text = await resp.text();
-      const rows = parseCSV(text);
-      ideasData = csvToIdeas(rows);
+      const rows = await sbFetch('ideas');
+      ideasData = {
+        ru: rows.map(r => rowToIdea(r, 'ru')),
+        en: rows.map(r => rowToIdea(r, 'en'))
+      };
       const supportBtn = document.getElementById('support-btn');
       if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
       const ic = document.getElementById('ideas-counter');
       if (ic) {
-        const cnt = ideasData[currentLang].length;
-        ic.textContent = currentLang === 'ru' ? cnt + ' идей в поиске команды' : cnt + ' ideas looking for a team';
+        ic.textContent = currentLang === 'ru' ? `${rows.length} идей в поиске команды` : `${rows.length} ideas looking for a team`;
         ic.style.display = 'block';
       }
       renderFilters();
       renderIdeas();
     } catch(e) {
       grid.innerHTML = '<div class="empty-state">Не удалось загрузить данные. Попробуйте обновить страницу.</div>';
-      console.error('Sheet load error:', e);
+      console.error('Supabase error:', e);
     }
   }
 
@@ -828,7 +869,12 @@
         <h3 class="idea-title">${highlightText(idea.title, searchQuery)}</h3>
         <p class="idea-summary">${highlightText(idea.summary, searchQuery)}</p>
         <div class="idea-tags">${idea.tags.map(tag => `<span class="idea-tag">${highlightText(tag, searchQuery)}</span>`).join('')}</div>
-        <div class="idea-author">${highlightText(idea.author, searchQuery)}</div>
+        <div class="idea-footer">
+          <div class="idea-author">${highlightText(idea.author, searchQuery)}</div>
+          <button class="like-btn ${likedIdeas && likedIdeas.has(idea.id) ? 'liked' : ''}" id="like-btn-${idea.id}" onclick="toggleLike(${idea.id}, event)">
+            ♡ <span id="like-count-${idea.id}">${idea.likes || 0}</span>
+          </button>
+        </div>
       </div>
     `).join('');
   }
@@ -1065,10 +1111,8 @@
 
   // Загружаем идеи из Google Sheets
   loadIdeas();
-
   const supportBtn = document.getElementById('support-btn');
-  if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';  
-    
+  if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
   window.addEventListener('scroll', () => {
     document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
   });
