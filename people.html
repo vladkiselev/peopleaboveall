@@ -1235,7 +1235,8 @@
   const supportBtn = document.getElementById('support-btn');
   if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
   window.addEventListener('scroll', () => {
-    document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
+    const btn = document.getElementById('scroll-top');
+    if (btn) btn.classList.toggle('visible', window.scrollY > 400);
   });
 </script>
 
