@@ -1233,7 +1233,7 @@
   // Загружаем людей из Google Sheets
   loadPeople();
   const supportBtn = document.getElementById('support-btn');
-  if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
+  if (supportBtn) supportBtn.textContent = сurrentlang === 'ru' ? 'Поддержать проект' : 'Support the movement';
   window.addEventListener('scroll', () => {
     const btn = document.getElementById('scroll-top');
     if (btn) btn.classList.toggle('visible', window.scrollY > 400);
