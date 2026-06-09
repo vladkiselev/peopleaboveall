@@ -243,6 +243,82 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 32px;
   }
+  .people-grid.list-view {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0 80px 100px;
+  }
+  .people-grid.list-view .person-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+    padding: 20px 32px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid var(--border);
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .people-grid.list-view .person-card:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .people-grid.list-view .person-card:hover {
+    background: #EDEAE3;
+    border-color: var(--border);
+  }
+  .people-grid.list-view .person-role {
+    margin-bottom: 4px;
+    white-space: nowrap;
+  }
+  .people-grid.list-view .person-name {
+    font-size: 20px;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+  .people-grid.list-view .person-bio {
+    -webkit-line-clamp: 1;
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 0;
+  }
+  .people-grid.list-view .person-see-more { display: none; }
+  .people-grid.list-view .person-skills { display: none; }
+  .people-grid.list-view .person-location {
+    white-space: nowrap;
+    margin-left: auto;
+    font-size: 13px;
+  }
+  .list-info {
+    min-width: 160px;
+  }
+
+  /* VIEW TOGGLE */
+  .view-toggle {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .view-btn {
+    background: none;
+    border: 1px solid var(--border);
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+  .view-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .view-btn:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
   .person-card {
     background: var(--cream);
     border: 1px solid var(--border);
@@ -651,7 +727,13 @@
       <span class="search-icon">🔍</span>
       <input type="text" id="search-input" class="search-input" placeholder="Поиск по людям...">
     </div>
-    <button class="top-join-btn" id="topJoinBtn" data-i18n="join_btn">Добавить себя в каталог</button>
+    <div style="display:flex; gap:12px; align-items:center;">
+      <div class="view-toggle">
+        <button class="view-btn active" id="grid-btn" onclick="setView('grid')" title="Сетка">⊞</button>
+        <button class="view-btn" id="list-btn" onclick="setView('list')" title="Список">≡</button>
+      </div>
+      <button class="top-join-btn" id="topJoinBtn" data-i18n="join_btn">Добавить себя в каталог</button>
+    </div>
   </div>
 
   <div class="filters" id="filter-bar"></div>
@@ -936,23 +1018,51 @@
     if (searchQuery) filtered = filtered.filter(p => personMatchesSearch(p, searchQuery));
     return filtered;
   }
+  let currentView = localStorage.getItem('paa_view') || 'grid';
+
+  function setView(view) {
+    currentView = view;
+    localStorage.setItem('paa_view', view);
+    const grid = document.getElementById('people-grid');
+    grid.classList.toggle('list-view', view === 'list');
+    document.getElementById('grid-btn').classList.toggle('active', view === 'grid');
+    document.getElementById('list-btn').classList.toggle('active', view === 'list');
+    renderPeople();
+  }
+
   function renderPeople() {
     const grid = document.getElementById("people-grid");
+    grid.classList.toggle('list-view', currentView === 'list');
+    document.getElementById('grid-btn')?.classList.toggle('active', currentView === 'grid');
+    document.getElementById('list-btn')?.classList.toggle('active', currentView === 'list');
     const filtered = getFilteredPeople();
     if (!filtered.length) {
       grid.innerHTML = `<div class="empty-state">${t('empty_state')}</div>`;
       return;
     }
-    grid.innerHTML = filtered.map(person => `
-      <div class="person-card" onclick="openProfileModal(${person.id})">
-        <div class="person-role">${highlightText(person.role, searchQuery)}</div>
-        <h3 class="person-name">${highlightText(person.name, searchQuery)}</h3>
-        <p class="person-bio">${highlightText(person.bio, searchQuery)}</p>
-        ${person.bio && person.bio.length > 120 ? `<p class="person-see-more">${currentLang === 'ru' ? 'Читать далее →' : 'Read more →'}</p>` : ''}
-        <div class="person-skills">${person.skills.map(s => `<span class="skill-tag">${highlightText(s, searchQuery)}</span>`).join('')}</div>
-        <div class="person-location">📍 ${person.location}</div>
-      </div>
-    `).join('');
+    if (currentView === 'list') {
+      grid.innerHTML = filtered.map(person => `
+        <div class="person-card" onclick="openProfileModal(${person.id})">
+          <div class="list-info">
+            <div class="person-role">${highlightText(person.role, searchQuery)}</div>
+            <h3 class="person-name">${highlightText(person.name, searchQuery)}</h3>
+          </div>
+          <p class="person-bio">${highlightText(person.bio, searchQuery)}</p>
+          <div class="person-location">📍 ${person.location}</div>
+        </div>
+      `).join('');
+    } else {
+      grid.innerHTML = filtered.map(person => `
+        <div class="person-card" onclick="openProfileModal(${person.id})">
+          <div class="person-role">${highlightText(person.role, searchQuery)}</div>
+          <h3 class="person-name">${highlightText(person.name, searchQuery)}</h3>
+          <p class="person-bio">${highlightText(person.bio, searchQuery)}</p>
+          ${person.bio && person.bio.length > 120 ? `<p class="person-see-more">${currentLang === 'ru' ? 'Читать далее →' : 'Read more →'}</p>` : ''}
+          <div class="person-skills">${person.skills.map(s => `<span class="skill-tag">${highlightText(s, searchQuery)}</span>`).join('')}</div>
+          <div class="person-location">📍 ${person.location}</div>
+        </div>
+      `).join('');
+    }
   }
 
   // ---- Profile Modal ----
