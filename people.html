@@ -747,7 +747,10 @@
 <footer>
   <span class="footer-logo">People Above All</span>
   <span class="footer-copy">peopleaboveall.com · 2026 · <a href="privacy.html" style="color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);">Privacy Policy</a></span>
-  <a href="https://app.lava.top/peopleaboveall" target="_blank" id="support-btn" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream);background:var(--ink);padding:8px 16px;text-decoration:none;transition:background 0.3s;" onmouseover="this.style.background='#C8A97E'" onmouseout="this.style.background='var(--ink)'" data-ru="Поддержать проект" data-en="Support the movement">Поддержать проект</a>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="https://calendly.com/vladislav-kiselevv/consultation" target="_blank" id="book-btn" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink);border:0.5px solid var(--border);padding:8px 16px;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--warm)';this.style.color='var(--warm)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink)'" data-ru="Записаться на разговор" data-en="Book a call">Записаться на разговор</a>
+    <a href="https://app.lava.top/peopleaboveall" target="_blank" id="support-btn" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream);background:var(--ink);padding:8px 16px;text-decoration:none;transition:background 0.3s;" onmouseover="this.style.background='#C8A97E'" onmouseout="this.style.background='var(--ink)'" data-ru="Поддержать проект" data-en="Support the movement">Поддержать проект</a>
+  </div>
 </footer>
 
 <!-- Модальное окно для формы добавления в каталог -->
@@ -998,6 +1001,8 @@
     });
     const supportBtn = document.getElementById('support-btn');
     if (supportBtn) supportBtn.textContent = lang === 'ru' ? 'Поддержать проект' : 'Support the movement';
+    const bookBtn = document.getElementById('book-btn');
+    if (bookBtn) bookBtn.textContent = lang === 'ru' ? 'Записаться на разговор' : 'Book a call';
     updateSearchPlaceholder();
     updateJoinButtons();
     const searchInput = document.getElementById("search-input");
@@ -1095,6 +1100,10 @@
           <button class="btn-join-bottom" onclick="closeProfileModal(); openContactModal(${person.id});" style="font-size:11px; padding:14px 28px;">
             ${currentLang === 'ru' ? 'Связаться' : 'Contact'}
           </button>
+          ${person.id === 1 ? `
+          <a href="https://calendly.com/vladislav-kiselevv/consultation" target="_blank" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink);border:0.5px solid var(--border);padding:14px 28px;text-decoration:none;transition:all 0.3s;display:inline-block;" onmouseover="this.style.borderColor='var(--warm)';this.style.color='var(--warm)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink)'">
+            ${currentLang === 'ru' ? 'Записаться на разговор' : 'Book a call'}
+          </a>` : ''}
         </div>
       </div>
     `;
