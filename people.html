@@ -438,7 +438,12 @@
     margin-bottom: 32px;
   }
   .profile-modal-actions {
-    display: flex; gap: 12px; align-items: stretch;
+    display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap;
+  }
+  .profile-modal-actions > .btn-join-bottom,
+  .profile-modal-actions > a {
+    margin-top: 0; box-sizing: border-box; line-height: 1.2;
+    display: inline-flex; align-items: center; justify-content: center;
   }
 
   @media (max-width: 600px) {
@@ -1097,11 +1102,11 @@
         ` : ''}
         <div class="profile-modal-divider"></div>
         <div class="profile-modal-actions">
-          <button class="btn-join-bottom" onclick="closeProfileModal(); openContactModal(${person.id});" style="font-size:11px; padding:14px 28px;">
+          <button class="btn-join-bottom" onclick="closeProfileModal(); openContactModal(${person.id});" style="font-size:11px; padding:14px 28px; border:0.5px solid var(--ink);">
             ${currentLang === 'ru' ? 'Связаться' : 'Contact'}
           </button>
           ${person.id === 1 ? `
-          <a href="https://calendly.com/vladislav-kiselevv/consultation" target="_blank" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);border:0.5px solid var(--border);padding:16px 32px;text-decoration:none;transition:all 0.3s;display:flex;align-items:center;" onmouseover="this.style.borderColor='var(--warm)';this.style.color='var(--warm)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink)'">
+          <a href="https://calendly.com/vladislav-kiselevv/consultation" target="_blank" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);border:0.5px solid var(--border);padding:14px 28px;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--warm)';this.style.color='var(--warm)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink)'">
             ${currentLang === 'ru' ? 'Записаться на разговор' : 'Book a call'}
           </a>` : ''}
         </div>
@@ -1352,7 +1357,9 @@
   // Загружаем людей из Google Sheets
   loadPeople();
   const supportBtn = document.getElementById('support-btn');
-  if (supportBtn) supportBtn.textContent = сurrentlang === 'ru' ? 'Поддержать проект' : 'Support the movement';
+  if (supportBtn) supportBtn.textContent = currentLang === 'ru' ? 'Поддержать проект' : 'Support the movement';
+  const bookBtn = document.getElementById('book-btn');
+  if (bookBtn) bookBtn.textContent = currentLang === 'ru' ? 'Записаться на разговор' : 'Book a call';
   window.addEventListener('scroll', () => {
     const btn = document.getElementById('scroll-top');
     if (btn) btn.classList.toggle('visible', window.scrollY > 400);
