@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +9,13 @@
 <meta property="og:url" content="https://peopleaboveall.com/people.html">
 <meta property="og:title" content="People — People Above All">
 <meta property="og:description" content="Atlas of people from around the world — entrepreneurs, developers, designers, psychologists, doctors.">
-<meta property="og:image" content="https://peopleaboveall.com/og-image.svg">
+<meta property="og:image" content="https://peopleaboveall.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="People — People Above All">
 <meta name="twitter:description" content="Atlas of people from around the world — entrepreneurs, developers, designers, psychologists, doctors.">
-<meta name="twitter:image" content="https://peopleaboveall.com/og-image.svg">
+<meta name="twitter:image" content="https://peopleaboveall.com/og-image.png">
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -21,7 +23,7 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "wtfw3o88vo");
 </script>
-<title>Люди — People Above All</title>
+<title>People — People Above All</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -999,6 +1001,7 @@
     currentLang = lang;
     localStorage.setItem('paa_lang', lang);
     document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+    document.title = currentLang === 'ru' ? 'Люди — People Above All' : 'People — People Above All';
     document.querySelector('#lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -1346,6 +1349,7 @@
 
   // Применяем язык без рендера карточек (данных ещё нет)
   document.documentElement.lang = currentLang === 'ru' ? 'ru' : 'en';
+  document.title = currentLang === 'ru' ? 'Люди — People Above All' : 'People — People Above All';
   document.querySelector('#lang-switch').textContent = currentLang === 'ru' ? 'EN' : 'RU';
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');

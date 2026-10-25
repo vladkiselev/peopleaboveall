@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +9,13 @@
 <meta property="og:url" content="https://peopleaboveall.com">
 <meta property="og:title" content="People Above All">
 <meta property="og:description" content="Atlas of people from around the world.">
-<meta property="og:image" content="https://peopleaboveall.com/og-image.svg">
+<meta property="og:image" content="https://peopleaboveall.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="People Above All">
 <meta name="twitter:description" content="Atlas of people from around the world.">
-<meta name="twitter:image" content="https://peopleaboveall.com/og-image.svg">
+<meta name="twitter:image" content="https://peopleaboveall.com/og-image.png">
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -55,7 +57,7 @@
   // ───────────────────────────────────────────────────────────
 
 </script>
-<title>People Above All — люди превыше всего</title>
+<title>People Above All — trusted introductions, not algorithms</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -464,6 +466,13 @@
     position: relative;
   }
   .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .cta-follow { margin-top: 40px; position: relative; }
+  .cta-follow a {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 4px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .cta-follow a:hover { color: var(--warm); border-color: var(--warm); }
   footer {
     padding: 48px 80px;
     border-top: 1px solid var(--border);
@@ -795,6 +804,7 @@
   <h2 class="reveal"><span data-i18n="cta_title_1">Готов соединиться</span><br><em data-i18n="cta_title_2">с правильными людьми?</em></h2>
   <p class="reveal" data-i18n="cta_subtitle">Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.</p>
   <div class="cta-buttons reveal"><a href="#" class="btn-primary" id="ctaIdeaBtn" data-i18n="btn_idea">Поделиться идеей</a><a href="#" class="btn-ghost" id="ctaJoinBtn" data-i18n="btn_join_project">Добавить себя в каталог</a></div>
+  <div class="cta-follow reveal"><a href="https://t.me/people_above_all" target="_blank" rel="noopener" data-i18n="cta_follow">Пока не готов? Следи за проектом в Telegram →</a></div>
 </section>
 
 <footer>
@@ -863,6 +873,7 @@
       founder_story_1: "За последние годы я побывал в десятках стран и познакомился с сотнями людей — разработчиками, дизайнерами, предпринимателями, философами, просто невероятными личностями.\n\nИ каждый раз замечал одну и ту же боль. Человек рассказывает гениальную идею, а потом шепотом добавляет: «Только никому не говори, а то украдут». И идея остаётся похороненной в заметках телефона.\n\nЯ искренне люблю людей. Вижу красоту в каждом. Ко мне обращаются за советом, я много обжигался и много учился. И понял одно — прозрачные отношения и живые связи ценятся больше всего.",
       founder_story_2: "People Above All — это не просто платформа. Это моё желание познакомить тебя с теми удивительными людьми, которых я встретил по всему миру.",
       cta_title_1: "Готов соединиться", cta_title_2: "с правильными людьми?",
+      cta_follow: "Пока не готов? Следи за проектом в Telegram →",
       cta_subtitle: "Это больше, чем платформа. Это обещание, что люди — их достоинство, мечты и потенциал — всегда будут на первом месте.",
       idea_modal_title: "Расскажи об <em>идее</em>",
       idea_modal_subtitle: "Займёт 3 минуты · Владислав ответит лично",
@@ -942,6 +953,7 @@
       founder_story_1: "Over the past few years, I've traveled to dozens of countries and met hundreds of people — developers, designers, entrepreneurs, philosophers, just incredible individuals.\n\nAnd every time I noticed the same pain. A person shares a brilliant idea and then whispers: 'Just don't tell anyone, they'll steal it.' The idea remains buried in phone notes.\n\nI truly love people. I see beauty in everyone. People come to me for advice, I've made many mistakes and learned a lot. And I realized one thing — transparent relationships and genuine connections are what matter most.",
       founder_story_2: "People Above All is not just a platform. It's my desire to introduce you to the amazing people I've met around the world.",
       cta_title_1: "Ready to connect", cta_title_2: "with the right people?",
+      cta_follow: "Not ready yet? Follow the journey on Telegram →",
       cta_subtitle: "It's more than a platform. It's a promise that people — their dignity, dreams, and potential — will always come first.",
       idea_modal_title: "Share your <em>idea</em>",
       idea_modal_subtitle: "Takes 3 minutes · Vladislav will reply personally",
@@ -993,6 +1005,7 @@
     currentLang = lang;
     localStorage.setItem('paa_lang', lang);
     document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+    document.title = currentLang === 'ru' ? 'People Above All — люди превыше всего' : 'People Above All — trusted introductions, not algorithms';
     document.querySelector('#lang-switch').textContent = lang === 'ru' ? 'EN' : 'RU';
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
