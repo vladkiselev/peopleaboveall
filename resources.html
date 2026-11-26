@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tools and guides Vladislav uses himself: how to connect your Telegram to Claude, a VPN that works, and more.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://peopleaboveall.com/resources.html">
+<meta property="og:title" content="Resources — People Above All">
+<meta property="og:description" content="Tools and guides I use myself: connect your Telegram to Claude, a VPN that works, and more.">
+<meta property="og:image" content="https://peopleaboveall.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Resources — People Above All">
+<meta name="twitter:description" content="Tools and guides I use myself: connect your Telegram to Claude, a VPN that works, and more.">
+<meta name="twitter:image" content="https://peopleaboveall.com/og-image.png">
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wtfw3o88vo");
+</script>
+<title>Resources — People Above All</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F5F0E8;
+    --ink:   #1A1714;
+    --warm:  #C8A97E;
+    --muted: #6B6560;
+    --border: rgba(26,23,20,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  [hidden] { display: none !important; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+  nav {
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 10;
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link.active { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+  .nav-link:hover { color: var(--ink); }
+  .lang-switch {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.3s;
+  }
+  .lang-switch:hover { border-color: var(--ink); color: var(--ink); }
+
+  .page-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 20px;
+  }
+  .page-title {
+    font-size: clamp(44px, 6vw, 72px);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .page-title em, .res-title em { font-style: italic; color: var(--warm); }
+  .page-intro {
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 600px;
+  }
+
+  .toc {
+    margin: 48px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .toc a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 22px;
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--warm); }
+  .toc-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .res { margin-top: 96px; scroll-margin-top: 96px; }
+  .res-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--warm);
+    margin-bottom: 16px;
+  }
+  .res-title {
+    font-size: clamp(32px, 4vw, 44px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+  .res-body h3 {
+    font-size: 22px;
+    font-weight: 400;
+    margin: 40px 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .res-body h3::before {
+    content: '—';
+    color: var(--warm);
+    margin-right: 10px;
+    font-weight: 300;
+  }
+  .res-body p, .res-body li {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+  .res-body p { margin-bottom: 16px; }
+  .res-body ul, .res-body ol { margin: 0 0 16px; padding-left: 0; list-style: none; }
+  .res-body li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+  .res-body ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--warm);
+    font-size: 22px;
+    line-height: 1.55;
+  }
+  .res-body a {
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .res-body a:hover { border-color: var(--ink); }
+  .res-body code {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    background: rgba(26,23,20,0.06);
+    padding: 1px 6px;
+  }
+
+  .code-block {
+    position: relative;
+    background: var(--ink);
+    color: var(--cream);
+    margin: 16px 0 24px;
+  }
+  .code-block pre {
+    padding: 28px 28px 24px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .code-block pre code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    background: none;
+    padding: 0;
+    color: var(--cream);
+  }
+  .copy-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--warm);
+    border: none;
+    border-left: 0.5px solid rgba(200,169,126,0.3);
+    border-bottom: 0.5px solid rgba(200,169,126,0.3);
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+  }
+  .copy-btn:hover { background: rgba(200,169,126,0.12); }
+
+  .note {
+    border-left: 2px solid var(--warm);
+    padding: 4px 0 4px 20px;
+    margin: 24px 0;
+  }
+  .note p { color: var(--muted); margin-bottom: 0; }
+
+  .suggest {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 40px;
+    margin-top: 96px;
+  }
+  .suggest h2 {
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .suggest h2 em { font-style: italic; color: var(--warm); }
+  .suggest p {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 24px;
+  }
+  .suggest a {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--warm);
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+  .suggest a:hover { background: var(--cream); }
+
+  footer {
+    padding: 24px 48px;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .footer-copy a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); }
+
+  @media (max-width: 700px) {
+    nav { padding: 20px 24px; }
+    .nav-links { gap: 14px; }
+    .nav-link { letter-spacing: 0.06em; }
+    .page-wrap { padding: 48px 24px 80px; }
+    .code-block pre { padding: 36px 20px 20px; }
+    .suggest { padding: 32px 24px; }
+    footer { padding: 20px 24px; flex-direction: column; gap: 8px; }
+  }
+  @media (max-width: 480px) {
+    .nav-logo { font-size: 0; }
+    .nav-logo::after { content: 'PAA'; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">People Above All</a>
+  <div class="nav-links">
+    <a href="ideas.html" class="nav-link" data-ru="Идеи" data-en="Ideas">Ideas</a>
+    <a href="people.html" class="nav-link" data-ru="Люди" data-en="People">People</a>
+    <a href="resources.html" class="nav-link active" data-ru="Полезное" data-en="Resources">Resources</a>
+    <a href="index.html" class="nav-link" data-ru="О проекте" data-en="About">About</a>
+    <button class="lang-switch" id="lang-switch" onclick="toggleLang()">RU</button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <p class="eyebrow" data-ru="Полезное · Resources" data-en="Resources">Resources</p>
+  <h1 class="page-title" data-ru="Чем я пользуюсь <em>сам</em>" data-en="What I <em>actually</em> use">What I <em>actually</em> use</h1>
+  <p class="page-intro" data-ru="Инструменты и инструкции, которые я проверил на себе. Меня часто об этом спрашивают — теперь всё в одном месте." data-en="Tools and guides I've tested myself. People ask me about these all the time — so here they are, in one place.">Tools and guides I've tested myself. People ask me about these all the time — so here they are, in one place.</p>
+
+  <div class="toc">
+    <a href="#telegram-claude"><span data-ru="Как подключить свой Telegram к Claude" data-en="Connect your Telegram to Claude">Connect your Telegram to Claude</span><span class="toc-tag" data-ru="Гайд" data-en="Guide">Guide</span></a>
+    <a href="#vpn" id="toc-vpn" hidden><span data-ru="VPN, которым я пользуюсь" data-en="The VPN I use">The VPN I use</span><span class="toc-tag" data-ru="Инструмент" data-en="Tool">Tool</span></a>
+  </div>
+
+  <!-- TELEGRAM + CLAUDE -->
+  <section class="res" id="telegram-claude">
+    <p class="res-num">01</p>
+    <h2 class="res-title" data-ru="Как подключить свой Telegram <em>к Claude</em>" data-en="Connect your Telegram <em>to Claude</em>">Connect your Telegram <em>to Claude</em></h2>
+    <div class="res-body">
+      <p data-ru="Я подключил свой Telegram к Claude Code. Теперь я прошу его найти сообщение в старой переписке, кратко пересказать чат, набросать ответ или расшифровать голосовые — и он делает это прямо в моём аккаунте. Ниже — как собрать то же самое за вечер, даже если вы не программист." data-en="I've connected my Telegram to Claude Code. Now I ask it to find a message in an old chat, summarise a conversation, draft a reply or transcribe voice messages — and it does that right in my account. Here's how to build the same thing in an evening, even if you don't code.">I've connected my Telegram to Claude Code. Now I ask it to find a message in an old chat, summarise a conversation, draft a reply or transcribe voice messages — and it does that right in my account. Here's how to build the same thing in an evening, even if you don't code.</p>
+
+      <h3 data-ru="Что понадобится" data-en="What you need">What you need</h3>
+      <ul>
+        <li data-ru="<a href=&quot;https://claude.com/claude-code&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>Claude Code</a> — в терминале или в приложении Claude для компьютера" data-en="<a href=&quot;https://claude.com/claude-code&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>Claude Code</a> — in the terminal or in the Claude desktop app"><a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a> — in the terminal or in the Claude desktop app</li>
+        <li data-ru="Python 3 (на Mac обычно уже установлен)" data-en="Python 3 (usually already installed on a Mac)">Python 3 (usually already installed on a Mac)</li>
+        <li data-ru="Ключи <code>api_id</code> и <code>api_hash</code> — бесплатно на <a href=&quot;https://my.telegram.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>my.telegram.org</a> → API development tools" data-en="An <code>api_id</code> and <code>api_hash</code> — free at <a href=&quot;https://my.telegram.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>my.telegram.org</a> → API development tools">An <code>api_id</code> and <code>api_hash</code> — free at <a href="https://my.telegram.org" target="_blank" rel="noopener">my.telegram.org</a> → API development tools</li>
+      </ul>
+      <div class="note"><p data-ru="Это не бот, а вход в ваш собственный аккаунт (как ещё одно устройство). Поэтому Claude видит все ваши чаты — и поэтому так важны правила безопасности ниже." data-en="This isn't a bot — it logs in to your own account, like another device. That's why Claude can see all your chats, and why the safety rules below matter.">This isn't a bot — it logs in to your own account, like another device. That's why Claude can see all your chats, and why the safety rules below matter.</p></div>
+
+      <h3 data-ru="Шаг 1. Попросите Claude собрать проект" data-en="Step 1. Ask Claude to build it">Step 1. Ask Claude to build it</h3>
+      <p data-ru="Создайте пустую папку, откройте её в Claude Code и вставьте этот промпт:" data-en="Create an empty folder, open it in Claude Code and paste this prompt:">Create an empty folder, open it in Claude Code and paste this prompt:</p>
+      <div class="code-block">
+        <button class="copy-btn" data-ru="Копировать" data-en="Copy">Copy</button>
+        <pre><code data-ru="Собери Python-проект tg_access: клиент Telegram на Telethon, который входит в МОЙ аккаунт (user client, не бот). Им будешь пользоваться ты сам, по моим просьбам.
+
+- venv и requirements.txt
+- .env с TG_API_ID и TG_API_HASH, плюс .env.example без значений
+- login.py — одноразовый вход: код из Telegram и пароль 2FA. Сам его не запускай, я сделаю это в Терминале
+- tg.py — команды: me, dialogs [N], history [чат] [N], draft [чат] [текст] (сохраняет черновик, НЕ отправляет), drafts, send [чат] [текст]
+- чат можно указать как @username, числовой id или me (Избранное)
+- файлы .session и .env добавь в .gitignore
+- README с инструкцией по установке
+
+Пока ничего не отправляй и не удаляй." data-en="Build a Python project called tg_access: a Telethon client that logs in to MY Telegram account (a user client, not a bot). You will use it yourself when I ask.
+
+- venv and requirements.txt
+- .env with TG_API_ID and TG_API_HASH, plus a .env.example without values
+- login.py — one-time login: Telegram code and 2FA password. Don't run it yourself, I'll do it in Terminal
+- tg.py — commands: me, dialogs [N], history [chat] [N], draft [chat] [text] (saves a draft, does NOT send), drafts, send [chat] [text]
+- a chat can be given as @username, a numeric id, or me (Saved Messages)
+- add the .session file and .env to .gitignore
+- a README with setup steps
+
+Don't send or delete anything yet.">Build a Python project called tg_access: a Telethon client that logs in to MY Telegram account (a user client, not a bot). You will use it yourself when I ask.
+
+- venv and requirements.txt
+- .env with TG_API_ID and TG_API_HASH, plus a .env.example without values
+- login.py — one-time login: Telegram code and 2FA password. Don't run it yourself, I'll do it in Terminal
+- tg.py — commands: me, dialogs [N], history [chat] [N], draft [chat] [text] (saves a draft, does NOT send), drafts, send [chat] [text]
+- a chat can be given as @username, a numeric id, or me (Saved Messages)
+- add the .session file and .env to .gitignore
+- a README with setup steps
+
+Don't send or delete anything yet.</code></pre>
+      </div>
+
+      <h3 data-ru="Шаг 2. Впишите ключи и войдите" data-en="Step 2. Add your keys and log in">Step 2. Add your keys and log in</h3>
+      <p data-ru="Вставьте <code>api_id</code> и <code>api_hash</code> в файл <code>.env</code>. Затем откройте обычный Терминал в папке проекта и запустите вход — Telegram пришлёт код в приложение:" data-en="Put your <code>api_id</code> and <code>api_hash</code> into <code>.env</code>. Then open a regular Terminal in the project folder and log in — Telegram will send a code to your app:">Put your <code>api_id</code> and <code>api_hash</code> into <code>.env</code>. Then open a regular Terminal in the project folder and log in — Telegram will send a code to your app:</p>
+      <div class="code-block">
+        <button class="copy-btn" data-ru="Копировать" data-en="Copy">Copy</button>
+        <pre><code>.venv/bin/python login.py</code></pre>
+      </div>
+      <p data-ru="Проверьте, что всё работает: <code>.venv/bin/python tg.py me</code> должен показать ваше имя." data-en="Check that it works: <code>.venv/bin/python tg.py me</code> should print your name.">Check that it works: <code>.venv/bin/python tg.py me</code> should print your name.</p>
+
+      <h3 data-ru="Шаг 3. Объясните Claude правила" data-en="Step 3. Give Claude the rules">Step 3. Give Claude the rules</h3>
+      <p data-ru="Добавьте этот блок в файл <code>~/.claude/CLAUDE.md</code> — Claude читает его в каждой сессии. Замените путь к папке на свой:" data-en="Add this block to <code>~/.claude/CLAUDE.md</code> — Claude reads it in every session. Replace the folder path with yours:">Add this block to <code>~/.claude/CLAUDE.md</code> — Claude reads it in every session. Replace the folder path with yours:</p>
+      <div class="code-block">
+        <button class="copy-btn" data-ru="Копировать" data-en="Copy">Copy</button>
+        <pre><code data-ru="## Telegram
+У тебя есть доступ к моему Telegram через ~/tg_access (Telethon, мой личный аккаунт).
+Запускай команды из этой папки: .venv/bin/python tg.py ...
+
+- Никогда ничего не удаляй: сообщения, чаты, контакты.
+- «Напиши X» = сохрани черновик (tg.py draft), а не отправляй.
+  Отправляй (tg.py send) только когда я прямо скажу «отправь».
+- Реакции, вступление в чаты, отметки «прочитано» — только по моей просьбе.
+- Файл .session — это полный доступ к аккаунту. Никогда не выводи и не копируй его." data-en="## Telegram
+You have access to my Telegram via ~/tg_access (Telethon, my personal account).
+Run commands from that folder: .venv/bin/python tg.py ...
+
+- Never delete anything: messages, chats, contacts.
+- &quot;Write to X&quot; means save a draft (tg.py draft), not send.
+  Send (tg.py send) only when I explicitly say &quot;send it&quot;.
+- Reactions, joining chats, marking as read — only when I ask.
+- The .session file is full access to my account. Never print or copy it.">## Telegram
+You have access to my Telegram via ~/tg_access (Telethon, my personal account).
+Run commands from that folder: .venv/bin/python tg.py ...
+
+- Never delete anything: messages, chats, contacts.
+- "Write to X" means save a draft (tg.py draft), not send.
+  Send (tg.py send) only when I explicitly say "send it".
+- Reactions, joining chats, marking as read — only when I ask.
+- The .session file is full access to my account. Never print or copy it.</code></pre>
+      </div>
+      <p data-ru="Готово. Теперь можно просто писать Claude: «найди, что Маша писала про встречу в пятницу», «перескажи последние 50 сообщений в рабочем чате», «набросай ответ Пете»." data-en="Done. Now you can just ask Claude: “find what Anna said about Friday's meeting”, “summarise the last 50 messages in the work chat”, “draft a reply to Mark”.">Done. Now you can just ask Claude: “find what Anna said about Friday's meeting”, “summarise the last 50 messages in the work chat”, “draft a reply to Mark”.</p>
+
+      <h3 data-ru="Бонус: голосовые в текст" data-en="Bonus: voice messages to text">Bonus: voice messages to text</h3>
+      <p data-ru="На Mac с чипом Apple (M1 и новее) можно расшифровывать голосовые прямо на компьютере, ничего не отправляя в облако. Попросите Claude: «добавь команду hear [чат] [N], которая скачивает последние N голосовых и расшифровывает их локально через mlx-whisper»." data-en="On a Mac with Apple silicon (M1 or later) you can transcribe voice messages right on your computer, without sending anything to the cloud. Ask Claude: “add a hear [chat] [N] command that downloads the last N voice messages and transcribes them locally with mlx-whisper”.">On a Mac with Apple silicon (M1 or later) you can transcribe voice messages right on your computer, without sending anything to the cloud. Ask Claude: “add a hear [chat] [N] command that downloads the last N voice messages and transcribes them locally with mlx-whisper”.</p>
+
+      <h3 data-ru="Безопасность — обязательно прочитайте" data-en="Safety — please read">Safety — please read</h3>
+      <ul>
+        <li data-ru="Файл <code>.session</code> — это ключ от вашего аккаунта. Любой, у кого он есть, получает полный доступ. Не загружайте его в git, облако или чаты." data-en="The <code>.session</code> file is the key to your account. Anyone who has it gets full access. Never upload it to git, the cloud or a chat.">The <code>.session</code> file is the key to your account. Anyone who has it gets full access. Never upload it to git, the cloud or a chat.</li>
+        <li data-ru="Черновики вместо отправки — по умолчанию. Вы перечитываете текст и отправляете сами." data-en="Drafts instead of sending, by default. You reread the text and send it yourself.">Drafts instead of sending, by default. You reread the text and send it yourself.</li>
+        <li data-ru="Не делайте массовых рассылок и не выгружайте тысячи сообщений подряд: Telegram ограничивает аккаунты, которые ведут себя как спам-боты." data-en="No mass messaging and no pulling thousands of messages in a row: Telegram restricts accounts that behave like spam bots.">No mass messaging and no pulling thousands of messages in a row: Telegram restricts accounts that behave like spam bots.</li>
+        <li data-ru="Если что-то пошло не так, завершите сеанс в Telegram: Настройки → Устройства. Файл сессии сразу перестанет работать." data-en="If anything goes wrong, end the session in Telegram: Settings → Devices. The session file stops working immediately.">If anything goes wrong, end the session in Telegram: Settings → Devices. The session file stops working immediately.</li>
+      </ul>
+      <div class="note"><p data-ru="Если my.telegram.org не открывается (например, из России), откройте его через VPN — например, <a href=&quot;#vpn&quot;>тот, которым пользуюсь я</a>." data-en="If my.telegram.org won't open (for example, from Russia), open it through a VPN — like <a href=&quot;#vpn&quot;>the one I use</a>.">If my.telegram.org won't open (for example, from Russia), open it through a VPN — like <a href="#vpn">the one I use</a>.</p></div>
+    </div>
+  </section>
+
+  <!-- VPN: shown once VPN_LINK below is filled in -->
+  <section class="res" id="vpn" hidden>
+    <p class="res-num">02</p>
+    <h2 class="res-title" data-ru="VPN, которым я <em>пользуюсь</em>" data-en="The VPN I <em>use</em>">The VPN I <em>use</em></h2>
+    <div class="res-body">
+      <p id="vpn-text"></p>
+      <p><a id="vpn-link" href="#" target="_blank" rel="noopener"></a></p>
+      <div class="note"><p data-ru="Это реферальная ссылка: если вы подключитесь по ней, мне начислят несколько бесплатных дней подписки. Денег я за это не получаю." data-en="This is a referral link: if you sign up with it, I get a few free days of subscription. I don't get paid for it.">This is a referral link: if you sign up with it, I get a few free days of subscription. I don't get paid for it.</p></div>
+    </div>
+  </section>
+
+  <div class="suggest">
+    <h2 data-ru="Знаете что-то <em>полезное?</em>" data-en="Know something <em>useful?</em>">Know something <em>useful?</em></h2>
+    <p data-ru="Если у вас есть инструмент или инструкция, которыми стоит поделиться, — напишите мне. Лучшее добавлю сюда с упоминанием автора." data-en="If you have a tool or a guide worth sharing, message me. I'll add the best ones here and credit the author.">If you have a tool or a guide worth sharing, message me. I'll add the best ones here and credit the author.</p>
+    <a href="https://t.me/people_above_all" target="_blank" rel="noopener" data-ru="Написать в Telegram" data-en="Message on Telegram">Message on Telegram</a>
+  </div>
+</main>
+
+<footer>
+  <span class="footer-logo">People Above All</span>
+  <span class="footer-copy">peopleaboveall.com · 2026 · <a href="privacy.html">Privacy Policy</a></span>
+</footer>
+
+<script>
+  // Fill these in to show the VPN section
+  const VPN_NAME = 'Sota VPN';
+  const VPN_LINK = 'https://t.me/sota?start=420167383';
+  const VPN_TEXT = {
+    ru: 'Sota VPN работает через Telegram-бота: подключение и оплата — прямо в чате, без отдельного сайта. Пользуюсь им сам.',
+    en: 'Sota VPN runs through a Telegram bot: you sign up and pay right in the chat, no separate website. It’s the one I use myself.'
+  };
+
+  let currentLang = localStorage.getItem('paa_lang') || 'en';
+
+  function applyLang() {
+    document.documentElement.lang = currentLang;
+    document.title = currentLang === 'ru' ? 'Полезное — People Above All' : 'Resources — People Above All';
+    document.getElementById('lang-switch').textContent = currentLang === 'ru' ? 'EN' : 'RU';
+    document.querySelectorAll('[data-ru]').forEach(el => {
+      const value = el.getAttribute('data-' + currentLang);
+      // Code samples are plain text; everything else may contain markup
+      if (el.tagName === 'CODE') el.textContent = value;
+      else el.innerHTML = value;
+    });
+    if (VPN_LINK) {
+      document.getElementById('vpn-text').textContent = VPN_TEXT[currentLang];
+      document.getElementById('vpn-link').textContent = VPN_NAME + ' →';
+    }
+  }
+
+  function toggleLang() {
+    currentLang = currentLang === 'ru' ? 'en' : 'ru';
+    localStorage.setItem('paa_lang', currentLang);
+    applyLang();
+  }
+
+  if (VPN_LINK) {
+    document.getElementById('vpn').hidden = false;
+    document.getElementById('toc-vpn').hidden = false;
+    document.getElementById('vpn-link').href = VPN_LINK;
+  }
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = currentLang === 'ru' ? 'Скопировано' : 'Copied';
+        setTimeout(() => { btn.textContent = btn.getAttribute('data-' + currentLang); }, 1800);
+      });
+    });
+  });
+
+  applyLang();
+</script>
+</body>
+</html>

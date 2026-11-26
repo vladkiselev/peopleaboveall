@@ -488,6 +488,8 @@
   }
   @media (max-width: 900px) {
     nav { padding: 20px 24px; }
+    .nav-links { gap: 14px; }
+    .nav-link { letter-spacing: 0.06em; }
     .hero-mini { padding: 120px 24px 40px; }
     .search-section { padding: 0 24px 20px; flex-direction: column; align-items: stretch; }
     .top-share-btn { white-space: normal; text-align: center; }
@@ -536,6 +538,10 @@
     display: none;
     opacity: 0.7;
   } */
+  @media (max-width: 480px) {
+    .nav-logo { font-size: 0; }
+    .nav-logo::after { content: 'PAA'; font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -545,6 +551,7 @@
   <div class="nav-links">
     <a href="ideas.html" class="nav-link active" data-i18n="nav_ideas">Идеи</a>
     <a href="people.html" class="nav-link" data-i18n="nav_people">Люди</a>
+    <a href="resources.html" class="nav-link" data-i18n="nav_resources">Полезное</a>
     <a href="index.html" class="nav-link" data-i18n="nav_about">О проекте</a>
     <button class="lang-switch" id="lang-switch">EN</button>
   </div>
@@ -694,7 +701,7 @@
   // Переводы (полные, с заголовками, лейблами, плейсхолдерами)
   const translations = {
     ru: {
-      nav_ideas: "Идеи", nav_people: "Люди", nav_about: "О проекте",
+      nav_ideas: "Идеи", nav_people: "Люди", nav_resources: "Полезное", nav_about: "О проекте",
       hero_title_start: "Сад", hero_title_em: "идей", hero_subtitle: "Идеи, которые ищут команду. Смотри, вдохновляйся, присоединяйся к тем, кто уже начал.",
       share_idea_btn: "Поделиться своей идеей",
       filter_all: "Все", empty_state: "Пока нет идей в этой категории. Будь первым — поделись своей!",
@@ -739,7 +746,7 @@
       contact_error_default: "Заполните все обязательные поля"
     },
     en: {
-      nav_ideas: "Ideas", nav_people: "People", nav_about: "About",
+      nav_ideas: "Ideas", nav_people: "People", nav_resources: "Resources", nav_about: "About",
       hero_title_start: "Garden of", hero_title_em: "Ideas", hero_subtitle: "Ideas seeking a team. Browse, get inspired, join those who have already started.",
       share_idea_btn: "Share your idea",
       filter_all: "All", empty_state: "No ideas in this category yet. Be the first — share yours!",
