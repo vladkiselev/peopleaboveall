@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Theme: saved choice, else the system setting. Runs before paint to avoid a flash.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('paa_theme'); } catch (e) {}
+    if (t !== 'dark' && t !== 'light') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+  function toggleTheme() {
+    var t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('paa_theme', t); } catch (e) {}
+  }
+</script>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="description" content="Atlas of people from around the world — entrepreneurs, developers, designers, psychologists, doctors.">
 <meta property="og:type" content="website">
@@ -267,7 +281,7 @@
     border-top: 1px solid var(--border);
   }
   .people-grid.list-view .person-card:hover {
-    background: #EDEAE3;
+    background: var(--surface-hover);
     border-color: var(--border);
   }
   .people-grid.list-view .person-role {
@@ -462,7 +476,7 @@
     font-size: 8px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: rgba(26,23,20,0.05);
+    background: var(--tint);
     padding: 4px 12px;
     color: var(--muted);
   }
@@ -664,7 +678,7 @@
     .hero-mini { padding: 120px 24px 40px; }
     .search-section { padding: 0 24px 20px; flex-direction: column; align-items: stretch; }
     .search-wrapper { max-width: none; }
-    .top-join-btn { white-space: normal; text-align: center; }
+    .top-join-btn { white-space: normal; text-align: center; flex-shrink: 1; }
     .filters { padding: 0 24px 32px; }
     .people-grid { padding: 20px 24px 60px; }
     footer { padding: 32px 24px; }
@@ -715,6 +729,46 @@
     .nav-logo { font-size: 0; }
     .nav-logo::after { content: 'PAA'; font-size: 11px; }
   }
+
+  /* THEME */
+  :root {
+    --tint: rgba(26,23,20,0.05);
+    --surface-hover: #EDE8DF;
+    --section-dark: #1A1714;
+    --section-dark-fg: #F5F0E8;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --cream:  #15120F;
+    --ink:    #ECE5D8;
+    --warm:   #C8A97E;
+    --rust:   #D08A55;
+    --muted:  #9C948A;
+    --border: rgba(236,229,216,0.13);
+    --tint: rgba(236,229,216,0.06);
+    --surface-hover: #1E1A16;
+    --section-dark: #1E1915;
+    --section-dark-fg: #ECE5D8;
+    color-scheme: dark;
+  }
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .theme-switch:hover { border-color: var(--ink); color: var(--ink); }
+  .theme-switch svg { width: 14px; height: 14px; display: block; }
+  :root[data-theme="dark"] .icon-moon,
+  :root:not([data-theme="dark"]) .icon-sun { display: none; }
+  @media (max-width: 480px) {
+    .nav-links, .nav-right { gap: 10px !important; }
+  }
 </style>
 </head>
 <body>
@@ -726,6 +780,7 @@
     <a href="people.html" class="nav-link active" data-i18n="nav_people">Люди</a>
     <a href="resources.html" class="nav-link" data-i18n="nav_resources">Полезное</a>
     <a href="index.html" class="nav-link" data-i18n="nav_about">О проекте</a>
+    <button class="theme-switch" id="theme-switch" type="button" onclick="toggleTheme()" aria-label="Toggle dark theme"><svg class="icon-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M13 9.6A5.5 5.5 0 0 1 6.4 3a5.5 5.5 0 1 0 6.6 6.6z"/></svg><svg class="icon-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3"/></svg></button>
     <button class="lang-switch" id="lang-switch">EN</button>
   </div>
 </nav>
@@ -1267,7 +1322,7 @@
         <h3>${t('contact_modal_title', person.name.split(' ')[0])}</h3>
         <p class="modal-sub">${t('contact_modal_subtitle')}</p>
         ${person.seek ? `
-        <div style="margin-bottom:24px; padding:16px 20px; background:rgba(26,23,20,0.04); border-left:2px solid var(--warm);">
+        <div style="margin-bottom:24px; padding:16px 20px; background:var(--tint); border-left:2px solid var(--warm);">
           <p style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--warm); margin-bottom:8px;">${currentLang === 'ru' ? 'Что ищет' : 'Looking for'}</p>
           <p style="font-size:16px; font-weight:300; line-height:1.6; color:var(--ink);">${person.seek}</p>
         </div>` : ''}

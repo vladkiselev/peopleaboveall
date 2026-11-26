@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Theme: saved choice, else the system setting. Runs before paint to avoid a flash.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('paa_theme'); } catch (e) {}
+    if (t !== 'dark' && t !== 'light') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+  function toggleTheme() {
+    var t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('paa_theme', t); } catch (e) {}
+  }
+</script>
 <title>404 — People Above All</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -204,6 +218,51 @@
     main { padding: 60px 24px; }
     footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
   }
+
+  /* THEME */
+  :root {
+    --tint: rgba(26,23,20,0.05);
+    --surface-hover: #EDE8DF;
+    --section-dark: #1A1714;
+    --section-dark-fg: #F5F0E8;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --cream:  #15120F;
+    --ink:    #ECE5D8;
+    --warm:   #C8A97E;
+    --rust:   #D08A55;
+    --muted:  #9C948A;
+    --border: rgba(236,229,216,0.13);
+    --tint: rgba(236,229,216,0.06);
+    --surface-hover: #1E1A16;
+    --section-dark: #1E1915;
+    --section-dark-fg: #ECE5D8;
+    color-scheme: dark;
+  }
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .theme-switch:hover { border-color: var(--ink); color: var(--ink); }
+  .theme-switch svg { width: 14px; height: 14px; display: block; }
+  :root[data-theme="dark"] .icon-moon,
+  :root:not([data-theme="dark"]) .icon-sun { display: none; }
+  @media (max-width: 480px) {
+    .nav-links, .nav-right { gap: 10px !important; }
+  }
+  @media (max-width: 480px) {
+    .nav-logo { font-size: 0; }
+    .nav-logo::after { content: 'PAA'; font-size: 11px; }
+    .nav-link { letter-spacing: 0.06em; }
+  }
 </style>
 </head>
 <body>
@@ -214,8 +273,10 @@
     <div class="nav-links" style="display:flex; gap:28px;">
       <a href="ideas.html" class="nav-link" data-ru="Идеи" data-en="Ideas">Идеи</a>
       <a href="people.html" class="nav-link" data-ru="Люди" data-en="People">Люди</a>
+      <a href="resources.html" class="nav-link" data-ru="Полезное" data-en="Resources">Полезное</a>
       <a href="index.html" class="nav-link" data-ru="О проекте" data-en="About">О проекте</a>
     </div>
+    <button class="theme-switch" id="theme-switch" type="button" onclick="toggleTheme()" aria-label="Toggle dark theme"><svg class="icon-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M13 9.6A5.5 5.5 0 0 1 6.4 3a5.5 5.5 0 1 0 6.6 6.6z"/></svg><svg class="icon-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3"/></svg></button>
     <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
   </div>
 </nav>
@@ -234,7 +295,7 @@
 
 <footer>
   <span class="footer-logo">People Above All</span>
-  <span class="footer-copy">peopleaboveall.com · 2025</span>
+  <span class="footer-copy">peopleaboveall.com · 2026</span>
 </footer>
 
 <script>
@@ -256,258 +317,5 @@
 
   applyLang();
 </script>
-</body>
-</html>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --cream: #F5F0E8;
-    --ink:   #1A1714;
-    --warm:  #C8A97E;
-    --muted: #6B6560;
-    --border: rgba(26,23,20,0.12);
-  }
-
-  html, body { height: 100%; }
-
-  body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* grain */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 100;
-    opacity: 0.6;
-  }
-
-  /* NAV */
-  nav {
-    padding: 24px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 0.5px solid var(--border);
-  }
-  .nav-logo {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 28px; }
-  .nav-link {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-link:hover { color: var(--ink); }
-
-  /* MAIN */
-  main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 80px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* big 404 background */
-  main::before {
-    content: '404';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: clamp(180px, 30vw, 320px);
-    font-weight: 300;
-    font-style: italic;
-    color: var(--ink);
-    opacity: 0.04;
-    pointer-events: none;
-    letter-spacing: -0.05em;
-    white-space: nowrap;
-  }
-
-  .content {
-    text-align: center;
-    position: relative;
-    max-width: 560px;
-    animation: fadeUp 0.9s ease forwards;
-    opacity: 0;
-  }
-
-  /* neural network SVG */
-  .neural {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 40px;
-    display: block;
-    opacity: 0.7;
-  }
-
-  .eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--warm);
-    margin-bottom: 20px;
-  }
-
-  h1 {
-    font-size: clamp(40px, 6vw, 72px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 20px;
-  }
-
-  h1 em { font-style: italic; color: var(--warm); }
-
-  .subtitle {
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--muted);
-    margin-bottom: 48px;
-  }
-
-  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-  .btn-primary {
-    background: var(--ink);
-    color: var(--cream);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.3s;
-  }
-  .btn-primary:hover { background: var(--warm); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--ink);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    border: 0.5px solid var(--border);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: border-color 0.3s;
-  }
-  .btn-ghost:hover { border-color: var(--ink); }
-
-  /* FOOTER */
-  footer {
-    padding: 24px 48px;
-    border-top: 0.5px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .footer-logo {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .footer-copy {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    opacity: 0.5;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 600px) {
-    nav { padding: 20px 24px; }
-    .nav-links { display: none; }
-    main { padding: 60px 24px; }
-    footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
-  }
-</style>
-</head>
-<body>
-
-<nav>
-  <a href="index.html" class="nav-logo">People Above All</a>
-  <div class="nav-links">
-    <a href="ideas.html" class="nav-link">Идеи</a>
-    <a href="people.html" class="nav-link">Люди</a>
-    <a href="index.html" class="nav-link">О проекте</a>
-  </div>
-</nav>
-
-<main>
-  <div class="content">
-
-    <!-- Neural network icon -->
-    <svg class="neural" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-      <g stroke="#C8A97E" stroke-width="1" fill="none" opacity="0.5">
-        <line x1="40" y1="12" x2="22" y2="36"/>
-        <line x1="40" y1="12" x2="58" y2="36"/>
-        <line x1="22" y1="36" x2="12" y2="60"/>
-        <line x1="22" y1="36" x2="34" y2="60"/>
-        <line x1="58" y1="36" x2="46" y2="60"/>
-        <line x1="58" y1="36" x2="68" y2="60"/>
-        <line x1="12" y1="60" x2="68" y2="60"/>
-      </g>
-      <circle cx="40" cy="12" r="5" fill="#C8A97E"/>
-      <circle cx="40" cy="12" r="9" fill="none" stroke="#C8A97E" stroke-width="0.6" opacity="0.3"/>
-      <circle cx="22" cy="36" r="3.5" fill="#C8A97E" opacity="0.85"/>
-      <circle cx="58" cy="36" r="3.5" fill="#C8A97E" opacity="0.85"/>
-      <circle cx="12" cy="60" r="2.5" fill="#C8A97E" opacity="0.65"/>
-      <circle cx="34" cy="60" r="2.5" fill="#C8A97E" opacity="0.65"/>
-      <circle cx="46" cy="60" r="2.5" fill="#C8A97E" opacity="0.65"/>
-      <circle cx="68" cy="60" r="2.5" fill="#C8A97E" opacity="0.65"/>
-    </svg>
-
-    <p class="eyebrow">Ошибка · 404</p>
-    <h1>Страница<br>не <em>найдена</em></h1>
-    <p class="subtitle">Кажется, эта страница потерялась где-то между десятками стран.<br>Но люди — точно здесь.</p>
-    <div class="actions">
-      <a href="index.html" class="btn-primary">На главную</a>
-      <a href="people.html" class="btn-ghost">Атлас людей</a>
-    </div>
-  </div>
-</main>
-
-<footer>
-  <span class="footer-logo">People Above All</span>
-  <span class="footer-copy">peopleaboveall.com · 2025</span>
-</footer>
-
 </body>
 </html>
