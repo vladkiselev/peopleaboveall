@@ -289,7 +289,10 @@
   :root[data-theme="dark"] .icon-moon,
   :root:not([data-theme="dark"]) .icon-sun { display: none; }
   @media (max-width: 480px) {
+    nav { gap: 12px; }
     .nav-links, .nav-right { gap: 10px !important; }
+    /* the logo already links home */
+    .nav-link[href="index.html"] { display: none; }
   }
 </style>
 </head>

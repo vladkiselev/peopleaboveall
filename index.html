@@ -54,15 +54,36 @@
     return range ? parseInt(range.split('/')[1]) : 0;
   }
 
+  async function sbPeopleCities() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/people?visible=eq.true&select=id,city_en,city_ru`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    if (!res.ok) throw new Error('people ' + res.status);
+    return res.json();
+  }
+
+  // "Bali, Indonesia / Phuket, Thailand" -> countries; a bare "Thailand" counts as a country
+  function countCountries(people) {
+    const countries = new Set();
+    people.forEach(p => (p.city_en || '').split('/').forEach(part => {
+      const bits = part.split(',').map(b => b.trim()).filter(Boolean);
+      if (!bits.length || /^worldwide$/i.test(bits[0])) return;
+      countries.add(bits[bits.length - 1].toLowerCase());
+    }));
+    return countries.size;
+  }
+
   async function loadStats() {
     try {
-      const [peopleCount, ideasCount] = await Promise.all([
-        sbCount('people'),
+      const [people, ideasCount] = await Promise.all([
+        sbPeopleCities(),
         sbCount('ideas')
       ]);
-      document.getElementById('stat-people').textContent    = peopleCount;
+      window.paaPeople = people;
+      window.dispatchEvent(new CustomEvent('paa:people', { detail: people }));
+      document.getElementById('stat-people').textContent    = people.length;
       document.getElementById('stat-ideas').textContent     = ideasCount;
-      document.getElementById('stat-countries').textContent = 8;
+      document.getElementById('stat-countries').textContent = countCountries(people);
       document.getElementById('hero-stats').style.display   = 'flex';
     } catch(e) { console.error('Stats error:', e); }
   }
@@ -154,19 +175,52 @@
   }
   .hero {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    align-items: center;
     position: relative;
+    overflow: hidden;
   }
+  .hero-atlas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0;
+    animation: atlasIn 2s 0.5s ease forwards;
+  }
+  @keyframes atlasIn { to { opacity: 1; } }
+  .atlas-tip {
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 16px));
+    transition: opacity 0.2s;
+  }
+  .atlas-tip b { color: var(--warm); font-weight: 400; }
   .hero-left {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
     padding: 140px 64px 80px 80px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-right: 1px solid var(--border);
+    pointer-events: none;
     animation: fadeUp 1.2s ease forwards;
     opacity: 0;
   }
+  .hero-left a, .hero-left button { pointer-events: auto; }
   .hero-eyebrow {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -222,14 +276,14 @@
     transition: border-color 0.3s, color 0.3s;
   }
   .btn-ghost:hover { border-color: var(--ink); }
-  .hero-right {
-    padding: 140px 80px 80px 64px;
+  .manifesto-band {
+    padding: 120px 80px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    animation: fadeUp 1.2s 0.3s ease forwards;
-    opacity: 0;
+    border-top: 1px solid var(--border);
   }
+  .manifesto-band .manifesto-block { max-width: 760px; }
+  .manifesto-band .manifesto-text { font-size: clamp(22px, 2.4vw, 30px); }
   .manifesto-block { position: relative; }
   .manifesto-block::before {
     content: '"';
@@ -645,9 +699,9 @@
     nav { padding: 20px 24px; }
     .nav-links { gap: 14px; }
     .nav-link { letter-spacing: 0.06em; }
-    .hero { grid-template-columns: 1fr; }
-    .hero-left { padding: 120px 32px 48px; border-right: none; border-bottom: 1px solid var(--border); }
-    .hero-right { padding: 48px 32px 80px; }
+    .hero { align-items: flex-start; }
+    .hero-left { padding: 120px 32px calc(min(56vw, 480px) + 40px); }
+    .manifesto-band { padding: 80px 32px; }
     .divider { margin: 0 32px; }
     .beliefs { padding: 80px 32px; }
     .beliefs-grid { grid-template-columns: 1fr; }
@@ -757,7 +811,10 @@
   :root[data-theme="dark"] .icon-moon,
   :root:not([data-theme="dark"]) .icon-sun { display: none; }
   @media (max-width: 480px) {
+    nav { gap: 12px; }
     .nav-links, .nav-right { gap: 10px !important; }
+    /* the logo already links home */
+    .nav-link[href="index.html"] { display: none; }
   }
 </style>
 </head>
@@ -778,6 +835,8 @@
 
 <!-- HERO -->
 <section class="hero">
+  <canvas class="hero-atlas" aria-hidden="true"></canvas>
+  <div class="atlas-tip" id="atlas-tip"></div>
   <div class="hero-left">
     <p class="hero-eyebrow" data-i18n="hero_eyebrow">Движение · Платформа · Сообщество</p>
     <h1 class="hero-title"><span data-i18n="hero_title_1">Люди</span><br><span data-i18n="hero_title_2">превыше</span><br><em data-i18n="hero_title_3">всего.</em></h1>
@@ -804,13 +863,342 @@
       <a href="#" class="btn-ghost" id="joinBtn" data-i18n="btn_join_project">Найти своих</a>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="manifesto-block">
+</section>
+
+<script>
+  // ── ATLAS ──────────────────────────────────────────────────
+  // Dotted world map behind the hero. Gold points are the cities of people in the atlas
+  // (from Supabase); arcs between them are introductions, half of them through the founder.
+  (function () {
+    const canvas = document.querySelector('.hero-atlas');
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext('2d');
+    const hero = canvas.parentElement;
+    const tip = document.getElementById('atlas-tip');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Land mask: 128 rows (lat 71.5..-55.5) × 360 cols (lon -179.5..179.5), 1° cells, 1 bit each
+    const MASK = 'P////////xyAD7nAAC//+gAAAEf///////////+P/wmBAAAAAAAHYQAf////AAAP8gAAAAAP+A8f//8AA3///ogAAAAAABvgAAAAAfv+////////////8AAAAAB///+BfWH/+CuBhf8AA3////AAAAAABf/wAAAA8Pv///////////////H8P/wAAAAAAAAvD+xMP8B//gAAAP//////6AAAPz+hAIBAAAAAAAAAAAAAAAAAB/8AAAAAAAABAAgIHnAP/AAAH///////8AAAB3AAAAwAAAAAAAAAAAAAAAAAAH7wAAAAAAAAAAAGf8AD/AAAf///////gAAGBwAAADAAAAAAAAAAAAAAAAAAcPAAAAAAAAAAAAAV/8Bn/gAP//QD////ADgB8AAAAAAAAAAAAAAAAAAAAAAAAwAf///////////zwx/gAH/wAAP8AAAB/4/+f//////////////////////4AMAf//////////+DAAbgAH/gAADAAAAN/z/////////////////////////+AAH///////////4AwgGQAD/AAAAAAAA//H///////////////////////n/6AAP///////////wAA/AAAB/AAAAAAAB/+D//////////////////////jP+AAAH/9z////////gAA/wAAAMAAAAAACB//D1////////////////////+A/YAAAA/wAD///////gAA/wQAAAAAAAAAAB9/Ab///////////////////+uDgAAAAAB0AAf//////4AA/94AAAAAAAAAYA5+C///////////////////4AAHAAAAAABcAAP//////4AAf/8AAAAAAAAB8AA+i///////////////////wAAfgAAAAAMAAAC///////wAf/8AAAAAAAAAYAOeH///////////////////AAA/gAAAAAAAAAC///////8Af//AAAAAAAAAcAPQH//////////////////8AAA/AAAAAEAAAAAP///////z///wAAAAAAADuAETv//////////////////+AAA+AAAAAAAAAABP///////x///8AAAAAAAPHAX/////////////////////4AA8AAAAAAAAAAAj///////x///8AAAAAAAPPx//////////////////////6AAwAAAAAAAAAAAD///////////6AAAAAAAAPj//////////////////////6AAwAAAAAAAAAAACf//////////EAAAAAAAAQP//////////////////////zAAAAAAAAAAAAAABv////////+MNAAAAAAAAC///////////////////////zAAAAAAAAAAAAAAAP////////7wPgAAAAAAAf///////////////////////yAAAAAAAAAAAAAAAL/////////gCgAAAAAAAD///////////////////////iAAAAAAAAAAAAAAAP/////////pAAAAAAAAAD/////vP/h//////////////BAAAAAAAAAAAAAAAP/////////+AAAAAAAAAB//v//GP/B/////////////+AAAAAAAAAAAAAAAAP////////8wAAAAAAAAAB//H/+AP+P/////////////8CAAAAAAAAAAAAAAAP////////wAAAAAAAAADj/jx/+AD/H/////////////4HgAAAAAAAAAAAAAAP////////gAAAAAAAAAH/4Fw/8AA/B////////////+ACAAAAAAAAAAAAAAAP////////gAAAAAAAAAH/wAcf8PB/g////////////8AAAAAAAAAAAAAAAAAP///////8AAAAAAAAAAH/gMHfB///x///////////v4AMAAAAAAAAAAAAAAAP///////8AAAAAAAAAAH/IMCOH///h//////////+ZwAMAAAAAAAAAAAAAAAH///////4AAAAAAAQAAH/AACHP///g//////////8BwAMAAAAAAAAAAAAAAAD///////wAAAAAAAAAAH+AAYCH///g//////////+wYAYAAAAAAAAAAAAAAAD///////wAAAAAAAAAAAgf+AABs//////////////gYD4AAAAAAAAAAAAAAAB///////wAAAAAAAAAAAh/+AAAA//////////////A4PwAAAAAAAAAAAAAAAB///////gAAAAAAAAAAB//8AAAA//////////////Ah2AAAAAAAAAAAAAAAAAP/////+AAAAAAAAAAAD//+AAAB//////////////gjwAAAAAAAAAAAAAAAAAH/////4AAAAAAAAAAAH///4OAB//////////////gBAAAAAAAAAAAAAAAAAAG/////4AAAAAAAAAAAP///8P4D//////////////gCAAAAAAAAAAAAAAAAAACf////4AAAAAAAAAAAP////v////////////////gAAAAAAAAAAAAAAAAAAABv//hAYAAAAAAAAAAAP//////3//H///////////wAAAAAAAAAAAAAAAAAAAAv/+AAYAAAAAAAAAAAf/////////H///////////wAAAAAAAAAAAAAAAAAAAB3/+AAcAAAAAAAAAAB///////8//h///////////gAAAAAAAAAAAAAAAAAAAAZ/+AAMAAAAAAAAAAD///////8//wH//////////AAAAAAAAAAAAAAAAAAAAAJ/+AAEAAAAAAAAAAH///////+f/wB/f////////AAAAAAAAAAAAAAAAAAAAAI/8AAAAAAAAAAAAAH///////+f/4YAf///////8QAAAAAAAAAAAAAAAAAAAACf8AAAAAAAAAAAAAP////////H//+AP///////4gAAAAAAAAAAAAAAAAAAAAAP8AAvAAAAAAAAAAP////////H///AD///////AgAAAAAAAAAAAAAAAAAAAAAH8AQBgAAAAAAAAAf////////n//+ADf/4P//IAAAAAAAAAAAAAAAAAAAAAAAP+A4AYAAAAAAAAAP////////j//+AAf/4H/+IAAAAAAAAAAAAAAAgAAAAAAAH/B4ABwAAAAAAAAP////////h//8AAf/gD/8YAAAAAAAAAAAAAAAAAAAAAAAD/lwAD8AAAAAAAAP////////x//4AAf/AD/8QAAAAAAAAAAAAAAAAAAAAAAAAf/wAAAAAAAAAAAP////////4//gAAf+AB/+AAwAAAAAAAAAAAAAAAAAAAAAAH/wAAAAAAAAAAAP////////4f+AAAf8ADP/AAwAAAAAAAAAAAAAAAAAAAAAAAH/AAAAAAAAAAAf////////8f8AAAPwAAP/gAgAAAAAAAAAAAAAAAAAAAAAAAD/gAAAAAAAAAAf////////+fgAAAPwAAP/gAwAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAAAf/////////eAAAAHwAAN/gAsAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAf/////////gBAAAHwAAE/gACAAAAAAAAAAAAAAAAAAAAAAAADABIAAAAAAAAH/////////gIAAADwAAEfgALAAAAAAAAAAAAAAAAAAAAAAAADgPfIAAAAAAAH/////////34AAADwAAIOABAAAAAAAAAAAAAAAAAAAAAAAAAAyPf+AAAAAAAD//////////4AAADoAAIEACBAAAAAAAAAAAAAAAAAAAAAAAAA8///AAAAAAAB//////////wAAABIAAMAAAHAAAAAAAAAAAAAAAAAAAAAAAAAE///gAAAAAAA//////////wAAAAMAAEAAADgAAAAAAAAAAAAAAAAAAAAAAAAAf//wAAAAAAAf/7///////gAAAAMAADAAMDAAAAAAAAAAAAAAAAAAAAAAAAAAf///gAAAAAAP/B///////gAAAAAABDgAeAAAAAAAAAAAAAAAAAAAAAAAAAAAf///wAAAAAACAAn//////AAAAAAAAxgA+AAAAAAAAAAAAAAAAAAAAAAAAAAAf///4AAAAAAAAAD/////+AAAAAAAAZgB4AAAAAAAAAAAAAAAAAAAAAAAAAAA////4AAAAAAAAAD/////8AAAAAAAAMwH8AIAAAAAAAAAAAAAAAAAAAAAAAAB////8AAAAAAAAAD/////wAAAAAAAAHQf8AIAAAAAAAAAAAAAAAAAAAAAAAAD////4AAAAAAAAAH/////gAAAAAAAAHgf8cIAAAAAAAAAAAAAAAAAAAAAAAAD/////AAAAAAAAAH/////AAAAAAAAADof8ASgAAAAAAAAAAAAAAAAAAAAAAAH////u4AAAAAAAAH/////AAAAAAAAABwP5wQwAAAAAAAAAAAAAAAAAAAAAAAH////94AAAAAAAAD////+AAAAAAAAAB+P5wAD4AAAAAAAAAAAAAAAAAAAAAAH//////4AAAAAAAB////8AAAAAAAAAA8ARQif/AAAAAAAAAAAAAAAAAAAAAAH//////8AAAAAAAA////4AAAAAAAAAAcAAAAD/gAAAAAAAAAAAAAAAAAAAAAH///////gAAAAAAA////4AAAAAAAAAAMABAAI/ywAAAAAAAAAAAAAAAAAAAAD///////gAAAAAAA////4AAAAAAAAAADgAAAIf8BAAAAAAAAAAAAAAAAAAAAD///////gAAAAAAAf///4AAAAAAAAAAB+AABA/4AAAAAAAAAAAAAAAAAAAAAB///////gAAAAAAAf///4AAAAAAAAAAAAfsgAOMAAAAAAAAAAAAAAAAAAAAAA///////AAAAAAAAf///8AAAAAAAAAAAABCAAAGgAAAAAAAAAAAAAAAAAAAAA///////AAAAAAAAP///8AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAf/////+AAAAAAAAP///8AAAAAAAAAAAAAACgCAEAAAAAAAAAAAAAAAAAAAAAf/////8AAAAAAAAf///+AQAAAAAAAAAAAAB+CAAAAAAAQAAAAAAAAAAAAAAAP/////4AAAAAAAAf///+AwAAAAAAAAAAAAD8DAAAAAAAAAAAAAAAAAAAAAAAP/////4AAAAAAAA////+AwAAAAAAAAAAAAz8DgAAAAAAAAAAAAAAAAAAAAAAH/////4AAAAAAAA////+DwAAAAAAAAAAAD/8HgAAAAAAAAAAAAAAAAAP////+B////4AAAAAAAA////8PwAAAAAAAAAAAH//XgAABABAAAAAgAAAAAAAAAAAAf////4AAAAAAAA////wPgAAAAAAAAAAAP//3wAAAAAAAAAAAAAAAAAAAAAAAP////wAAAAAAAA////gPgAAAAAAAAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAP////wAAAAAAAAf//+APgAAAAAAAAAAAf///8AAAAAAAAAAAAAAAAAAAAAAAP////wAAAAAAAAf//+APgEAAAAAAAAAD////+AAIAAAAAAAAAAAAAAAAAAAAP////gAAAAAAAAP//+AfAAAAAAAAAAAf////+AAEAAAAAAAAAAAAAAAAAAAAP////AAAAAAAAAP///AfAAAAAAAAAAA//////AAAAAAAAAAAAAAAAAAAAAAAP///4AAAAAAAAAP//+APAAAAAAAAAAA//////gAAAAAAAAAAAAAAAAAAAAAAf///gAAAAAAAAAH//+AOAAAAAAAAAAB//////wAAAAAAAAAAAAAAAAAAAAAAf//+AAAAAAAAAAH//4AEAAAAAAAAAAA//////4AAAAAAAAAAAAAAAAAAAAAAf//+AAAAAAAAAAH//4AAAAAAAAAAAAB//////4AAAAAAAAAAAAAAAAAAAAAAf///AAAAAAAAAAH//4AAAAAAAAAAAAA//////8AAAAAAAAAAAAAAAAAAAAAAf//+AAAAAAAAAAD//wAAAAAAAAAAAAAf/////8AAAAAAAAAAAAAAAAAAAAAAf//8AAAAAAAAAAB//gAAAAAAAAAAAAAf/////4AAAAAAAAAAAAAAAAAAAAAA///8AAAAAAAAAAB//gAAAAAAAAAAAAAf/////4AAAAAAAAAAAAAAAAAAAAAA///wAAAAAAAAAAA//AAAAAAAAAAAAAAP/////4AAAAAAAAAAAAAAAAAAAAAAf//wAAAAAAAAAAA/+AAAAAAAAAAAAAAP/AP//wAAAAAAAAAAAAAAAAAAAAAA//vgAAAAAAAAAAA/4AAAAAAAAAAAAAAP8AG//gAAAAAAAAAAAAAAAAAAAAAA//3AAAAAAAAAAAAQAAAAAAAAAAAAAAAOAAF//gAAAAAAAAAAAAAAAAAAAAAB//4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//AAABAAAAAAAAAAAAAAAAAAB//4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/AAAAgAAAAAAAAAAAAAAAAAD//4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/AAAAQAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAAAAcAAAAAAAAAAAAAAAAAB/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAAAAD/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAD/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADQAAAAAAAAAAAAAAAAAB/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAHAAAAAAAAAAAAAAAAAAB/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAOAAAAAAAAAAAAAAAAAAB/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAAAAAH+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAAAAAH+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH8AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+    const ROWS = 128, COLS = 360, ROW_BYTES = 45;
+    const maskBytes = Uint8Array.from(atob(MASK), c => c.charCodeAt(0));
+    const isLand = (r, c) => (maskBytes[r * ROW_BYTES + (c >> 3)] >> (7 - (c & 7))) & 1;
+
+    // Known places; a person's "City, Country" is matched by city first, then country.
+    // Add new cities here when someone joins from a place that isn't listed.
+    const PLACES = {
+      'moscow': [37.62, 55.76], 'saint petersburg': [30.32, 59.94], 'st. petersburg': [30.32, 59.94],
+      'vladivostok': [131.89, 43.12], 'novosibirsk': [82.92, 55.03], 'yekaterinburg': [60.6, 56.84],
+      'kazan': [49.11, 55.79], 'sochi': [39.72, 43.6], 'kaliningrad': [20.51, 54.71],
+      'belgrade': [20.46, 44.79], 'novi sad': [19.83, 45.27], 'riyadh': [46.68, 24.71],
+      'dubai': [55.27, 25.2], 'abu dhabi': [54.37, 24.45], 'doha': [51.53, 25.29],
+      'bali': [115.19, -8.41], 'jakarta': [106.85, -6.21], 'phuket': [98.39, 7.88],
+      'bangkok': [100.5, 13.75], 'chiang mai': [98.99, 18.79], 'pattaya': [100.88, 12.93],
+      'london': [-0.13, 51.51], 'limassol': [33.02, 34.71], 'nicosia': [33.38, 35.19],
+      'vilnius': [25.28, 54.69], 'riga': [24.11, 56.95], 'tallinn': [24.75, 59.44],
+      'minsk': [27.56, 53.9], 'kyiv': [30.52, 50.45], 'warsaw': [21.01, 52.23], 'prague': [14.42, 50.08],
+      'berlin': [13.4, 52.52], 'paris': [2.35, 48.86], 'amsterdam': [4.9, 52.37], 'vienna': [16.37, 48.21],
+      'lisbon': [-9.14, 38.72], 'madrid': [-3.7, 40.42], 'barcelona': [2.17, 41.39], 'rome': [12.5, 41.9],
+      'milan': [9.19, 45.46], 'zurich': [8.54, 47.38], 'istanbul': [28.98, 41.01], 'antalya': [30.71, 36.9],
+      'tbilisi': [44.79, 41.72], 'batumi': [41.64, 41.64], 'yerevan': [44.51, 40.18], 'baku': [49.87, 40.41],
+      'almaty': [76.95, 43.24], 'astana': [71.45, 51.17], 'tashkent': [69.24, 41.3], 'bishkek': [74.59, 42.87],
+      'tel aviv': [34.78, 32.09], 'cairo': [31.24, 30.04], 'singapore': [103.82, 1.35],
+      'kuala lumpur': [101.69, 3.14], 'ho chi minh city': [106.66, 10.76], 'hanoi': [105.85, 21.03],
+      'da nang': [108.22, 16.05], 'phnom penh': [104.93, 11.56], 'hong kong': [114.17, 22.32],
+      'shanghai': [121.47, 31.23], 'beijing': [116.41, 39.9], 'seoul': [126.98, 37.57], 'tokyo': [139.69, 35.69],
+      'colombo': [79.86, 6.93], 'mumbai': [72.88, 19.08], 'delhi': [77.21, 28.61], 'goa': [73.83, 15.49],
+      'new york': [-74.01, 40.71], 'san francisco': [-122.42, 37.77], 'los angeles': [-118.24, 34.05],
+      'miami': [-80.19, 25.76], 'toronto': [-79.38, 43.65], 'mexico city': [-99.13, 19.43],
+      'buenos aires': [-58.38, -34.6], 'sao paulo': [-46.63, -23.55], 'cape town': [18.42, -33.92],
+      'sydney': [151.21, -33.87], 'melbourne': [144.96, -37.81],
+      // countries on their own
+      'russia': [37.62, 55.76], 'thailand': [100.5, 13.75], 'indonesia': [115.19, -8.41],
+      'serbia': [20.46, 44.79], 'cyprus': [33.02, 34.71], 'uae': [55.27, 25.2], 'georgia': [44.79, 41.72],
+      'worldwide': [100.5, 13.75],
+    };
+    const FOUNDER_ID = 1;
+
+    // Natural Earth projection (same formula as d3.geoNaturalEarth1)
+    function ne(lon, lat) {
+      const l = lon * Math.PI / 180, p = lat * Math.PI / 180;
+      const p2 = p * p, p4 = p2 * p2;
+      return [
+        l * (0.8707 - 0.131979 * p2 + p4 * (-0.013791 + p4 * (0.003971 * p2 - 0.001529 * p4))),
+        -p * (1.007226 + p2 * (0.015085 + p4 * (-0.044475 + 0.028874 * p2 - 0.005916 * p4))),
+      ];
+    }
+    // raw extent of the framed area (lon -170..180, lat -50..72)
+    const RAW = (() => {
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (let lat = -50; lat <= 72; lat += 2) for (const lon of [-170, 180]) {
+        const [x, y] = ne(lon, lat); x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+      }
+      return { x0, x1, y0, y1 };
+    })();
+
+    let w = 0, h = 0, dpr = 1, mobile = false, project = null;
+    let dotLayer = null, cities = [], arcs = [], colors = {}, dotSize = 2;
+    let visible = true, rafId = null, nextArcAt = 0, hover = null;
+
+    function rgb(v) {
+      const m = v.trim().replace('#', '').match(/.{2}/g);
+      return m ? m.map(x => parseInt(x, 16)).join(',') : '200,169,126';
+    }
+    function readColors() {
+      const cs = getComputedStyle(document.documentElement);
+      const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      colors = {
+        ink: rgb(cs.getPropertyValue('--ink')),
+        warm: rgb(cs.getPropertyValue('--warm')),
+        dot: dark ? 0.3 : 0.2,
+        near: dark ? 0.55 : 0.5,
+      };
+    }
+
+    function groupCities(people) {
+      const byPlace = new Map();
+      const lang = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+      people.forEach(p => {
+        const partsEn = (p.city_en || '').split('/');
+        const partsRu = (p.city_ru || '').split('/');
+        partsEn.forEach((part, i) => {
+          const bits = part.split(',').map(b => b.trim()).filter(Boolean);
+          if (!bits.length) return;
+          const key = [bits[0], bits[bits.length - 1]].map(b => b.toLowerCase()).find(k => PLACES[k]);
+          if (!key) { console.warn('Atlas: unknown place', part.trim()); return; }
+          const ll = PLACES[key];
+          const id = ll.join(',');
+          if (!byPlace.has(id)) byPlace.set(id, { ll, people: 0, founder: false, names: { en: '', ru: '' } });
+          const c = byPlace.get(id);
+          if (p.id === FOUNDER_ID) { c.founder = true; return; }
+          c.people += 1;
+          if (!c.names.en || c.names.en === 'Worldwide') {
+            c.names.en = bits[0];
+            c.names.ru = ((partsRu[i] || '').split(',')[0] || bits[0]).trim();
+          }
+        });
+      });
+      return [...byPlace.values()].map(c => {
+        if (!c.names.en) c.names = { en: 'Bangkok', ru: 'Бангкок' };
+        return c;
+      });
+    }
+
+    function layout() {
+      const rect = hero.getBoundingClientRect();
+      w = rect.width; h = rect.height; mobile = w < 900;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // desktop: right two-thirds, under the end of the text; mobile: the strip reserved by .hero-left's bottom padding
+      const mapH = Math.min(w * 0.56, 480);
+      const box = mobile ? [0, h - mapH - 28, w, h - 16] : [w * 0.3, h * 0.12, w * 1.03, h * 0.94];
+      const bw = box[2] - box[0], bh = box[3] - box[1];
+      const k = Math.min(bw / (RAW.x1 - RAW.x0), bh / (RAW.y1 - RAW.y0));
+      const ox = box[0] + (bw - (RAW.x1 - RAW.x0) * k) / 2 - RAW.x0 * k;
+      const oy = box[1] + (bh - (RAW.y1 - RAW.y0) * k) / 2 - RAW.y0 * k;
+      project = (lon, lat) => { const [x, y] = ne(lon, lat); return [ox + x * k, oy + y * k]; };
+
+      // keep roughly the same on-screen dot spacing at any size
+      const perDegree = (ne(1, 0)[0] - ne(0, 0)[0]) * k;
+      const stride = Math.max(1, Math.round((mobile ? 5.5 : 7.5) / perDegree));
+      dotSize = Math.max(1.2, Math.min(2.2, perDegree * stride * 0.28));
+
+      const dots = [];
+      for (let r = 0; r < ROWS; r += stride) for (let c = 0; c < COLS; c += stride) {
+        if (!isLand(r, c)) continue;
+        const [x, y] = project(-179.5 + c, 71.5 - r);
+        if (x > -4 && x < w + 4 && y > -4 && y < h + 4) dots.push([x, y]);
+      }
+      cities.forEach(c => { [c.x, c.y] = project(c.ll[0], c.ll[1]); });
+      drawDotLayer(dots);
+    }
+
+    // Land dots are static: render them once, warm near cities
+    let lastDots = [];
+    function drawDotLayer(dots) {
+      if (dots) lastDots = dots;
+      dotLayer = document.createElement('canvas');
+      dotLayer.width = canvas.width; dotLayer.height = canvas.height;
+      const lctx = dotLayer.getContext('2d');
+      lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const reach = mobile ? 28 : 46;
+      for (const [x, y] of lastDots) {
+        let near = 0;
+        for (const c of cities) {
+          const d = Math.hypot(x - c.x, y - c.y);
+          if (d < reach) near = Math.max(near, 1 - d / reach);
+        }
+        lctx.fillStyle = near > 0.05
+          ? `rgba(${colors.warm},${colors.dot + near * colors.near})`
+          : `rgba(${colors.ink},${colors.dot})`;
+        lctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
+      }
+    }
+
+    function setPeople(people) {
+      cities = groupCities(people).map(c => ({ ...c, x: 0, y: 0, glow: 0 }));
+      arcs = [];
+      if (project) { cities.forEach(c => { [c.x, c.y] = project(c.ll[0], c.ll[1]); }); drawDotLayer(); }
+      if (reduceMotion) drawStill();
+    }
+
+    function startArc(t) {
+      if (cities.length < 2 || arcs.length >= 3) return;
+      const busy = new Set(arcs.flatMap(a => [a.a, a.b]));
+      const free = cities.filter(c => !busy.has(c));
+      if (free.length < 2) return;
+      const hub = cities.find(c => c.founder);
+      const a = hub && free.includes(hub) && Math.random() < 0.5 ? hub : free[Math.floor(Math.random() * free.length)];
+      const others = free.filter(c => c !== a);
+      const b = others[Math.floor(Math.random() * others.length)];
+      arcs.push({ a, b, start: t, grow: 1800, hold: 2400, fade: 1400 });
+    }
+
+    function arcPoint(a, b, k) {
+      const d = Math.hypot(b.x - a.x, b.y - a.y);
+      const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2 - d * 0.35;
+      const u = 1 - k;
+      return [u * u * a.x + 2 * u * k * cx + k * k * b.x, u * u * a.y + 2 * u * k * cy + k * k * b.y];
+    }
+
+    function draw(t) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (dotLayer) {
+        ctx.drawImage(dotLayer, 0, 0);
+        // a slow band of light sweeping east
+        if (!reduceMotion) {
+          const band = canvas.width * 0.08;
+          const pos = ((t * 0.00005) % 1.3 - 0.15) * canvas.width;
+          ctx.save();
+          ctx.globalAlpha = 0.55;
+          ctx.beginPath(); ctx.rect(pos - band / 2, 0, band, canvas.height); ctx.clip();
+          ctx.drawImage(dotLayer, 0, 0);
+          ctx.restore();
+        }
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      arcs = arcs.filter(a => t - a.start < a.grow + a.hold + a.fade);
+      ctx.lineWidth = 1.2;
+      for (const arc of arcs) {
+        const age = t - arc.start;
+        const g = Math.min(1, age / arc.grow);
+        const eased = 1 - Math.pow(1 - g, 3);
+        const fade = age > arc.grow + arc.hold ? 1 - (age - arc.grow - arc.hold) / arc.fade : 1;
+        ctx.strokeStyle = `rgba(${colors.warm},${0.8 * fade})`;
+        ctx.beginPath();
+        const steps = 48;
+        for (let i = 0; i <= steps * eased; i++) {
+          const [x, y] = arcPoint(arc.a, arc.b, i / steps);
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        if (g < 1) {
+          const [sx, sy] = arcPoint(arc.a, arc.b, eased);
+          ctx.fillStyle = `rgba(${colors.warm},${fade})`;
+          ctx.beginPath(); ctx.arc(sx, sy, 2.2, 0, Math.PI * 2); ctx.fill();
+        }
+        arc.a.glow = Math.max(arc.a.glow, fade);
+        if (g >= 1) arc.b.glow = Math.max(arc.b.glow, fade);
+      }
+
+      for (const c of cities) {
+        const base = (mobile ? 2 : 2.6) + Math.sqrt(c.people || 1) * (mobile ? 1.1 : 1.6) + (c.founder ? 1 : 0);
+        if (!reduceMotion) {
+          const pulse = (t * 0.0005 + c.ll[0] * 0.01) % 1;
+          ctx.strokeStyle = `rgba(${colors.warm},${(1 - pulse) * 0.45})`;
+          ctx.lineWidth = 0.8;
+          ctx.beginPath(); ctx.arc(c.x, c.y, base + pulse * 16, 0, Math.PI * 2); ctx.stroke();
+        }
+        const gl = c === hover ? 1 : c.glow;
+        if (gl > 0) {
+          ctx.fillStyle = `rgba(${colors.warm},${0.18 * gl})`;
+          ctx.beginPath(); ctx.arc(c.x, c.y, base + 7, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.fillStyle = `rgb(${colors.warm})`;
+        ctx.beginPath(); ctx.arc(c.x, c.y, base, 0, Math.PI * 2); ctx.fill();
+        c.glow = Math.max(0, c.glow - 0.012);
+      }
+    }
+
+    function frame(t) {
+      rafId = null;
+      if (t >= nextArcAt) { startArc(t); nextArcAt = t + 1500 + Math.random() * 1800; }
+      draw(t);
+      schedule();
+    }
+    function schedule() {
+      if (!reduceMotion && visible && !document.hidden && rafId === null) rafId = requestAnimationFrame(frame);
+    }
+    function drawStill() {
+      arcs = [];
+      startArc(0); startArc(0);
+      arcs.forEach(a => { a.start = -a.grow - 100; });
+      draw(1000);
+    }
+
+    readColors();
+    setPeople(window.paaPeople || []);
+    layout();
+    if (reduceMotion) drawStill(); else schedule();
+
+    window.addEventListener('paa:people', e => setPeople(e.detail));
+    let resizeTimer, lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      // ignore mobile address-bar height jitter
+      if (window.innerWidth === lastWidth && mobile) return;
+      lastWidth = window.innerWidth;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { layout(); if (reduceMotion) drawStill(); }, 150);
+    });
+    new MutationObserver(() => { readColors(); drawDotLayer(); if (reduceMotion) drawStill(); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    new IntersectionObserver(entries => { visible = entries[0].isIntersecting; schedule(); }).observe(hero);
+    document.addEventListener('visibilitychange', schedule);
+
+    function showTip(x, y) {
+      hover = cities.reduce((best, c) => {
+        const d = Math.hypot(c.x - x, c.y - y);
+        return d < 20 && (!best || d < best.d) ? { c, d } : best;
+      }, null)?.c || null;
+      if (!hover) { tip.style.opacity = 0; return; }
+      const ru = document.documentElement.lang === 'ru';
+      const n = hover.people;
+      const word = ru
+        ? (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'человека' : 'человек')
+        : (n === 1 ? 'person' : 'people');
+      const parts = [];
+      if (n) parts.push(`${n} ${word}`);
+      if (hover.founder) parts.push(ru ? 'основатель' : 'founder');
+      tip.innerHTML = `<b>${ru ? hover.names.ru : hover.names.en}</b> · ${parts.join(' · ')}`;
+      tip.style.left = hover.x + 'px';
+      tip.style.top = hover.y + 'px';
+      tip.style.opacity = 1;
+      if (reduceMotion) draw(1000);
+    }
+    hero.addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      const r = hero.getBoundingClientRect();
+      showTip(e.clientX - r.left, e.clientY - r.top);
+    });
+    hero.addEventListener('pointerdown', e => {
+      const r = hero.getBoundingClientRect();
+      showTip(e.clientX - r.left, e.clientY - r.top);
+    });
+    hero.addEventListener('pointerleave', () => { hover = null; tip.style.opacity = 0; });
+  })();
+  // ───────────────────────────────────────────────────────────
+</script>
+
+<section class="manifesto-band">
+    <div class="manifesto-block reveal">
       <p class="manifesto-text" data-i18n="manifesto_text">Мы окружены «социальными» сетями, которые делают нас одинокими. Технологиями, которые следят за нами вместо того, чтобы нас освобождать. Системами, которые ставят прибыль выше людей.<br><br>Это заканчивается сейчас.</p>
       <p class="manifesto-attribution" data-i18n="manifesto_attribution">— Манифест People Above All</p>
     </div>
-  </div>
 </section>
+
 
 <div class="divider"></div>
 
